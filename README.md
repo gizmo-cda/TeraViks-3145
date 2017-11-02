@@ -1,8 +1,10 @@
 # TeraViks-3145
 2017 TeraViks FIRST Robotics Team *code*
 
+# [FIRST Robotics standards] (https://www.firstinspires.org/about/vision-and-mission)
+
 ## Mission
-The mission of FIRST is to inspire young people to be science and technology leaders and innovators, by engaging them in exciting Mentor-based programs that build science, engineering, and technology skills, that inspire innovation, and that foster well-rounded life capabilities including self-confidence, communication, and leadership.
+The mission of FIRFIRSTST is to inspire young people to be science and technology leaders and innovators, by engaging them in exciting Mentor-based programs that build science, engineering, and technology skills, that inspire innovation, and that foster well-rounded life capabilities including self-confidence, communication, and leadership.
 
 ## Vision
 "To transform our culture by creating a world where science and technology are celebrated and where young people dream of becoming science and technology leaders."  Dean Kamen, Founder
