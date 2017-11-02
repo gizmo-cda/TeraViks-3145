@@ -20,4 +20,14 @@ Lead Programmer V.2| Lead Programmer BETA | "MOrAl SuPpOrT" | code
 ![FRC](http://i1239.photobucket.com/albums/ff510/drumsuperman/TheA-TeamWay.jpg) | ![Meme](https://i.pinimg.com/736x/94/ab/4f/94ab4f2e19f96539dbf400238a9a48d0--youth-groups-dankest-memes.jpg) | ![code](https://i.imgflip.com/lotgw.jpg) | ![Dwight](https://i.imgflip.com/tuv.jpg)
 | :expressionless: | :eyes: | :scream: | :smirk_cat:
 
-############# We teach them to do do what we want them to do.
+* We 
+  * teach 
+    * them 
+      * to 
+        * do
+          * what 
+            * we 
+              * want 
+                * them 
+                  * to 
+                    * do
