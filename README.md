@@ -24,7 +24,7 @@ Lead Programmer V.2| Lead Programmer BETA | "MOrAl SuPpOrT" | code
  * teach 
   * them 
    * to 
-    * do
+       * do
      * what 
       * we 
        * want 
