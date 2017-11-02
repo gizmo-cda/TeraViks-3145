@@ -21,13 +21,12 @@ Lead Programmer V.2| Lead Programmer BETA | "MOrAl SuPpOrT" | code
 | :expressionless: | :eyes: | :scream: | :smirk_cat:
 
 * We 
- * teach 
-  * them 
-   * to 
-       * do
-     * what 
-      * we 
-       * want 
-        * them 
-         * to 
-          * do
+* teach 
+* them 
+* to 
+* do
+ * what 
+ * we 
+ * want 
+ * them 
+ * to 
