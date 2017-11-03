@@ -4,7 +4,7 @@
  - [X] Use common sense for names and descriptions; specific problems in the code can be referenced in the description and further explained with #commments and """ Multi-line ... comments """ in the code itself
       
 # Naming Conventions:
- * joined_lower for functions, methods, attributes, variables
+ * joined_lower for attributes, variables, parameters
  * joined_lower or ALL_CAPS for constants
  * StudlyCaps for classes
- * camelCase only to conform to pre-existing conventions
+ * camelCase to functions, methods
