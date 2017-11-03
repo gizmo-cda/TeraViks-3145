@@ -17,7 +17,7 @@ Link to the [robot.py documentation](https://robotpy.readthedocs.io/en/stable/) 
 Crista | Joe | Kennedy | Amber
 ------------ | ------------- | ------------ | -------------
 Lead Programmer V.2| Lead Programmer V.3 | "MOrAl SuPpOrT" | code
-![FRC](http://i1239.photobucket.com/albums/ff510/drumsuperman/TheA-TeamWay.jpg) | ![Meme](http://0.media.collegehumor.cvcdn.com/98/39/448bb95befd949a907e95365e57b5132.jpg) | ![code](https://i.imgflip.com/lotgw.jpg) | ![Dwight](https://i.imgflip.com/tuv.jpg)
+![FRC](http://i1239.photobucket.com/albums/ff510/drumsuperman/TheA-TeamWay.jpg) | ![Meme](https://i.imgur.com/67T3LN9.png) | ![code](https://i.imgflip.com/lotgw.jpg) | ![Dwight](https://i.imgflip.com/tuv.jpg)
 | :expressionless: | :eyes: | :scream: | :smirk_cat:
 
 * We 
