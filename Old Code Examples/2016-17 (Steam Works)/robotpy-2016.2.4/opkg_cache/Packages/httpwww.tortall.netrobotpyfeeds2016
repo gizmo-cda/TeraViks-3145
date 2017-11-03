@@ -1,0 +1,438 @@
+Package: ATLAS
+Version: 3.10.2
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: fb6d313f66e92065a10ee02fcdf08213
+Size: 10145472
+Filename: ATLAS_3.10.2_cortexa9-vfpv3.ipk
+Description: Automatically Tuned Linear Algebra Software
+OE: ATLAS
+Homepage: http://www.vesperix.com/arm/atlas-arm/
+Depends: libgfortran3 (>= 4.8.2)
+Priority: optional
+
+
+Package: ATLAS-dev
+Version: 3.10.2
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 6561e9b0b248ea5e2859d393d2818805
+Size: 4037754
+Filename: ATLAS-dev_3.10.2_cortexa9-vfpv3.ipk
+Description: Automatically Tuned Linear Algebra Software
+OE: ATLAS
+Homepage: http://www.vesperix.com/arm/atlas-arm/
+Depends: ATLAS (= 3.10.2)
+Priority: optional
+
+
+Package: gfortran
+Version: 4.8.2-r0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: NI Linux Real-Time Maintainers <nilrt@ni.com>
+MD5Sum: fab23cf403cd855bdcb2ea9e4b7b84e4
+Size: 5331018
+Filename: gfortran_4.8.2-r0_cortexa9-vfpv3.ipk
+Description: GNU cc and gcc C compilers
+ GNU cc and gcc C compilers.
+OE: gcc
+Homepage: http://www.gnu.org/software/gcc/
+Depends: libc6 (>= 2.20), libz1 (>= 1.2.8), libgmp10 (>= 6.0.0), libmpfr4 (>= 3.1.2), libmpc3 (>= 1.0.2)
+Priority: optional
+
+
+Package: gfortran-symlinks
+Version: 4.8.2-r0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: NI Linux Real-Time Maintainers <nilrt@ni.com>
+MD5Sum: 996214d2cf57f174192b04bba226bc07
+Size: 1646
+Filename: gfortran-symlinks_4.8.2-r0_cortexa9-vfpv3.ipk
+Description: GNU cc and gcc C compilers
+ GNU cc and gcc C compilers.
+OE: gcc
+Homepage: http://www.gnu.org/software/gcc/
+Depends: gfortran
+Priority: optional
+
+
+Package: libgfortran-dev
+Version: 4.8.2-r0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: NI Linux Real-Time Maintainers <nilrt@ni.com>
+MD5Sum: 3756ee8228c5630f77f71798d18a711b
+Size: 10534
+Filename: libgfortran-dev_4.8.2-r0_cortexa9-vfpv3.ipk
+Description: GNU cc and gcc C compilers - Development files
+ GNU cc and gcc C compilers.  This package contains symbolic links, header
+ files, and related items necessary for software development.
+OE: libgfortran
+Homepage: http://www.gnu.org/software/gcc/
+Depends: libgfortran3 (= 4.8.2-r0)
+Priority: optional
+
+
+Package: libgfortran3
+Version: 4.8.2-r0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: f329f74406df4efa07b2c57906266a33
+Size: 227630
+Filename: libgfortran3_4.8.2-r0_cortexa9-vfpv3.ipk
+Description: Fortran runtime
+OE: libgfortran
+Homepage: http://gcc.gnu.org
+Priority: optional
+
+
+Package: mjpg-streamer
+Version: 2016.1.1
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: d215c41379184bd61df41dd1df6f9970
+Size: 187330
+Filename: mjpg-streamer_2016.1.1_cortexa9-vfpv3.ipk
+Description: Sends video via MJPG stream
+OE: unknown
+Homepage: http://www.python.org
+Depends: libc6, libjpeg8
+Priority: optional
+
+
+Package: mjpg-streamer
+Version: 2016.1.2
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: ea3701af7fbc2103b3e65e4507794f4c
+Size: 187314
+Filename: mjpg-streamer_2016.1.2_cortexa9-vfpv3.ipk
+Description: Sends video via MJPG stream
+OE: unknown
+Homepage: http://www.python.org
+Depends: libc6, libjpeg8
+Priority: optional
+
+
+Package: mjpg-streamer
+Version: 2016.2.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: fcb380e973a1d14861e3af2257c3f739
+Size: 191908
+Filename: mjpg-streamer_2016.2.0_cortexa9-vfpv3.ipk
+Description: Sends video via MJPG stream
+OE: unknown
+Homepage: http://www.python.org
+Depends: libc6, libjpeg8
+Priority: optional
+
+
+Package: mjpg-streamer
+Version: 2016.3.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 99383b162307a38c68c640fd68da3377
+Size: 194568
+Filename: mjpg-streamer_2016.3.0_cortexa9-vfpv3.ipk
+Description: Sends video via MJPG stream
+OE: unknown
+Homepage: https://github.com/mjpg-streamer/mjpg-streamer
+Depends: libc6, libjpeg8
+Priority: optional
+
+
+Package: mjpg-streamer-cv
+Version: 2016.3.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 0b96659204efca0f59eb6f12d5246579
+Size: 11212
+Filename: mjpg-streamer-cv_2016.3.0_cortexa9-vfpv3.ipk
+Description: OpenCV plugin for mjpg-streamer
+OE: unknown
+Homepage: https://github.com/mjpg-streamer/mjpg-streamer
+Depends: mjpg-streamer (= 2016.3.0), opencv3  (= 3.1.0-r1), v4l-utils
+Priority: optional
+
+
+Package: mjpg-streamer-py
+Version: 2016.3.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 80366e5a6979b2b77fc808c3bb4c46b8
+Size: 13758
+Filename: mjpg-streamer-py_2016.3.0_cortexa9-vfpv3.ipk
+Description: Python plugin for mjpg-streamer
+OE: unknown
+Homepage: https://github.com/mjpg-streamer/mjpg-streamer
+Depends: mjpg-streamer-cv (= 2016.3.0), python35-opencv3 (= 3.1.0-r1)
+Priority: optional
+
+
+Package: opencv3
+Version: 3.1.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 0bc4ff07c5ce633e8d72273da157ce1f
+Size: 7021954
+Filename: opencv3_3.1.0_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library
+OE: unknown
+Homepage: http://opencv.org/
+Depends: libc6 libstdc++6
+Priority: optional
+
+
+Package: opencv3
+Version: 3.1.0-r1
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: de0095bad3528e61cbe7ea28c83ae028
+Size: 7021958
+Filename: opencv3_3.1.0-r1_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library
+OE: unknown
+Homepage: http://opencv.org/
+Depends: libc6 libstdc++6
+Priority: optional
+
+
+Package: opencv3-dev
+Version: 3.1.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: e2db6b42384dd39bd7a6faf7f670ac11
+Size: 688692
+Filename: opencv3-dev_3.1.0_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library (development files)
+OE: unknown
+Homepage: http://opencv.org/
+Depends: opencv3 (= 3.1.0)
+Priority: optional
+
+
+Package: opencv3-dev
+Version: 3.1.0-r1
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: dd98e48279d9a576aa9d6ca0177816a0
+Size: 688712
+Filename: opencv3-dev_3.1.0-r1_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library (development files)
+OE: unknown
+Homepage: http://opencv.org/
+Depends: opencv3 (= 3.1.0-r1), opencv3-java (= 3.1.0-r1)
+Priority: optional
+
+
+Package: opencv3-java
+Version: 3.1.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 29ee5bfba28b745aa256bc2ec8bd48a6
+Size: 514628
+Filename: opencv3-java_3.1.0_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library (Java bindings)
+OE: unknown
+Homepage: http://opencv.org/
+Depends: opencv3 (= 3.1.0)
+Priority: optional
+
+
+Package: opencv3-java
+Version: 3.1.0-r1
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 83239cb031b18ab3279d8d463e20a28a
+Size: 514614
+Filename: opencv3-java_3.1.0-r1_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library (Java bindings)
+OE: unknown
+Homepage: http://opencv.org/
+Depends: opencv3 (= 3.1.0-r1)
+Priority: optional
+
+
+Package: python2
+Version: 2.7.11
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: acb32f4176c8f9d0f430f50321ed60eb
+Size: 19655086
+Filename: python2_2.7.11_cortexa9-vfpv3.ipk
+Description: Python programming language
+OE: python
+Homepage: http://www.python.org
+Depends: libc6
+Priority: optional
+
+
+Package: python2-dev
+Version: 2.7.11
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 6901e4eebef414a7289509a21335529c
+Size: 3345700
+Filename: python2-dev_2.7.11_cortexa9-vfpv3.ipk
+Description: Python programming language development files
+OE: python3
+Homepage: http://www.python.org
+Depends: python2 (= 2.7.11)
+Priority: optional
+
+
+Package: python27-numpy
+Version: 1.10.2
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 3bb6d2a407024a2c68d6332e0f9fdf52
+Size: 6226224
+Filename: python27-numpy_1.10.2_cortexa9-vfpv3.ipk
+Description: array processing for numbers, strings, records, and objects
+OE: numpy
+Homepage: http://www.numpy.org
+Depends: ATLAS (>= 3.10.2), python (>= 2.7.0)
+Priority: optional
+
+
+Package: python27-opencv3
+Version: 3.1.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: bb6f1ca261aa37352447743bb1e69937
+Size: 432198
+Filename: python27-opencv3_3.1.0_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library (Python 2.7 bindings)
+OE: unknown
+Homepage: http://opencv.org/
+Depends: opencv3 (= 3.1.0), python27-numpy (>= 1.10.2)
+Priority: optional
+
+
+Package: python27-opencv3
+Version: 3.1.0-r1
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 42f5d236217cf3d4ffc04acb9dd850d7
+Size: 432198
+Filename: python27-opencv3_3.1.0-r1_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library (Python 2.7 bindings)
+OE: unknown
+Homepage: http://opencv.org/
+Depends: opencv3 (= 3.1.0-r1), python27-numpy (>= 1.10.2)
+Priority: optional
+
+
+Package: python3
+Version: 3.5.1
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 2fd3dd4e1d5decfbc5ce735cf1043fc5
+Size: 9530442
+Filename: python3_3.5.1_cortexa9-vfpv3.ipk
+Description: Python programming language
+OE: python3
+Homepage: http://www.python.org
+Depends: libc6
+Priority: optional
+
+
+Package: python3-dev
+Version: 3.5.1
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 5a6e0094659700c89eb12432b20e7646
+Size: 4797114
+Filename: python3-dev_3.5.1_cortexa9-vfpv3.ipk
+Description: Python programming language development files
+OE: python3
+Homepage: http://www.python.org
+Depends: python3 (= 3.5.1)
+Priority: optional
+
+
+Package: python35-numpy
+Version: 1.10.2
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 07ab05e6e1cb7345ac6ac2a6ba383a56
+Size: 6544298
+Filename: python35-numpy_1.10.2_cortexa9-vfpv3.ipk
+Description: array processing for numbers, strings, records, and objects
+OE: numpy
+Homepage: http://www.numpy.org
+Depends: ATLAS (>= 3.10.2), python3 (>= 3.5.0)
+Priority: optional
+
+
+Package: python35-opencv3
+Version: 3.1.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: a54f5072a30d76f1052b514205fe70f1
+Size: 431852
+Filename: python35-opencv3_3.1.0_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library (Python 3.5 bindings)
+OE: unknown
+Homepage: http://opencv.org/
+Depends: opencv3 (= 3.1.0), python35-numpy (>= 1.10.2)
+Priority: optional
+
+
+Package: python35-opencv3
+Version: 3.1.0-r1
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: 8f3675c5de934ae83c745c5d8d2a3d8a
+Size: 431856
+Filename: python35-opencv3_3.1.0-r1_cortexa9-vfpv3.ipk
+Description: Open Source Computer Vision Library (Python 3.5 bindings)
+OE: unknown
+Homepage: http://opencv.org/
+Depends: opencv3 (= 3.1.0-r1), python35-numpy (>= 1.10.2)
+Priority: optional
+
+
+Package: python35-scipy
+Version: 0.17.0
+Section: devel
+Architecture: cortexa9-vfpv3
+Maintainer: RobotPy Developers <robotpy@googlegroups.com>
+MD5Sum: d33ae2deae141806807aa17bd15be8a8
+Size: 30847956
+Filename: python35-scipy_0.17.0_cortexa9-vfpv3.ipk
+Description: array processing for numbers, strings, records, and objects
+OE: scipy
+Homepage: http://www.scipy.org
+Depends: ATLAS (>= 3.10.2), python3 (>= 3.5.0), python35-numpy (>= 1.10)
+Priority: optional
+
+

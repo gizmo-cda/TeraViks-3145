@@ -1,0 +1,49 @@
+Introductions
+
+How many of you code?
+
+Say some joke about software
+
+WHAT ARE WE GOING TO LEARN THIS YEAR?
+GITHUB
+
+What is a programming langage?
+
+  1. A language designed to communicate instructions to a machine
+
+  2. How? COMPILER / INTERPRETER
+
+  3.Languages
+
+    types
+
+    different uses
+
+  3. FRC languages
+
+    advantages
+
+    say something funny about java
+
+  4. Python
+    why it is so good
+
+  5. Libraries
+    packages and pip
+
+    robotpy = WPI for python
+
+How do we get it there?
+
+  1. FTP - file transfer protocol
+  winscp
+  filezilla
+
+  2. SSH - secure shell
+  putty / bash-terminal
+
+  3. Driver Station
+
+Walkthrough of robot code
+
+Run robot code
