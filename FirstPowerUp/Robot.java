@@ -7,6 +7,12 @@
 
 package org.usfirst.frc.team3145.robot;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode.PixelFormat;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,6 +21,10 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -51,12 +61,51 @@ public class Robot extends IterativeRobot {
 	
 	DifferentialDrive _drive = new DifferentialDrive(_left, _right); 
 	
+	Solenoid _grabberator = new Solenoid(40, 5);
+	WPI_TalonSRX _grabMotor1 = new WPI_TalonSRX(5);
+	WPI_TalonSRX _grabMotor2 = new WPI_TalonSRX(6);
+	
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+		
+		UsbCamera usbCamera = new UsbCamera("USB Camera 0", 0);
+
+		MjpegServer mjpegServer1 = new MjpegServer("serve_USB Camera 0", 1181);
+
+		mjpegServer1.setSource(usbCamera); CvSink cvSink = new CvSink("opencv_USB Camera 0");
+
+		cvSink.setSource(usbCamera);
+
+		CvSource outputStream = new CvSource("Blur", PixelFormat.kMJPEG, 640, 480, 30);
+
+		MjpegServer mjpegServer2 = new MjpegServer("serve_Blur", 1182);
+
+		mjpegServer2.setSource(outputStream);
+		
+		// CameraServer.getInstance().startAutomaticCapture();
+		
+//		new Thread(() -> {
+//            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+//            camera.setResolution(320, 240);
+//            
+//            CvSink cvSink = CameraServer.getInstance().getVideo();
+//            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 320, 240);
+//            
+//            Mat source = new Mat();
+//            Mat output = new Mat();
+//            
+//            while(!Thread.interrupted()) {
+//                cvSink.grabFrame(source);
+//                Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+//                outputStream.putFrame(output);
+//            }
+//        }).start();
+		
 		
 		_solenoid.set(false);
 		
@@ -148,6 +197,22 @@ public class Robot extends IterativeRobot {
 			_solenoid.set(false);
 		}
 		
+		if (_armJoystick.getRawButton(1)){
+			_grabberator.set(true);
+		} else {
+			_grabberator.set(false);
+		}
+		
+		if (_armJoystick.getRawButton(4)) {
+			_grabMotor1.set(-1);
+			_grabMotor2.set(1);
+		} else if (_armJoystick.getRawButton(5)) {
+			_grabMotor1.set(1);
+			_grabMotor2.set(-1);
+		} else {
+			_grabMotor1.set(0);
+			_grabMotor2.set(0);
+		}
 	}
 
 	/**
