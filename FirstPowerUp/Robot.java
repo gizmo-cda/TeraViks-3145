@@ -7,11 +7,7 @@
 
 package org.usfirst.frc.team3145.robot;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.MjpegServer;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode.PixelFormat;
+
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -22,8 +18,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -39,32 +33,46 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  * project.
  */
 public class Robot extends IterativeRobot {
+	
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
-	TalonSRX _talon = new TalonSRX(0);
+	
+	//PID talon for arm tilt
+	TalonSRX _armTiltMotor = new TalonSRX(8);
+	
+	//Controllers
 	Joystick _armJoystick = new Joystick(2);
 	Joystick _driveJoystick = new Joystick(0);
 	
+	//Pneumatics
 	Compressor _compressor = new Compressor();
-	Solenoid _solenoid = new Solenoid(40, 1);
+	Solenoid _shifterSolenoid = new Solenoid(40, 1);
 	
-	// Drive Train
+	// Drive Train motors
 	WPI_TalonSRX _left1 = new WPI_TalonSRX(3);
 	WPI_TalonSRX _left2 = new WPI_TalonSRX(4);
 	WPI_TalonSRX _right1 = new WPI_TalonSRX(1);
 	WPI_TalonSRX _right2 = new WPI_TalonSRX(2);
-
+	
+	//Drive train speed controllers
 	SpeedControllerGroup _left = new SpeedControllerGroup(_left1, _left2);
 	SpeedControllerGroup _right = new SpeedControllerGroup(_right1, _right2);
 	
+	//Drive train object using speed controllers
 	DifferentialDrive _drive = new DifferentialDrive(_left, _right); 
 	
-	Solenoid _grabberator = new Solenoid(40, 5);
+	//Hardware for grabberator
+	Solenoid _grabberator = new Solenoid(40, 4);
 	WPI_TalonSRX _grabMotor1 = new WPI_TalonSRX(5);
 	WPI_TalonSRX _grabMotor2 = new WPI_TalonSRX(6);
 	
+	// Scissor lift solenoid stuff
+	Solenoid _scissorLiftSol = new Solenoid(40, 2);
+	
+	// Climb 
+	Solenoid _climbSol = new Solenoid(40, 3);
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -73,84 +81,92 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		
-		UsbCamera usbCamera = new UsbCamera("USB Camera 0", 0);
-
-		MjpegServer mjpegServer1 = new MjpegServer("serve_USB Camera 0", 1181);
-
-		mjpegServer1.setSource(usbCamera); CvSink cvSink = new CvSink("opencv_USB Camera 0");
-
-		cvSink.setSource(usbCamera);
-
-		CvSource outputStream = new CvSource("Blur", PixelFormat.kMJPEG, 640, 480, 30);
-
-		MjpegServer mjpegServer2 = new MjpegServer("serve_Blur", 1182);
-
-		mjpegServer2.setSource(outputStream);
+		// We know that this works
+		CameraServer.getInstance().startAutomaticCapture();
 		
-		// CameraServer.getInstance().startAutomaticCapture();
-		
-//		new Thread(() -> {
-//            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-//            camera.setResolution(320, 240);
-//            
-//            CvSink cvSink = CameraServer.getInstance().getVideo();
-//            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 320, 240);
-//            
-//            Mat source = new Mat();
-//            Mat output = new Mat();
-//            
-//            while(!Thread.interrupted()) {
-//                cvSink.grabFrame(source);
-//                Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-//                outputStream.putFrame(output);
-//            }
-//        }).start();
-		
-		
-		_solenoid.set(false);
-		
-		m_chooser.addDefault("Default Auto", kDefaultAuto);
-		m_chooser.addObject("My Auto", kCustomAuto);
-		SmartDashboard.putData("Auto choices", m_chooser);
-		
-		_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-		_talon.setSensorPhase(true);
-		_talon.setInverted(false);
-
-		/* Set relevant frame periods to be at least as fast as periodic rate */
-		_talon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
-		_talon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
-
-		/* set the peak and nominal outputs */
-		_talon.configNominalOutputForward(0, Constants.kTimeoutMs);
-		_talon.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		_talon.configPeakOutputForward(1, Constants.kTimeoutMs);
-		_talon.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-
-		/* set closed loop gains in slot0 - see documentation */
-		_talon.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
-		_talon.config_kF(0, 0.2, Constants.kTimeoutMs);
-		_talon.config_kP(0, 1, Constants.kTimeoutMs);
-		_talon.config_kI(0, 0, Constants.kTimeoutMs);
-		_talon.config_kD(0, 0, Constants.kTimeoutMs);
-		/* set acceleration and vcruise velocity - see documentation */
-		_talon.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
-		_talon.configMotionAcceleration(6000, Constants.kTimeoutMs);
 		/* zero the sensor */
-		_talon.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+
+		
+		/* first choose the sensor */
+		_armTiltMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,
+		Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		_armTiltMotor.setSensorPhase(true);
+		_armTiltMotor.setInverted(false);
+		/* Set relevant frame periods to be at least as fast as periodic rate*/
+		_armTiltMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10,
+		Constants.kTimeoutMs);
+		_armTiltMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10,
+		Constants.kTimeoutMs);
+		/* set the peak and nominal outputs */
+		_armTiltMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
+		_armTiltMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+		_armTiltMotor.configPeakOutputForward(1, Constants.kTimeoutMs);
+		_armTiltMotor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+		/* set closed loop gains in slot0 - see documentation */
+		_armTiltMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
+		_armTiltMotor.config_kF(0, 0, Constants.kTimeoutMs);
+		_armTiltMotor.config_kP(0, 2, Constants.kTimeoutMs);
+		_armTiltMotor.config_kI(0, 0, Constants.kTimeoutMs);
+		_armTiltMotor.config_kD(0, 4, Constants.kTimeoutMs);
+		/* set acceleration and vcruise velocity - see documentation */
+		_armTiltMotor.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
+		_armTiltMotor.configMotionAcceleration(6000, Constants.kTimeoutMs);
+
+		
+//		// _armTiltMotor.setSelectedSensorPosition(261, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+//		
+////		new Thread(() -> {
+////            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+////            camera.setResolution(320, 240);
+////            
+////            CvSink cvSink = CameraServer.getInstance().getVideo();
+////            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 320, 240);
+////            
+////            Mat source = new Mat();
+////            Mat output = new Mat();
+////            
+////            while(!Thread.interrupted()) {
+////                cvSink.grabFrame(source);
+////                Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+////                outputStream.putFrame(output);
+////            }
+////        }).start();
+//		
+//		//Shift into low gear for safety
+//		_shifterSolenoid.set(false);
+//		
+//		m_chooser.addDefault("Default Auto", kDefaultAuto);
+//		m_chooser.addObject("My Auto", kCustomAuto);
+//		SmartDashboard.putData("Auto choices", m_chooser);
+//		
+//		_armTiltMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+//		_armTiltMotor.setSensorPhase(true);
+//		_armTiltMotor.setInverted(false);
+//
+//		/* Set relevant frame periods to be at least as fast as periodic rate */
+//		_armTiltMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+//		_armTiltMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
+//
+//		/* set the peak and nominal outputs */
+//		_armTiltMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
+//		_armTiltMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+//		_armTiltMotor.configPeakOutputForward(1, Constants.kTimeoutMs);
+//		_armTiltMotor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+//
+//		/* set closed loop gains in slot0 - see documentation */
+//		_armTiltMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
+//		_armTiltMotor.config_kF(0, 0.2, Constants.kTimeoutMs);
+//		_armTiltMotor.config_kP(0, 1, Constants.kTimeoutMs);
+//		_armTiltMotor.config_kI(0, 0, Constants.kTimeoutMs);
+//		_armTiltMotor.config_kD(0, 0, Constants.kTimeoutMs);
+//		/* set acceleration and vcruise velocity - see documentation */
+//		_armTiltMotor.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
+//		_armTiltMotor.configMotionAcceleration(6000, Constants.kTimeoutMs);
+//		
+//		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 	}
 
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString line to get the auto name from the text box below the Gyro
-	 *
-	 * <p>You can add additional auto modes by adding additional comparisons to
-	 * the switch structure below with additional strings. If using the
-	 * SendableChooser make sure to add them to the chooser code above as well.
-	 */
 	@Override
 	public void autonomousInit() {
 		m_autoSelected = m_chooser.getSelected();
@@ -181,28 +197,46 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
-	
-//		_talon.set(ControlMode.PercentOutput, 1.0);
+		
+		//Operates the arm tilt motor with PID
+		//Get stick position
 		double leftYstick = _armJoystick.getRawAxis(1);
-		//double motorOutput = _talon.getMotorOutputPercent();
-	
-		double targetPos = leftYstick * 980;
-		// _talon.set(ControlMode.MotionMagic, targetPos);
-		
-		_drive.arcadeDrive(_driveJoystick.getY(), -1 * _driveJoystick.getZ());
-		
-		if (_driveJoystick.getRawButton(7)) {
-			_solenoid.set(true);
-		} else if (_driveJoystick.getRawButton(8)) {
-			_solenoid.set(false);
+		//Set target position
+		double targetPos = leftYstick * 1300;
+		// Motor will only turn in the "negative" direction (when joystick is forward, not backward)
+		if (targetPos >= 0) {
+			targetPos = 0;
+		} else {
+			_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
 		}
 		
+		//Drive the motor to the target position
+		_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
+
+		System.out.println("Target Position: " + targetPos);
+		System.out.println("Current Encoder Position: " + _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx));
+		
+		
+		//Run the drive train based on the controller input
+		_drive.arcadeDrive(_driveJoystick.getY(), -1 * _driveJoystick.getZ());
+		
+		
+		//Shift into high and low gear
+		if (_driveJoystick.getRawButton(7)) {
+			_shifterSolenoid.set(true);
+		} else if (_driveJoystick.getRawButton(8)) {
+			_shifterSolenoid.set(false);
+		}
+		
+		
+		//Open and close grabberator claw
 		if (_armJoystick.getRawButton(1)){
 			_grabberator.set(true);
 		} else {
 			_grabberator.set(false);
 		}
 		
+		//Drive grabberator motors in and out
 		if (_armJoystick.getRawButton(4)) {
 			_grabMotor1.set(-1);
 			_grabMotor2.set(1);
@@ -213,8 +247,14 @@ public class Robot extends IterativeRobot {
 			_grabMotor1.set(0);
 			_grabMotor2.set(0);
 		}
+		// Scissor Lift Control
+		if (_armJoystick.getRawButton(2)) {	
+			_scissorLiftSol.set(false);
+		} else if (_armJoystick.getRawButton(3)) {
+			_scissorLiftSol.set(true);
+		}
 	}
-
+				
 	/**
 	 * This function is called periodically during test mode.
 	 */
