@@ -7,7 +7,6 @@
 
 package org.usfirst.frc.team3145.robot;
 
-
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -69,7 +68,8 @@ public class Robot extends IterativeRobot {
 	WPI_TalonSRX _grabMotor2 = new WPI_TalonSRX(6);
 	
 	// Scissor lift solenoid stuff
-	Solenoid _scissorLiftSol = new Solenoid(40, 2);
+	Solenoid _scissorLiftSolUp = new Solenoid(40, 2);
+	Solenoid _scissorLiftSolUpDown = new Solenoid(40, 0);
 	
 	// Climb 
 	Solenoid _climbSol = new Solenoid(40, 3);
@@ -237,10 +237,10 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//Drive grabberator motors in and out
-		if (_armJoystick.getRawButton(4)) {
+		if (_armJoystick.getRawButton(6)) {
 			_grabMotor1.set(-1);
 			_grabMotor2.set(1);
-		} else if (_armJoystick.getRawButton(5)) {
+		} else if (_armJoystick.getRawButton(7)) {
 			_grabMotor1.set(1);
 			_grabMotor2.set(-1);
 		} else {
@@ -249,9 +249,14 @@ public class Robot extends IterativeRobot {
 		}
 		// Scissor Lift Control
 		if (_armJoystick.getRawButton(2)) {	
-			_scissorLiftSol.set(false);
-		} else if (_armJoystick.getRawButton(3)) {
-			_scissorLiftSol.set(true);
+			_scissorLiftSolUpDown.set(true);
+		} else {
+			_scissorLiftSolUpDown.set(false);
+		}
+		if (_armJoystick.getRawButton(3)) {
+			_scissorLiftSolUp.set(true);
+		} else {
+			_scissorLiftSolUp.set(false);
 		}
 	}
 				
