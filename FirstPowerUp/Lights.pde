@@ -16,18 +16,33 @@ void setup() {
 
 void loop() {
 
-for (int i = 0; i < 61; i++){
-  for (int k = 0; k < 256; k+=5){
-    strip.setPixelColor(i, k, 0, 0);
-    strip.show();
-    delay(5);
+  for (int i = 0; i < 61; i++){
+    for (int k = 0; k < 256; k+=5){
+      strip.setPixelColor(i, k, 0, 0);
+      strip.show();
+      delay(2);
+    }
   }
-}
-for (int i = 0; i < 61; i++){
-  for (int k = 0; k < 256; k+=5){
-    strip.setPixelColor(i, 0, 0, k);
-    strip.show();
-    delay(5);
+  for (int i = 0; i < 61; i++){
+    for (int k = 0; k < 256; k+=5){
+      strip.setPixelColor(i, 0, 0, k);
+      strip.show();
+      delay(1);
+    }
+  }
+  for (int k = 0; k < 256; k++){
+    for (int i = 61; i > 0; i--){
+      strip.setPixelColor(i, k, k, k);
+      strip.show();
+      delay(1);
+    }
+  }
+  for (int i = 61; i > 0; i--){
+    for (int k = 0; k < 256; k+=5){
+      strip.setPixelColor(i, k, k, k);
+      strip.show();
+      delay(1);
+    }
   }
 }
  
@@ -80,4 +95,3 @@ for (int i = 0; i < 61; i++){
 //    strip.show();
 //     delay(50);
 //  }
-}
