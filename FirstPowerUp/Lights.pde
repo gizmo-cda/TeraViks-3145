@@ -5,8 +5,7 @@
 #define NUM_LEDS 60
 
 //create a NeoPixel strip
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
-
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800); 
 
 void setup() {
   // start the strip and blank it out
@@ -14,84 +13,53 @@ void setup() {
   strip.show();
 }
 
-void loop() {
+void pacman() {
+    for (int t = 0; t <= NUM_LEDS; t++){
+    strip.setPixelColor(t, 255, 0, 0); // red
+    strip.setPixelColor(t-1, 255, 0, 255); //pink 
+    strip.setPixelColor(t-2, 0, 255, 255); //cyan
+    strip.setPixelColor(t-3, 200, 60, 0); //orange
+    strip.setPixelColor(t-5, 255, 255, 0); //yellow
+    strip.show();
+    delay(100);
 
-  for (int i = 0; i < 61; i++){
-    for (int k = 0; k < 256; k+=5){
-      strip.setPixelColor(i, k, 0, 0);
-      strip.show();
-      delay(2);
-    }
-  }
-  for (int i = 0; i < 61; i++){
-    for (int k = 0; k < 256; k+=5){
-      strip.setPixelColor(i, 0, 0, k);
-      strip.show();
-      delay(1);
-    }
-  }
-  for (int k = 0; k < 256; k++){
-    for (int i = 61; i > 0; i--){
-      strip.setPixelColor(i, k, k, k);
-      strip.show();
-      delay(1);
-    }
-  }
-  for (int i = 61; i > 0; i--){
-    for (int k = 0; k < 256; k+=5){
-      strip.setPixelColor(i, k, k, k);
-      strip.show();
-      delay(1);
-    }
+    strip.setPixelColor(t-5, 0, 0, 0);
+    strip.setPixelColor(t-3, 0, 0, 0);
+    strip.setPixelColor(t-2, 0, 0, 0);
+    strip.setPixelColor(t-1, 0, 0, 0);
+    strip.setPixelColor(t, 0, 0, 0);
+    delay(100);
+    strip.show();
   }
 }
- 
+void led_sequence(int color1R, int color1G, int color1B, int color2R, int color2G, int color2B) {
+  for (int i = 61; i >= 0; i-=1){
+      strip.setPixelColor(i, color2R, color2G, color2B);
+      strip.show();
+      delay(30);
+    }
+    for (int i = 0; i < 61; i+=1){
+      strip.setPixelColor(i, color1R, color1G, color1B);
+      strip.show();
+      delay(30);
+    }
+    for (int i = 61; i >= 0; i-=2){
+      strip.setPixelColor(i, color2R, color2G, color2B);
+      strip.show();
+      delay(75);
+    }
+    for (int i = 0; i < 61; i+=1){
+      strip.setPixelColor(i, color2R, color2G, color2B);
+      strip.show();
+    }
+    for (int i = 0; i < 61; i+=2){
+      strip.setPixelColor(i, color1R, color1G, color1B);
+      strip.show();
+          delay(75);
+    }
+}
 
-////  Cop Chase
-//  for (int t = 0; t <= NUM_LEDS; t++){
-//    strip.setPixelColor(t, 255, 20, 255);
-//    strip.setPixelColor(t-2, 255, 0, 0);
-//  
-//    strip.setPixelColor(t-3, 0, 0, 255);
-//    strip.show();
-//    delay(50);
-//
-//    strip.setPixelColor(t, 0, 0, 0);
-//    strip.setPixelColor(t-3, 0, 0, 0);
-//    strip.setPixelColor(t-2, 0, 0, 0);
-//    strip.show();
-//  }
-//
-//  
-//// OTHER THING:
-//  for (int x = 0; x <= NUM_LEDS; x++){
-//    if (x%2 == 0){
-//      strip.setPixelColor(x, 255, 0, 0);
-//      strip.show();
-//    }
-//    else if (x%3 == 0) {
-//      strip.setPixelColor(x, 255, 255, 0);
-//      strip.show();
-//    }
-//    else {
-//      strip.setPixelColor(x, 255, 255, 255);
-//      strip.show();
-//    }
-//    delay(10);
-//  }
-//
-//  for (int x = 0; x <= NUM_LEDS; x++){
-//    strip.setPixelColor(x, 0, 255, 0);
-//    strip.show();
-//    delay(10);
-//  }
-//  for (int x = 0; x <= NUM_LEDS; x++){
-//    strip.setPixelColor(x, 255, 255, 255);
-//    strip.show();
-//    delay(10);
-//  }
-//  for (int y = 0; y <= NUM_LEDS; y++){
-//    strip.setPixelColor(y, 0, 0, 0);
-//    strip.show();
-//     delay(50);
-//  }
+void loop() {
+  led_sequence(200, 10, 120, 20, 150, 255);
+  led_sequence(0, 0, 255, 255, 255, 255);
+}
