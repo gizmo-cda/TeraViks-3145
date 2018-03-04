@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -34,7 +34,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class Robot extends IterativeRobot {
 	
 	private static final String kDefaultAuto = "Default";
-	private static final String kCustomAuto = "My Auto";
+	private static final String kCustomAuto1 = "Go Straight";
+	private static final String kCustomAuto2 = "Angle right";
+	private static final String kCustomAuto3 = "Angle left";
+	private static final String kCustomAuto4 = "Go straight and place block";
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
@@ -49,7 +52,7 @@ public class Robot extends IterativeRobot {
 	Compressor _compressor = new Compressor();
 	Solenoid _shifterSolenoid = new Solenoid(40, 1);
 	
-	// Drive Train motors
+//	// Drive Train motors
 	WPI_TalonSRX _left1 = new WPI_TalonSRX(3);
 	WPI_TalonSRX _left2 = new WPI_TalonSRX(4);
 	WPI_TalonSRX _right1 = new WPI_TalonSRX(1);
@@ -62,14 +65,18 @@ public class Robot extends IterativeRobot {
 	//Drive train object using speed controllers
 	DifferentialDrive _drive = new DifferentialDrive(_left, _right); 
 	
+//	//Hardware for grabberator
+//	Solenoid _grabberator = new Solenoid(40, 4);
+//	WPI_TalonSRX _grabMotor1 = new WPI_TalonSRX(5);
+//	WPI_TalonSRX _grabMotor2 = new WPI_TalonSRX(6);
+	
 	//Hardware for grabberator
 	Solenoid _grabberator = new Solenoid(40, 4);
-	WPI_TalonSRX _grabMotor1 = new WPI_TalonSRX(5);
-	WPI_TalonSRX _grabMotor2 = new WPI_TalonSRX(6);
+	WPI_TalonSRX _grabMotor = new WPI_TalonSRX(5);
 	
 	// Scissor lift solenoid stuff
 	Solenoid _scissorLiftSolUp = new Solenoid(40, 2);
-	Solenoid _scissorLiftSolUpDown = new Solenoid(40, 0);
+	Solenoid _scissorLiftSolDown = new Solenoid(40, 0);
 	
 	// Climb 
 	Solenoid _climbSol = new Solenoid(40, 3);
@@ -113,58 +120,6 @@ public class Robot extends IterativeRobot {
 		_armTiltMotor.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
 		_armTiltMotor.configMotionAcceleration(6000, Constants.kTimeoutMs);
 
-		
-//		// _armTiltMotor.setSelectedSensorPosition(261, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-//		
-////		new Thread(() -> {
-////            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-////            camera.setResolution(320, 240);
-////            
-////            CvSink cvSink = CameraServer.getInstance().getVideo();
-////            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 320, 240);
-////            
-////            Mat source = new Mat();
-////            Mat output = new Mat();
-////            
-////            while(!Thread.interrupted()) {
-////                cvSink.grabFrame(source);
-////                Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-////                outputStream.putFrame(output);
-////            }
-////        }).start();
-//		
-//		//Shift into low gear for safety
-//		_shifterSolenoid.set(false);
-//		
-//		m_chooser.addDefault("Default Auto", kDefaultAuto);
-//		m_chooser.addObject("My Auto", kCustomAuto);
-//		SmartDashboard.putData("Auto choices", m_chooser);
-//		
-//		_armTiltMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-//		_armTiltMotor.setSensorPhase(true);
-//		_armTiltMotor.setInverted(false);
-//
-//		/* Set relevant frame periods to be at least as fast as periodic rate */
-//		_armTiltMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
-//		_armTiltMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
-//
-//		/* set the peak and nominal outputs */
-//		_armTiltMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
-//		_armTiltMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-//		_armTiltMotor.configPeakOutputForward(1, Constants.kTimeoutMs);
-//		_armTiltMotor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-//
-//		/* set closed loop gains in slot0 - see documentation */
-//		_armTiltMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
-//		_armTiltMotor.config_kF(0, 0.2, Constants.kTimeoutMs);
-//		_armTiltMotor.config_kP(0, 1, Constants.kTimeoutMs);
-//		_armTiltMotor.config_kI(0, 0, Constants.kTimeoutMs);
-//		_armTiltMotor.config_kD(0, 0, Constants.kTimeoutMs);
-//		/* set acceleration and vcruise velocity - see documentation */
-//		_armTiltMotor.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
-//		_armTiltMotor.configMotionAcceleration(6000, Constants.kTimeoutMs);
-//		
-//		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 	}
 
 	@Override
@@ -180,13 +135,66 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		int counter;
 		switch (m_autoSelected) {
-			case kCustomAuto:
-				// Put custom auto code here
+			case kCustomAuto1:
+				// Straight line until counter time ends
+				counter = 0;	
+				// _shifterSolenoid.set(true);
+				if (counter < 100) {
+					_drive.arcadeDrive(.65, 0);
+					counter++;
+					
+				} else {
+					_drive.arcadeDrive(0, 0);
+				}
+				break;
+			case kCustomAuto2:
+				// Angle right and go forward
+				counter = 0;
+				// _shifterSolenoid.set(false); See if we even feel comfortable shifting here because the turn and everything might be super unstable
+				if (counter < 100) {
+					_drive.arcadeDrive(.65, .25); // ? see about the scale of the  z axis when you are trying to turn
+					counter++;
+				} else {
+					_drive.arcadeDrive(0,  0);
+				}
+				break;
+			case kCustomAuto3:
+				// Angle left and go forward
+				counter = 0;
+				// _shifterSolenoid.set(false);
+				if (counter < 100) {
+					_drive.arcadeDrive(.65,  -.25); //Same thing as the turn right, test the magnitude of the z axis when you try to turn left
+					counter++;
+				} else {
+					_drive.arcadeDrive(0, 0);
+				}
+				break;
+			case kCustomAuto4:
+				// Go in a straight line. After you stop, place the block into the switch
+				counter = 0;
+				_armTiltMotor.set(ControlMode.MotionMagic, 0); // we can change this angle once we determine the best angle for "shooting" an placing the block
+				// _shifterSolenoid.set(true);
+				if (counter < 100) {
+					_drive.arcadeDrive(.65, 0);
+				} else {
+					_drive.arcadeDrive(0, 0);
+					for (int i = 0; i < 20; i++) {
+						// Functionality for placing block
+						_grabMotor.set(1);
+						// Competition
+						//_grabMotor1.set(-1);
+						//_grabMotor2.set(1);
+					}
+				}
+				_grabMotor.set(0);
+				//_grabMotor1.set(0);
+				//_grabMotor2.set(0);
 				break;
 			case kDefaultAuto:
 			default:
-				// Put default auto code here
+				System.out.println("This is the default case; let's see what happens here, I guess. Pretend we drive straight?");
 				break;
 		}
 	}
@@ -204,11 +212,12 @@ public class Robot extends IterativeRobot {
 		//Set target position
 		double targetPos = leftYstick * 1300;
 		// Motor will only turn in the "negative" direction (when joystick is forward, not backward)
-		if (targetPos >= 0) {
-			targetPos = 0;
-		} else {
-			_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
-		}
+		_armTiltMotor.set(ControlMode.MotionMagic, -1 * targetPos);
+//		if (targetPos >= bottom) {
+//			targetPos = bottom;
+//		} else if (targetPos >= top) {
+//			targetPos = top;
+//		}
 		
 		//Drive the motor to the target position
 		_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
@@ -238,20 +247,23 @@ public class Robot extends IterativeRobot {
 		
 		//Drive grabberator motors in and out
 		if (_armJoystick.getRawButton(6)) {
-			_grabMotor1.set(-1);
-			_grabMotor2.set(1);
+//			_grabMotor1.set(-1);
+//			_grabMotor2.set(1);
+			_grabMotor.set(1);
 		} else if (_armJoystick.getRawButton(7)) {
-			_grabMotor1.set(1);
-			_grabMotor2.set(-1);
+//			_grabMotor1.set(1);
+//			_grabMotor2.set(-1);
+			_grabMotor.set(-1);
 		} else {
-			_grabMotor1.set(0);
-			_grabMotor2.set(0);
+//			_grabMotor1.set(0);
+//			_grabMotor2.set(0);
+			_grabMotor.set(0);
 		}
 		// Scissor Lift Control
 		if (_armJoystick.getRawButton(2)) {	
-			_scissorLiftSolUpDown.set(true);
+			_scissorLiftSolDown.set(true);
 		} else {
-			_scissorLiftSolUpDown.set(false);
+			_scissorLiftSolDown.set(false);
 		}
 		if (_armJoystick.getRawButton(3)) {
 			_scissorLiftSolUp.set(true);
