@@ -94,7 +94,6 @@ public class Robot extends IterativeRobot {
 		/* zero the sensor */
 		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 
-		
 		/* first choose the sensor */
 		_armTiltMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,
 		Constants.kPIDLoopIdx, Constants.kTimeoutMs);
@@ -219,6 +218,14 @@ public class Robot extends IterativeRobot {
 //			targetPos = top;
 //		}
 		
+		if (targetPos >= 5) {
+			targetPos = -5;
+		} else if (targetPos <= -98) {
+			targetPos = -108;
+		} 
+		
+		_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
+		
 		//Drive the motor to the target position
 		_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
 
@@ -232,9 +239,9 @@ public class Robot extends IterativeRobot {
 		
 		//Shift into high and low gear
 		if (_driveJoystick.getRawButton(7)) {
-			_shifterSolenoid.set(true);
-		} else if (_driveJoystick.getRawButton(8)) {
 			_shifterSolenoid.set(false);
+		} else if (_driveJoystick.getRawButton(8)) {
+			_shifterSolenoid.set(true);
 		}
 		
 		
@@ -249,11 +256,11 @@ public class Robot extends IterativeRobot {
 		if (_armJoystick.getRawButton(6)) {
 //			_grabMotor1.set(-1);
 //			_grabMotor2.set(1);
-			_grabMotor.set(1);
+			_grabMotor.set(-1);
 		} else if (_armJoystick.getRawButton(7)) {
 //			_grabMotor1.set(1);
 //			_grabMotor2.set(-1);
-			_grabMotor.set(-1);
+			_grabMotor.set(1);
 		} else {
 //			_grabMotor1.set(0);
 //			_grabMotor2.set(0);
@@ -265,8 +272,10 @@ public class Robot extends IterativeRobot {
 		} else {
 			_scissorLiftSolDown.set(false);
 		}
-		if (_armJoystick.getRawButton(3)) {
-			_scissorLiftSolUp.set(true);
+		if (_armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx) <= -90) {
+			if (_armJoystick.getRawButton(3)) {
+				_scissorLiftSolUp.set(true);
+			}
 		} else {
 			_scissorLiftSolUp.set(false);
 		}
