@@ -14,11 +14,11 @@ Engage kids in kindergarten through high school in exciting, Mentor-based, resea
 
 Link to the [robot.py documentation](https://robotpy.readthedocs.io/en/stable/) we use to program the robot
 
-Crista | Joe | Kennedy | Amber
------------- | ------------- | ------------ | -------------
-Lead Programmer V.2| Lead Programmer V.3 | "MOrAl SuPpOrT" | code
-![FRC](http://i1239.photobucket.com/albums/ff510/drumsuperman/TheA-TeamWay.jpg) | ![Meme](https://i.imgur.com/67T3LN9.png) | ![code](https://i.imgflip.com/lotgw.jpg) | ![Dwight](https://i.imgflip.com/tuv.jpg)
-| :expressionless: | :eyes: | :scream: | :smirk_cat:
+Crista | Joe | Kennedy 
+------------ | ------------- | ------------ 
+Lead Programmer V.2| Lead Programmer V.3 | "MOrAl SuPpOrT" 
+![FRC](http://i1239.photobucket.com/albums/ff510/drumsuperman/TheA-TeamWay.jpg) | ![Meme](https://i.imgur.com/67T3LN9.png) | ![code](https://i.imgflip.com/lotgw.jpg) |
+| :expressionless: | :eyes: | :scream: |
 
 * We 
 * teach 
