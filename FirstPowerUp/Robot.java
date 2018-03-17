@@ -9,16 +9,20 @@ package org.usfirst.frc.team3145.robot;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+// import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -33,13 +37,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  */
 public class Robot extends IterativeRobot {
 	
-	private static final String kDefaultAuto = "Default";
-	private static final String kCustomAuto1 = "Go Straight";
-	private static final String kCustomAuto2 = "Angle right";
-	private static final String kCustomAuto3 = "Angle left";
-	private static final String kCustomAuto4 = "Go straight and place block";
-	private String m_autoSelected;
-	private SendableChooser<String> m_chooser = new SendableChooser<>();
+//	private static final String kDefaultAuto = "Default";
+//	private static final String kCustomAuto1 = "Go Straight";
+//	private static final String kCustomAuto2 = "Angle right";
+//	private static final String kCustomAuto3 = "Angle left";
+//	private static final String kCustomAuto4 = "Go straight and place block";
+	//private String m_autoSelected;
+	//private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
 	//PID talon for arm tilt
 	TalonSRX _armTiltMotor = new TalonSRX(8);
@@ -80,7 +84,21 @@ public class Robot extends IterativeRobot {
 	
 	// Climb 
 	Solenoid _climbSol = new Solenoid(40, 3);
+
+	// Limit switch that is TRUE when the scissor lift is fully retracted
+	DigitalInput _limitSwitch = new DigitalInput(1);
 	
+	// True until we hit the top
+	DigitalInput _homeSwitch = new DigitalInput(0);
+	
+	double targetPos;
+
+	private boolean hasBeenHomed;
+	
+	//Autonomous
+	// Command autonomousCommand;
+	// SendableChooser autoChooser;
+		
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -88,11 +106,16 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		
+		// autoChooser = new SendableChooser();
+		// autoChooser.addDefault("Default autonomous", new autoDefault());
+		// autoChooser.addObject("Autonomous 1", new auto1());
+		// SmartDashboard.putData("Auto mode chooser", autoChooser);
+		
+		// What scissor lift should be set to
+		// targetPos = - 1850;
+	
 		// We know that this works
 		CameraServer.getInstance().startAutomaticCapture();
-		
-		/* zero the sensor */
-		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 
 		/* first choose the sensor */
 		_armTiltMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,
@@ -111,22 +134,29 @@ public class Robot extends IterativeRobot {
 		_armTiltMotor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
 		/* set closed loop gains in slot0 - see documentation */
 		_armTiltMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
-		_armTiltMotor.config_kF(0, 0, Constants.kTimeoutMs);
-		_armTiltMotor.config_kP(0, 2, Constants.kTimeoutMs);
-		_armTiltMotor.config_kI(0, 0, Constants.kTimeoutMs);
-		_armTiltMotor.config_kD(0, 4, Constants.kTimeoutMs);
+		_armTiltMotor.config_kF(Constants.kSlotIdx, .1, Constants.kTimeoutMs);
+		_armTiltMotor.config_kP(Constants.kSlotIdx, 50, Constants.kTimeoutMs);
+		_armTiltMotor.config_kI(Constants.kSlotIdx, 0, Constants.kTimeoutMs);
+		_armTiltMotor.config_kD(Constants.kSlotIdx, 0, Constants.kTimeoutMs);
 		/* set acceleration and vcruise velocity - see documentation */
-		_armTiltMotor.configMotionCruiseVelocity(15000, Constants.kTimeoutMs);
-		_armTiltMotor.configMotionAcceleration(6000, Constants.kTimeoutMs);
-
+		_armTiltMotor.configMotionCruiseVelocity(220, Constants.kTimeoutMs);
+		_armTiltMotor.configMotionAcceleration(220, Constants.kTimeoutMs);
+		
+		
 	}
-
+	
 	@Override
 	public void autonomousInit() {
-		m_autoSelected = m_chooser.getSelected();
-		// autoSelected = SmartDashboard.getString("Auto Selector",
-		// defaultAuto);
-		System.out.println("Auto selected: " + m_autoSelected);
+		//home tilt motor
+		hasBeenHomed = false;
+		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
+			_armTiltMotor.set(ControlMode.MotionMagic, i);
+		}	
+		hasBeenHomed = true;
+		System.out.println("NOT MOVING");
+		/* zero the sensor */
+		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		_armTiltMotor.set(ControlMode.MotionMagic, 10);
 	}
 
 	/**
@@ -134,69 +164,78 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		int counter;
-		switch (m_autoSelected) {
-			case kCustomAuto1:
-				// Straight line until counter time ends
-				counter = 0;	
-				// _shifterSolenoid.set(true);
-				if (counter < 100) {
-					_drive.arcadeDrive(.65, 0);
-					counter++;
-					
-				} else {
-					_drive.arcadeDrive(0, 0);
-				}
-				break;
-			case kCustomAuto2:
-				// Angle right and go forward
-				counter = 0;
-				// _shifterSolenoid.set(false); See if we even feel comfortable shifting here because the turn and everything might be super unstable
-				if (counter < 100) {
-					_drive.arcadeDrive(.65, .25); // ? see about the scale of the  z axis when you are trying to turn
-					counter++;
-				} else {
-					_drive.arcadeDrive(0,  0);
-				}
-				break;
-			case kCustomAuto3:
-				// Angle left and go forward
-				counter = 0;
-				// _shifterSolenoid.set(false);
-				if (counter < 100) {
-					_drive.arcadeDrive(.65,  -.25); //Same thing as the turn right, test the magnitude of the z axis when you try to turn left
-					counter++;
-				} else {
-					_drive.arcadeDrive(0, 0);
-				}
-				break;
-			case kCustomAuto4:
-				// Go in a straight line. After you stop, place the block into the switch
-				counter = 0;
-				_armTiltMotor.set(ControlMode.MotionMagic, 0); // we can change this angle once we determine the best angle for "shooting" an placing the block
-				// _shifterSolenoid.set(true);
-				if (counter < 100) {
-					_drive.arcadeDrive(.65, 0);
-				} else {
-					_drive.arcadeDrive(0, 0);
-					for (int i = 0; i < 20; i++) {
-						// Functionality for placing block
-						_grabMotor.set(1);
-						// Competition
-						//_grabMotor1.set(-1);
-						//_grabMotor2.set(1);
-					}
-				}
-				_grabMotor.set(0);
-				//_grabMotor1.set(0);
-				//_grabMotor2.set(0);
-				break;
-			case kDefaultAuto:
-			default:
-				System.out.println("This is the default case; let's see what happens here, I guess. Pretend we drive straight?");
-				break;
+//		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
+//			_armTiltMotor.set(ControlMode.MotionMagic, i);
+//		}	
+//		hasBeenHomed = true;
+//		System.out.println("NOT MOVING");
+//		/* zero the sensor */
+//		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+//		_armTiltMotor.set(ControlMode.MotionMagic, 10);
+		// Scheduler.getInstance().run();
+//		int counter;
+//		switch (m_autoSelected) {
+//			case kCustomAuto1:
+//				// Straight line until counter time ends
+//				counter = 0;	
+//				// _shifterSolenoid.set(true);
+//				if (counter < 100) {
+//					_drive.arcadeDrive(.65, 0);
+//					counter++;
+//					
+//				} else {
+//					_drive.arcadeDrive(0, 0);
+//				}
+//				break;
+//			case kCustomAuto2:
+//				// Angle right and go forward
+//				counter = 0;
+//				// _shifterSolenoid.set(false); See if we even feel comfortable shifting here because the turn and everything might be super unstable
+//				if (counter < 100) {
+//					_drive.arcadeDrive(.65, .25); // ? see about the scale of the  z axis when you are trying to turn
+//					counter++;
+//				} else {
+//					_drive.arcadeDrive(0,  0);
+//				}
+//				break;
+//			case kCustomAuto3:
+//				// Angle left and go forward
+//				counter = 0;
+//				// _shifterSolenoid.set(false);
+//				if (counter < 100) {
+//					_drive.arcadeDrive(.65,  -.25); //Same thing as the turn right, test the magnitude of the z axis when you try to turn left
+//					counter++;
+//				} else {
+//					_drive.arcadeDrive(0, 0);
+//				}
+//				break;
+//			case kCustomAuto4:
+//				// Go in a straight line. After you stop, place the block into the switch
+//				counter = 0;
+//				_armTiltMotor.set(ControlMode.MotionMagic, 0); // we can change this angle once we determine the best angle for "shooting" an placing the block
+//				// _shifterSolenoid.set(true);
+//				if (counter < 100) {
+//					_drive.arcadeDrive(.65, 0);
+//				} else {
+//					_drive.arcadeDrive(0, 0);
+//					for (int i = 0; i < 20; i++) {
+//						// Functionality for placing block
+//						_grabMotor.set(1);
+//						// Competition
+//						//_grabMotor1.set(-1);
+//						//_grabMotor2.set(1);
+//					}
+//				}
+//				_grabMotor.set(0);
+//				//_grabMotor1.set(0);
+//				//_grabMotor2.set(0);
+//				break;
+//			case kDefaultAuto:
+//			default:
+//				System.out.println("This is the default case; let's see what happens here, I guess. Pretend we drive straight?");
+//				break;
 		}
-	}
+	//}
 
 	/**
 	 * This function is called periodically during operator control.
@@ -204,38 +243,47 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
-		
 		//Operates the arm tilt motor with PID
 		//Get stick position
+		
+		double encoderPos = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx);
 		double leftYstick = _armJoystick.getRawAxis(1);
-		//Set target position
-		double targetPos = leftYstick * 1300;
-		// Motor will only turn in the "negative" direction (when joystick is forward, not backward)
-		_armTiltMotor.set(ControlMode.MotionMagic, -1 * targetPos);
-//		if (targetPos >= bottom) {
-//			targetPos = bottom;
-//		} else if (targetPos >= top) {
-//			targetPos = top;
-//		}
 		
-		if (targetPos >= 5) {
-			targetPos = -5;
-		} else if (targetPos <= -98) {
-			targetPos = -108;
-		} 
-		
-		_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
-		
-		//Drive the motor to the target position
-		_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
+		//Controls for tilting the scissor lift
+		if(leftYstick > .05) {
+			 
+			if(targetPos > 20) {
+				targetPos += -50 * leftYstick;
+			} else if(targetPos >= 0 && targetPos <= 20) {
+				targetPos += - 25;
+			}
+			
+		} else if(leftYstick < -.05) {
+			if(6480 > targetPos) {
+				targetPos += -50 * leftYstick;
+			} else if(6500 >= targetPos && targetPos >= 6480) {
+				targetPos += 25;
+			}
+		}
+ //Drive the motor to the target position
+		//	_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
 
-		System.out.println("Target Position: " + targetPos);
-		System.out.println("Current Encoder Position: " + _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx));
 		
+		//Operates the arm tilt motor with PID
+				//Set target position
+				// double targetPos = leftYstick;
+				//Drive the motor to the target position
+			_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
+			// _armTiltMotor.set(ControlMode.PercentOutput, .50);
+
 		
+		System.out.println("Target Position: " + targetPos);		
+		System.out.println("Current Encoder Position: " + encoderPos);
+		System.out.println("Velocity: "+_armTiltMotor.getSelectedSensorVelocity(Constants.kPIDLoopIdx));
+		//System.out.println("Axis: " + leftYstick);
+				
 		//Run the drive train based on the controller input
 		_drive.arcadeDrive(_driveJoystick.getY(), -1 * _driveJoystick.getZ());
-		
 		
 		//Shift into high and low gear
 		if (_driveJoystick.getRawButton(7)) {
@@ -244,7 +292,6 @@ public class Robot extends IterativeRobot {
 			_shifterSolenoid.set(true);
 		}
 		
-		
 		//Open and close grabberator claw
 		if (_armJoystick.getRawButton(1)){
 			_grabberator.set(true);
@@ -252,6 +299,10 @@ public class Robot extends IterativeRobot {
 			_grabberator.set(false);
 		}
 		
+		if (_armJoystick.getRawButton(11)) {
+			_armTiltMotor.set(ControlMode.MotionMagic, -800);
+		}
+//		
 		//Drive grabberator motors in and out
 		if (_armJoystick.getRawButton(6)) {
 //			_grabMotor1.set(-1);
@@ -266,24 +317,42 @@ public class Robot extends IterativeRobot {
 //			_grabMotor2.set(0);
 			_grabMotor.set(0);
 		}
-		// Scissor Lift Control
+		
+		// Scissor Lift Control	
 		if (_armJoystick.getRawButton(2)) {	
 			_scissorLiftSolDown.set(true);
 		} else {
 			_scissorLiftSolDown.set(false);
 		}
-		if (_armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx) <= -90) {
-			if (_armJoystick.getRawButton(3)) {
+		
+		if (_armJoystick.getRawButton(3)) {
+			if (_limitSwitch.get()) {
 				_scissorLiftSolUp.set(true);
-			}
-		} else {
+			} 
+		}
+		else {
 			_scissorLiftSolUp.set(false);
+		}
+		
+		if (! _limitSwitch.get()) {
+			System.out.println("We are ok to extend fully");
+		}
+		
+		if (_armJoystick.getRawButton(8)) {
+			_climbSol.set(true);
+			_scissorLiftSolDown.set(true);
+		}
+		
+		if (_armJoystick.getRawButton(9)) {
+			_climbSol.set(false);
+			_scissorLiftSolDown.set(false);
 		}
 	}
 				
 	/**
 	 * This function is called periodically during test mode.
 	 */
+	
 	@Override
 	public void testPeriodic() {
 	}
