@@ -94,6 +94,8 @@ public class Robot extends IterativeRobot {
 	double targetPos;
 
 	private boolean hasBeenHomed;
+
+	private int counter;
 	
 	//Autonomous
 	// Command autonomousCommand;
@@ -149,14 +151,17 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		//home tilt motor
 		hasBeenHomed = false;
-		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
-			_armTiltMotor.set(ControlMode.MotionMagic, i);
-		}	
+		//for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
+		//	_armTiltMotor.set(ControlMode.MotionMagic, i);
+		//}	
 		hasBeenHomed = true;
 		System.out.println("NOT MOVING");
 		/* zero the sensor */
-		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-		_armTiltMotor.set(ControlMode.MotionMagic, 10);
+		//_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		//_armTiltMotor.set(ControlMode.MotionMagic, 10);
+		
+		counter = 0;
+		
 	}
 
 	/**
@@ -164,6 +169,24 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		int counterLimit = 100000;
+		while (counter < counterLimit) {
+			// Try to test until we could potentially own our switch by autonomous
+			// <TODO: Figure out where switches are so we know (turning, distance, height, etc) />
+			_drive.arcadeDrive(-0.7, 0);
+			//_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			counter ++;
+		}
+		//_grabberator.set(true);
+//		_grabMotor1.set(-1);
+//		_grabMotor2.set(1);
+		 while (counter < counterLimit + 55000) {
+			 // <TODO: Look into placing box at slower speed, or dropping; see what would work best for switch/>
+			 _grabMotor.set(-1);
+			 counter ++;
+		 }
+		 _grabMotor.set(0);
+		
 //		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
 //			_armTiltMotor.set(ControlMode.MotionMagic, i);
 //		}	
@@ -265,16 +288,14 @@ public class Robot extends IterativeRobot {
 				targetPos += 25;
 			}
 		}
- //Drive the motor to the target position
-		//	_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
 
 		
 		//Operates the arm tilt motor with PID
 				//Set target position
 				// double targetPos = leftYstick;
-				//Drive the motor to the target position
-			_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
-			// _armTiltMotor.set(ControlMode.PercentOutput, .50);
+		
+	//Drive the motor to the target position
+	// _armTiltMotor.set(ControlMode.MotionMagic, targetPos);
 
 		
 		System.out.println("Target Position: " + targetPos);		
