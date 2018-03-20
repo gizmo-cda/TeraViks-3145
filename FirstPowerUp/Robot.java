@@ -10,6 +10,7 @@ package org.usfirst.frc.team3145.robot;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -96,10 +97,36 @@ public class Robot extends IterativeRobot {
 	private boolean hasBeenHomed;
 
 	private int counter;
+
+	private String switchPosition;
 	
 	//Autonomous
 	// Command autonomousCommand;
 	// SendableChooser autoChooser;
+	
+	public static void autoDriveAndPlace(String switchPosition, int counter, WPI_TalonSRX _grabMotor, Solenoid _grabberator, DifferentialDrive _drive) {
+		int counterLimit = 21000;
+		while (counter < counterLimit) {
+			// <TODO: Figure out where switches are so we know (turning, distance, height, etc) />
+		
+			// Distance from alliance zone to switch is 14 ft (~427 cm)
+			// Height is 1 ft 3 in (~ cm) above ground
+			//Plates are 9 inches above ground
+			_drive.arcadeDrive(-0.65, 0);
+			//_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			counter ++;
+			System.out.println(counter);
+		}
+//		_grabMotor1.set(-1);
+//		_grabMotor2.set(1);
+		 while (counter < counterLimit + 10000) {
+			 _grabMotor.set(-1);
+			 _grabberator.set(true);
+			 counter ++;
+		 }
+		 _grabMotor.set(0);
+		 _grabberator.set(false);
+	}
 		
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -160,41 +187,49 @@ public class Robot extends IterativeRobot {
 		//_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		//_armTiltMotor.set(ControlMode.MotionMagic, 10);
 		
+		//
+		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		counter = 0;
-		
-	}
+		if(gameData.length() > 0) {
+			if(gameData.charAt(0) == 'L') {
+				switchPosition = "left";
+			} else {
+				switchPosition = "right";
+				}
+        	}
+		}
 
 	/**
 	 * This function is called periodically during autonomous.
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		int counterLimit = 100000;
-		while (counter < counterLimit) {
-			// Try to test until we could potentially own our switch by autonomous
-			// <TODO: Figure out where switches are so we know (turning, distance, height, etc) />
-			_drive.arcadeDrive(-0.7, 0);
-			//_armTiltMotor.set(ControlMode.MotionMagic, 3000);
-			counter ++;
-		}
-		//_grabberator.set(true);
-//		_grabMotor1.set(-1);
-//		_grabMotor2.set(1);
-		 while (counter < counterLimit + 55000) {
-			 // <TODO: Look into placing box at slower speed, or dropping; see what would work best for switch/>
-			 _grabMotor.set(-1);
-			 counter ++;
-		 }
-		 _grabMotor.set(0);
 		
-//		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
-//			_armTiltMotor.set(ControlMode.MotionMagic, i);
-//		}	
-//		hasBeenHomed = true;
-//		System.out.println("NOT MOVING");
-//		/* zero the sensor */
-//		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-//		_armTiltMotor.set(ControlMode.MotionMagic, 10);
+		// This is assuming we start at the right!!
+		if (switchPosition != null) {
+			if (switchPosition == "right") {
+				autoDriveAndPlace(switchPosition, counter, _grabMotor, _grabberator, _drive);
+			} else {
+//				TURNS LEFT 90 DEGREES
+				while (counter < 37500) {
+					_drive.arcadeDrive(-0.8, .6);
+					counter ++;
+				}
+				for (int i = 0; i < 18000; i ++) {
+					// This should drive
+					_drive.arcadeDrive(.65, 0);
+				}
+//				TURNS RIGHT 90 DEGREES
+				while (counter < counter + 37500) {
+					_drive.arcadeDrive(-0.8, -.6);
+					counter ++;
+				}
+				counter = 0;
+				autoDriveAndPlace(switchPosition, counter, _grabMotor, _grabberator, _drive);
+			}
+		}
+		
+		
 		// Scheduler.getInstance().run();
 //		int counter;
 //		switch (m_autoSelected) {
