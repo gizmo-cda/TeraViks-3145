@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -100,8 +99,6 @@ public class Robot extends IterativeRobot {
 
 	private boolean hasBeenHomed;
 
-	private int counter;
-
 	private String switchPosition;
 
 	private int _upperLimit;
@@ -120,15 +117,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		
-		// autoChooser = new SendableChooser();
-		// autoChooser.addDefault("Default autonomous", new autoDefault());
-		// autoChooser.addObject("Autonomous 1", new auto1());
-		// SmartDashboard.putData("Auto mode chooser", autoChooser);
-		
-		// What scissor lift should be set to
-		// targetPos = - 1850;
-	
 		// We know that this works
 		CameraServer.getInstance().startAutomaticCapture();
 
@@ -169,37 +157,11 @@ public class Robot extends IterativeRobot {
 		}
 	}
 	
-	public static void autoDriveAndPlace(String switchPosition, int counter, WPI_TalonSRX _grabMotor, Solenoid _grabberator, DifferentialDrive _drive) {
-		int counterLimit = 21000;
-		while (counter < counterLimit) {
-			// <TODO: Figure out where switches are so we know (turning, distance, height, etc) />
-			// Distance from alliance zone to switch is 14 ft (~427 cm)
-			// Height is 1 ft 3 in (~33 cm) above ground
-			// Plates are 9 inches above ground
-			// Switches are 12 ft (~366 cm) apart from each other on the same side
-			
-			_drive.arcadeDrive(-0.65, 0);
-			_armTiltMotor.set(ControlMode.MotionMagic, 3000);
-			counter ++;
-			System.out.println(counter);
-		}
-		
-//		_grabMotor1.set(-1);
-//		_grabMotor2.set(1);
-		
-		 while (counter < counterLimit + 10000) {
-			 //_grabMotor.set(-1);
-			 _grabberator.set(true);
-			 counter ++;
-		 }
-		 //_grabMotor.set(0);
-		 _grabberator.set(false);
-	}
-	
 	@Override
 	public void autonomousInit() {
 		//home tilt motor
 		hasBeenHomed = false;
+		
 		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
 			_armTiltMotor.set(ControlMode.MotionMagic, i);
 		}	
@@ -212,13 +174,10 @@ public class Robot extends IterativeRobot {
 		
 		//set switch position
 		switchPosition = "left";
-		counter = 0;
 		_timer.start();
 		_drive.setExpiration(.01);
 		
-		//
 //		String gameData = DriverStation.getInstance().getGameSpecificMessage();
-//		counter = 0;
 //		if(gameData.length() > 0) {
 //			if(gameData.charAt(0) == 'L') {
 //				switchPosition = "left";
@@ -339,12 +298,10 @@ public class Robot extends IterativeRobot {
 		
 		System.out.println("left:" + _leftStartingPos.get());
 		System.out.println("right:" + _rightStartingPos.get());
-		//Operates the arm tilt motor with PID
-		//Get stick position
 		
 		double encoderPos = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx);
 		double leftYstick = _armJoystick.getRawAxis(1);
-		
+				
 		//Controls for tilting the scissor lift
 		if(leftYstick > .05) {
 			 
@@ -362,11 +319,7 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
-		
 		//Operates the arm tilt motor with PID
-		//Set target position
-		// double targetPos = leftYstick;
-		
 		//Drive the motor to the target position
 		_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
 		
@@ -448,5 +401,7 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void testPeriodic() {
+		boolean isFmsAThing = DriverStation.getInstance().isFMSAttached();
+		System.out.println("Do we have some communicate to a FMS type thing? "+isFmsAThing);
 	}
 }
