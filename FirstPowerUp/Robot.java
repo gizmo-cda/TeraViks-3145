@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -40,7 +42,7 @@ public class Robot extends IterativeRobot {
 	//private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
 	//PID talon for arm tilt
-	TalonSRX _armTiltMotor = new TalonSRX(8);
+	static TalonSRX _armTiltMotor = new TalonSRX(8);
 	
 	//Controllers
 	Joystick _armJoystick = new Joystick(2);
@@ -50,6 +52,8 @@ public class Robot extends IterativeRobot {
 	Compressor _compressor = new Compressor();
 	Solenoid _shifterSolenoid = new Solenoid(40, 1);
 	
+	//timer
+	Timer _timer = new Timer();
 //	// Drive Train motors
 	WPI_TalonSRX _left1 = new WPI_TalonSRX(3);
 	WPI_TalonSRX _left2 = new WPI_TalonSRX(4);
@@ -62,6 +66,8 @@ public class Robot extends IterativeRobot {
 	
 	//Drive train object using speed controllers
 	DifferentialDrive _drive = new DifferentialDrive(_left, _right); 
+
+
 	
 //	//Hardware for grabberator
 //	Solenoid _grabberator = new Solenoid(40, 4);
@@ -98,42 +104,15 @@ public class Robot extends IterativeRobot {
 
 	private String switchPosition;
 
-	private int upperLimit;
+	private int _upperLimit;
 
-	private int lowerLimit;
+	private int _lowerLimit;
 	
 	private String startingPos;
 		
 	//Autonomous
 	// Command autonomousCommand;
 	// SendableChooser autoChooser;
-	
-	public static void autoDriveAndPlace(String switchPosition, int counter, WPI_TalonSRX _grabMotor, Solenoid _grabberator, DifferentialDrive _drive) {
-		int counterLimit = 21000;
-		while (counter < counterLimit) {
-			// <TODO: Figure out where switches are so we know (turning, distance, height, etc) />
-			// Distance from alliance zone to switch is 14 ft (~427 cm)
-			// Height is 1 ft 3 in (~33 cm) above ground
-			// Plates are 9 inches above ground
-			// Switches are 12 ft (~366 cm) apart from each other on the same side
-			
-			_drive.arcadeDrive(-0.65, 0);
-			//_armTiltMotor.set(ControlMode.MotionMagic, 3000);
-			counter ++;
-			System.out.println(counter);
-		}
-		
-//		_grabMotor1.set(-1);
-//		_grabMotor2.set(1);
-		
-		 while (counter < counterLimit + 10000) {
-			 _grabMotor.set(-1);
-			 _grabberator.set(true);
-			 counter ++;
-		 }
-		 _grabMotor.set(0);
-		 _grabberator.set(false);
-	}
 		
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -178,16 +157,43 @@ public class Robot extends IterativeRobot {
 		_armTiltMotor.configMotionCruiseVelocity(220, Constants.kTimeoutMs);
 		_armTiltMotor.configMotionAcceleration(220, Constants.kTimeoutMs);
 		
-		upperLimit = 0;
-		lowerLimit = 6500;
+		_upperLimit = 0;
+		_lowerLimit = 6500;
 		
-		if (! _leftStartingPos.get() && ! _rightStartingPos.get()) {
+		if (_leftStartingPos.get() && _rightStartingPos.get()) {
 			startingPos = "middle";
 		} else if (_leftStartingPos.get()) {
 			startingPos = "left";
 		} else {
 			startingPos = "right";
 		}
+	}
+	
+	public static void autoDriveAndPlace(String switchPosition, int counter, WPI_TalonSRX _grabMotor, Solenoid _grabberator, DifferentialDrive _drive) {
+		int counterLimit = 21000;
+		while (counter < counterLimit) {
+			// <TODO: Figure out where switches are so we know (turning, distance, height, etc) />
+			// Distance from alliance zone to switch is 14 ft (~427 cm)
+			// Height is 1 ft 3 in (~33 cm) above ground
+			// Plates are 9 inches above ground
+			// Switches are 12 ft (~366 cm) apart from each other on the same side
+			
+			_drive.arcadeDrive(-0.65, 0);
+			_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			counter ++;
+			System.out.println(counter);
+		}
+		
+//		_grabMotor1.set(-1);
+//		_grabMotor2.set(1);
+		
+		 while (counter < counterLimit + 10000) {
+			 //_grabMotor.set(-1);
+			 _grabberator.set(true);
+			 counter ++;
+		 }
+		 //_grabMotor.set(0);
+		 _grabberator.set(false);
 	}
 	
 	@Override
@@ -203,6 +209,12 @@ public class Robot extends IterativeRobot {
 		/* zero the sensor */
 		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 		_armTiltMotor.set(ControlMode.MotionMagic, 10);
+		
+		//set switch position
+		switchPosition = "left";
+		counter = 0;
+		_timer.start();
+		_drive.setExpiration(.01);
 		
 		//
 //		String gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -221,162 +233,102 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-//		if (startingPos == "right") {
-//			// This is assuming we start at the right!!
-//			if (switchPosition != null) {
-//				if (switchPosition == "right") {
-//					autoDriveAndPlace(switchPosition, counter, _grabMotor, _grabberator, _drive);
-//				} else {
-////					TURNS LEFT 90 DEGREES
-//					while (counter < 37500) {
-//						_drive.arcadeDrive(-0.8, .6);
-//						counter ++;
-//					}
-//					for (int i = 0; i < 18000; i ++) {
-//						// This should drive
-//						_drive.arcadeDrive(.65, 0);
-//					}
-////					TURNS RIGHT 90 DEGREES
-//					while (counter < counter + 37500) {
-//						_drive.arcadeDrive(-0.8, -.6);
-//						counter ++;
-//					}
-//					counter = 0;
-//					autoDriveAndPlace(switchPosition, counter, _grabMotor, _grabberator, _drive);
-//				}
-//			} 
-//			
-//		if (startingPos == "left") {
-//			// This is assuming we start at the left!!
-//			if (switchPosition != null) {
-//				if (switchPosition == "left") {
-//					autoDriveAndPlace(switchPosition, counter, _grabMotor, _grabberator, _drive);
-//				} else {
-////					TURNS RIGHT 90 DEGREES
-//					while (counter < counter + 37500) {
-//						_drive.arcadeDrive(-0.8, -.6);
-//						counter ++;
-//					}
-//					for (int i = 0; i < 18000; i ++) {
-//						// This should drive
-//						_drive.arcadeDrive(.65, 0);
-//					}
-////					TURNS LEFT 90 DEGREES
-//					while (counter < 37500) {
-//						_drive.arcadeDrive(-0.8, .6);
-//						counter ++;
-//					}
-//					counter = 0;
-//						autoDriveAndPlace(switchPosition, counter, _grabMotor, _grabberator, _drive);
-//					}
-//				}
-//			}
-//		if (startingPos == "middle") {
-//			// This is assuming we start in the middle!!
-//			if (switchPosition != null) {
-//				if (switchPosition == "left") {
-////					TURNS RIGHT 90 DEGREES
-//					while (counter < counter + 37500) {
-//						_drive.arcadeDrive(-0.8, -.6);
-//						counter ++;
-//					}
-//					for (int i = 0; i < 9000; i ++) {
-//						// This should drive
-//						_drive.arcadeDrive(.65, 0);
-//					}
-////					TURNS LEFT 90 DEGREES
-//					while (counter < 37500) {
-//						_drive.arcadeDrive(-0.8, .6);
-//						counter ++;
-//					}
-//					counter = 0;
-//						autoDriveAndPlace(switchPosition, counter, _grabMotor, _grabberator, _drive);
-//					}
-//				} else {
-////					TURNS LEFT 90 DEGREES
-//					while (counter < 37500) {
-//						_drive.arcadeDrive(-0.8, .6);
-//						counter ++;
-//					}
-//					for (int i = 0; i < 9000; i ++) {
-//						// This should drive
-//						_drive.arcadeDrive(.65, 0);
-//					}
-////					TURNS RIGHT 90 DEGREES
-//					while (counter < counter + 37500) {
-//						_drive.arcadeDrive(-0.8, -.6);
-//						counter ++;
-//					}
-//					counter = 0;
-//						autoDriveAndPlace(switchPosition, counter, _grabMotor, _grabberator, _drive);
-//					}
-//				}
-//			}
+		System.out.println(startingPos);
+		//Auto functions for just driving straight forward
+		//We only use these when the switch and robot are on the same side
+		if(startingPos == "right" & switchPosition == "right") {
+			if(_timer.get() < 5.2) {
+				_drive.arcadeDrive(-.8, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			} else {
+				_drive.arcadeDrive(0, 0);
+				//_grabMotor.set(-.5);
+				_grabberator.set(true);
+			}
+			
+		} else if(startingPos == "left" & switchPosition == "left") {
+			if(_timer.get() < 5.2) {
+				_drive.arcadeDrive(-.8, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			} else {
+				_drive.arcadeDrive(0, 0);
+				//_grabMotor.set(-.5);
+				_grabberator.set(true);
+			}
 		}
-
-//		// Scheduler.getInstance().run();
-//		int counter;
-//		switch (m_autoSelected) {
-//			case kCustomAuto1:
-//				// Straight line until counter time ends
-//				counter = 0;	
-//				// _shifterSolenoid.set(true);
-//				if (counter < 100) {
-//					_drive.arcadeDrive(.65, 0);
-//					counter++;
-//					
-//				} else {
-//					_drive.arcadeDrive(0, 0);
-//				}
-//				break;
-//			case kCustomAuto2:
-//				// Angle right and go forward
-//				counter = 0;
-//				// _shifterSolenoid.set(false); See if we even feel comfortable shifting here because the turn and everything might be super unstable
-//				if (counter < 100) {
-//					_drive.arcadeDrive(.65, .25); // ? see about the scale of the  z axis when you are trying to turn
-//					counter++;
-//				} else {
-//					_drive.arcadeDrive(0,  0);
-//				}
-//				break;
-//			case kCustomAuto3:
-//				// Angle left and go forward
-//				counter = 0;
-//				// _shifterSolenoid.set(false);
-//				if (counter < 100) {
-//					_drive.arcadeDrive(.65,  -.25); //Same thing as the turn right, test the magnitude of the z axis when you try to turn left
-//					counter++;
-//				} else {
-//					_drive.arcadeDrive(0, 0);
-//				}
-//				break;
-//			case kCustomAuto4:
-//				// Go in a straight line. After you stop, place the block into the switch
-//				counter = 0;
-//				_armTiltMotor.set(ControlMode.MotionMagic, 0); // we can change this angle once we determine the best angle for "shooting" an placing the block
-//				// _shifterSolenoid.set(true);
-//				if (counter < 100) {
-//					_drive.arcadeDrive(.65, 0);
-//				} else {
-//					_drive.arcadeDrive(0, 0);
-//					for (int i = 0; i < 20; i++) {
-//						// Functionality for placing block
-//						_grabMotor.set(1);
-//						// Competition
-//						//_grabMotor1.set(-1);
-//						//_grabMotor2.set(1);
-//					}
-//				}
-//				_grabMotor.set(0);
-//				//_grabMotor1.set(0);
-//				//_grabMotor2.set(0);
-//				break;
-//			case kDefaultAuto:
-//			default:
-//				System.out.println("This is the default case; let's see what happens here, I guess. Pretend we drive straight?");
-//				break;
-//		}
+		
+		//Auto function for switches on opposite sides of the robot
+		if(startingPos == "right" & switchPosition == "left") {
+			if(_timer.get() < 1) {
+				_drive.arcadeDrive(-.8, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			}else if(_timer.get() < 2) {
+				_drive.arcadeDrive(0, .75);
+			}else if(_timer.get() < 6.5) {
+				_drive.arcadeDrive( -.8, 0);
+			} else if(_timer.get() < 7.35) {
+				_drive.arcadeDrive(0, -.75);
+			} else if(_timer.get() < 10) {
+				_drive.arcadeDrive(-.8, 0);
+			}else {
+				_drive.stopMotor();
+				_grabberator.set(true);
+			}
+			
+		} else if(startingPos == "left" & switchPosition == "right") {
+			if(_timer.get() < 1) {
+				_drive.arcadeDrive(-.8, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			}else if(_timer.get() < 2) {
+				_drive.arcadeDrive(0, -.75);
+			}else if(_timer.get() < 6.5) {
+				_drive.arcadeDrive( -.8, 0);
+			} else if(_timer.get() < 7.35) {
+				_drive.arcadeDrive(0, .75);
+			} else if(_timer.get() < 10) {
+				_drive.arcadeDrive(-.8, 0);
+			}else {
+				_drive.stopMotor();
+				_grabberator.set(true);
+			}
+		}
+		
+		//auto functions for starting in the center
+		
+		if(startingPos == "middle" & switchPosition == "right") {
+			if(_timer.get() < 1) {
+				_drive.arcadeDrive(-.8, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			}else if(_timer.get() < 2) {
+				_drive.arcadeDrive(0, -.75);
+			}else if(_timer.get() < 4.5) {
+				_drive.arcadeDrive( -.9, 0);
+			} else if(_timer.get() < 5.35) {
+				_drive.arcadeDrive(0, .75);
+			} else if(_timer.get() < 8) {
+				_drive.arcadeDrive(-.8, 0);
+			}else {
+				_drive.stopMotor();
+				_grabberator.set(true);
+			}
+		} else if(startingPos == "middle" & switchPosition == "left") {
+			if(_timer.get() < 1) {
+				_drive.arcadeDrive(-.8, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			}else if(_timer.get() < 2) {
+				_drive.arcadeDrive(0, .75);
+			}else if(_timer.get() < 4.5) {
+				_drive.arcadeDrive( -.9, 0);
+			} else if(_timer.get() < 5.35) {
+				_drive.arcadeDrive(0, -.75);
+			} else if(_timer.get() < 8) {
+				_drive.arcadeDrive(-.8, 0);
+			}else {
+				_drive.stopMotor();
+				_grabberator.set(true);
+			}
+		}
+	}
 
 	/**
 	 * This function is called periodically during operator control.
@@ -384,6 +336,9 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
+		
+		System.out.println("left:" + _leftStartingPos.get());
+		System.out.println("right:" + _rightStartingPos.get());
 		//Operates the arm tilt motor with PID
 		//Get stick position
 		
@@ -393,16 +348,16 @@ public class Robot extends IterativeRobot {
 		//Controls for tilting the scissor lift
 		if(leftYstick > .05) {
 			 
-			if(targetPos > upperLimit + 20) {
+			if(targetPos > _upperLimit + 20) {
 				targetPos += -50 * leftYstick;
-			} else if(targetPos >= upperLimit && targetPos <= upperLimit + 20) {
+			} else if(targetPos >= _upperLimit && targetPos <= _upperLimit + 20) {
 				targetPos += - 25;
 			}
 			
 		} else if(leftYstick < -.05) {
-			if(lowerLimit - 20 > targetPos) {
+			if(_lowerLimit - 20 > targetPos) {
 				targetPos += -50 * leftYstick;
-			} else if(lowerLimit >= targetPos && targetPos >= lowerLimit - 20) {
+			} else if(_lowerLimit >= targetPos && targetPos >= _lowerLimit - 20) {
 				targetPos += 25;
 			}
 		}
@@ -465,7 +420,7 @@ public class Robot extends IterativeRobot {
 		
 		if (_armJoystick.getRawButton(3)) {
 			if (encoderPos < 400) {
-				lowerLimit = 400;
+				_lowerLimit = 400;
 				_scissorLiftSolUp.set(true);
 			} 
 		} else {
@@ -473,7 +428,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		if (! _armNotRetractedSwitch.get()) {
-			lowerLimit = 6500;
+			_lowerLimit = 6500;
 		}
 		
 		if (_armJoystick.getRawButton(8)) {
