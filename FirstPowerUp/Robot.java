@@ -222,12 +222,12 @@ public class Robot extends IterativeRobot {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			}else if(_timer.get() < 2) {
-				_drive.arcadeDrive(0, .75);
+				_drive.arcadeDrive(0, .85);
 			}else if(_timer.get() < 6.5) {
 				_drive.arcadeDrive( -.8, 0);
 			} else if(_timer.get() < 7.35) {
-				_drive.arcadeDrive(0, -.75);
-			} else if(_timer.get() < 10) {
+				_drive.arcadeDrive(0, -.9);
+			} else if(_timer.get() < 10.7) {
 				_drive.arcadeDrive(-.8, 0);
 			}else {
 				_drive.stopMotor();
@@ -239,12 +239,12 @@ public class Robot extends IterativeRobot {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			}else if(_timer.get() < 2) {
-				_drive.arcadeDrive(0, -.75);
+				_drive.arcadeDrive(0, -.85);
 			}else if(_timer.get() < 6.5) {
 				_drive.arcadeDrive( -.8, 0);
 			} else if(_timer.get() < 7.35) {
-				_drive.arcadeDrive(0, .75);
-			} else if(_timer.get() < 10) {
+				_drive.arcadeDrive(0, .9);
+			} else if(_timer.get() < 10.7) {
 				_drive.arcadeDrive(-.8, 0);
 			}else {
 				_drive.stopMotor();
@@ -259,12 +259,12 @@ public class Robot extends IterativeRobot {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			}else if(_timer.get() < 2) {
-				_drive.arcadeDrive(0, -.75);
+				_drive.arcadeDrive(0, -.8);
 			}else if(_timer.get() < 4.5) {
-				_drive.arcadeDrive( -.9, 0);
+				_drive.arcadeDrive( -.7, 0);
 			} else if(_timer.get() < 5.35) {
-				_drive.arcadeDrive(0, .75);
-			} else if(_timer.get() < 8) {
+				_drive.arcadeDrive(0, .9);
+			} else if(_timer.get() < 8.5) {
 				_drive.arcadeDrive(-.8, 0);
 			}else {
 				_drive.stopMotor();
@@ -275,12 +275,12 @@ public class Robot extends IterativeRobot {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			}else if(_timer.get() < 2) {
-				_drive.arcadeDrive(0, .75);
+				_drive.arcadeDrive(0, .8);
 			}else if(_timer.get() < 4.5) {
-				_drive.arcadeDrive( -.9, 0);
+				_drive.arcadeDrive( -.7, 0);
 			} else if(_timer.get() < 5.35) {
-				_drive.arcadeDrive(0, -.75);
-			} else if(_timer.get() < 8) {
+				_drive.arcadeDrive(0, -.9);
+			} else if(_timer.get() < 8.5) {
 				_drive.arcadeDrive(-.8, 0);
 			}else {
 				_drive.stopMotor();
@@ -401,7 +401,16 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void testPeriodic() {
+		if (_leftStartingPos.get() && _rightStartingPos.get()) {
+			startingPos = "middle";
+		} else if (_leftStartingPos.get()) {
+			startingPos = "left";
+		} else {
+			startingPos = "right";
+		}
+		
 		boolean isFmsAThing = DriverStation.getInstance().isFMSAttached();
 		System.out.println("Do we have some communicate to a FMS type thing? "+isFmsAThing);
+		System.out.println(startingPos);
 	}
 }
