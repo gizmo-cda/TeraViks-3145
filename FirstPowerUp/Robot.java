@@ -51,8 +51,9 @@ public class Robot extends IterativeRobot {
 	Compressor _compressor = new Compressor();
 	Solenoid _shifterSolenoid = new Solenoid(40, 1);
 	
-	//timer
+	//timer for autonomous
 	Timer _timer = new Timer();
+	
 //	// Drive Train motors
 	WPI_TalonSRX _left1 = new WPI_TalonSRX(3);
 	WPI_TalonSRX _left2 = new WPI_TalonSRX(4);
@@ -68,14 +69,13 @@ public class Robot extends IterativeRobot {
 
 
 	
-//	//Hardware for grabberator
-//	Solenoid _grabberator = new Solenoid(40, 4);
-//	WPI_TalonSRX _grabMotor1 = new WPI_TalonSRX(5);
-//	WPI_TalonSRX _grabMotor2 = new WPI_TalonSRX(6);
+	//Hardware for grabberator
+	WPI_TalonSRX _grabMotor1 = new WPI_TalonSRX(5);
+	WPI_TalonSRX _grabMotor2 = new WPI_TalonSRX(6);
 	
 	//Hardware for grabberator
 	Solenoid _grabberator = new Solenoid(40, 4);
-	WPI_TalonSRX _grabMotor = new WPI_TalonSRX(5);
+//	WPI_TalonSRX _grabMotor = new WPI_TalonSRX(5);
 	
 	// Scissor lift solenoid stuff
 	Solenoid _scissorLiftSolUp = new Solenoid(40, 2);
@@ -117,9 +117,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		// We know that this works
+		// stream camera to dashboard
 		CameraServer.getInstance().startAutomaticCapture();
-
+		
+		//PID INITIALIZATION STUFF FOR THE SCISOR LIFT TIT MOTOR
+		
 		/* first choose the sensor */
 		_armTiltMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,
 		Constants.kPIDLoopIdx, Constants.kTimeoutMs);
@@ -145,9 +147,43 @@ public class Robot extends IterativeRobot {
 		_armTiltMotor.configMotionCruiseVelocity(220, Constants.kTimeoutMs);
 		_armTiltMotor.configMotionAcceleration(220, Constants.kTimeoutMs);
 		
+		//initial limits for tilting
 		_upperLimit = 0;
 		_lowerLimit = 6500;
 		
+	}
+	
+	@Override
+	public void autonomousInit() {
+		//home tilt motor by slowly incrimenting the position untill a switch is activated
+		hasBeenHomed = false;
+		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
+			_armTiltMotor.set(ControlMode.MotionMagic, i);
+		}	
+		hasBeenHomed = true;
+		//System.out.println("NOT MOVING");
+		/* zero the sensor */
+		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+		_armTiltMotor.set(ControlMode.MotionMagic, 10);
+		
+		//Start timer and extend timeout period of the drive motors for autonomous
+		_timer.start();
+		_drive.setExpiration(.01);
+		
+		if (DriverStation.getInstance().isFMSAttached()) {
+			String gameData = DriverStation.getInstance().getGameSpecificMessage();
+			if(gameData.length() > 0) {
+				if(gameData.charAt(0) == 'L') {
+					switchPosition = "left";
+				} else {
+					switchPosition = "right";
+					}
+	        	}
+		}
+		
+		
+		//Set a starting position based off of switch input
+		//this is used for autonomous mode
 		if (_leftStartingPos.get() && _rightStartingPos.get()) {
 			startingPos = "middle";
 		} else if (_leftStartingPos.get()) {
@@ -155,36 +191,7 @@ public class Robot extends IterativeRobot {
 		} else {
 			startingPos = "right";
 		}
-	}
-	
-	@Override
-	public void autonomousInit() {
-		//home tilt motor
-		hasBeenHomed = false;
 		
-		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
-			_armTiltMotor.set(ControlMode.MotionMagic, i);
-		}	
-		
-		hasBeenHomed = true;
-		System.out.println("NOT MOVING");
-		/* zero the sensor */
-		_armTiltMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-		_armTiltMotor.set(ControlMode.MotionMagic, 10);
-		
-		//set switch position
-		switchPosition = "left";
-		_timer.start();
-		_drive.setExpiration(.01);
-		
-//		String gameData = DriverStation.getInstance().getGameSpecificMessage();
-//		if(gameData.length() > 0) {
-//			if(gameData.charAt(0) == 'L') {
-//				switchPosition = "left";
-//			} else {
-//				switchPosition = "right";
-//				}
-//        	}
 	}
 
 	/**
@@ -192,7 +199,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		System.out.println(startingPos);
+		//System.out.println(startingPos);
+		//switchPosition = "right";
 		//Auto functions for just driving straight forward
 		//We only use these when the switch and robot are on the same side
 		if(startingPos == "right" & switchPosition == "right") {
@@ -200,9 +208,7 @@ public class Robot extends IterativeRobot {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			} else {
-				_drive.arcadeDrive(0, 0);
-				//_grabMotor.set(-.5);
-				_grabberator.set(true);
+				_drive.arcadeDrive(0, 0);				_grabberator.set(true);
 			}
 			
 		} else if(startingPos == "left" & switchPosition == "left") {
@@ -211,7 +217,6 @@ public class Robot extends IterativeRobot {
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			} else {
 				_drive.arcadeDrive(0, 0);
-				//_grabMotor.set(-.5);
 				_grabberator.set(true);
 			}
 		}
@@ -222,11 +227,11 @@ public class Robot extends IterativeRobot {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			}else if(_timer.get() < 2) {
-				_drive.arcadeDrive(0, .85);
+				_drive.arcadeDrive(0, .65);
 			}else if(_timer.get() < 6.5) {
-				_drive.arcadeDrive( -.8, 0);
+				_drive.arcadeDrive( -.66, 0);
 			} else if(_timer.get() < 7.35) {
-				_drive.arcadeDrive(0, -.9);
+				_drive.arcadeDrive(0, -.78);
 			} else if(_timer.get() < 10.7) {
 				_drive.arcadeDrive(-.8, 0);
 			}else {
@@ -239,11 +244,11 @@ public class Robot extends IterativeRobot {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			}else if(_timer.get() < 2) {
-				_drive.arcadeDrive(0, -.85);
+				_drive.arcadeDrive(0, -.65);
 			}else if(_timer.get() < 6.5) {
-				_drive.arcadeDrive( -.8, 0);
+				_drive.arcadeDrive( -.66, 0);
 			} else if(_timer.get() < 7.35) {
-				_drive.arcadeDrive(0, .9);
+				_drive.arcadeDrive(0, .78);
 			} else if(_timer.get() < 10.7) {
 				_drive.arcadeDrive(-.8, 0);
 			}else {
@@ -252,41 +257,49 @@ public class Robot extends IterativeRobot {
 			}
 		}
 		
-		//auto functions for starting in the center
 		
-		if(startingPos == "middle" & switchPosition == "right") {
+		//auto functions for starting in the center
+
+		
+		if(startingPos == "middle") {
 			if(_timer.get() < 1) {
-				_drive.arcadeDrive(-.8, 0);
-				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
-			}else if(_timer.get() < 2) {
-				_drive.arcadeDrive(0, -.8);
-			}else if(_timer.get() < 4.5) {
-				_drive.arcadeDrive( -.7, 0);
-			} else if(_timer.get() < 5.35) {
-				_drive.arcadeDrive(0, .9);
-			} else if(_timer.get() < 8.5) {
-				_drive.arcadeDrive(-.8, 0);
-			}else {
-				_drive.stopMotor();
-				_grabberator.set(true);
-			}
-		} else if(startingPos == "middle" & switchPosition == "left") {
-			if(_timer.get() < 1) {
-				_drive.arcadeDrive(-.8, 0);
-				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
-			}else if(_timer.get() < 2) {
-				_drive.arcadeDrive(0, .8);
-			}else if(_timer.get() < 4.5) {
-				_drive.arcadeDrive( -.7, 0);
-			} else if(_timer.get() < 5.35) {
-				_drive.arcadeDrive(0, -.9);
-			} else if(_timer.get() < 8.5) {
-				_drive.arcadeDrive(-.8, 0);
-			}else {
-				_drive.stopMotor();
-				_grabberator.set(true);
+				_drive.arcadeDrive(-1, 0);
 			}
 		}
+		
+//		if(startingPos == "middle" & switchPosition == "right") {
+//			if(_timer.get() < 1) {
+//				_drive.arcadeDrive(-.8, 0);
+//				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+//			}else if(_timer.get() < 2) {
+//				_drive.arcadeDrive(0, -.65);
+//			}else if(_timer.get() < 4.5) {
+//				_drive.arcadeDrive( -.6, 0);
+//			} else if(_timer.get() < 5.35) {
+//				_drive.arcadeDrive(0, .78);
+//			} else if(_timer.get() < 8.5) {
+//				_drive.arcadeDrive(-.8, 0);
+//			}else {
+//				_drive.stopMotor();
+//				_grabberator.set(true);
+//			}
+//		} else if(startingPos == "middle" & switchPosition == "left") {
+//			if(_timer.get() < 1) {
+//				_drive.arcadeDrive(-.8, 0);
+//				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+//			}else if(_timer.get() < 2) {
+//				_drive.arcadeDrive(0, .66);
+//			}else if(_timer.get() < 4.5) {
+//				_drive.arcadeDrive( -.6, 0);
+//			} else if(_timer.get() < 5.35) {
+//				_drive.arcadeDrive(0, -.78);
+//			} else if(_timer.get() < 8.5) {
+//				_drive.arcadeDrive(-.8, 0);
+//			}else {
+//				_drive.stopMotor();
+//				_grabberator.set(true);
+//			}
+//		}
 	}
 
 	/**
@@ -296,13 +309,18 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		System.out.println("left:" + _leftStartingPos.get());
-		System.out.println("right:" + _rightStartingPos.get());
+		// System.out.println("left:" + _leftStartingPos.get());
+		// System.out.println("right:" + _rightStartingPos.get());
 		
+		//encoder position and stick axis
 		double encoderPos = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx);
 		double leftYstick = _armJoystick.getRawAxis(1);
 				
 		//Controls for tilting the scissor lift
+		//Here we increment a target position which we then command the
+		//tilt motor to drive to using motion magic
+		
+		//only incriment if we are out of the dead zone
 		if(leftYstick > .05) {
 			 
 			if(targetPos > _upperLimit + 20) {
@@ -322,10 +340,12 @@ public class Robot extends IterativeRobot {
 		//Operates the arm tilt motor with PID
 		//Drive the motor to the target position
 		_armTiltMotor.set(ControlMode.MotionMagic, targetPos);
+		//  System.out.println(encoderPos);
 		
-		System.out.println("Target Position: " + targetPos);		
-		System.out.println("Current Encoder Position: " + encoderPos);
-		System.out.println("Velocity: "+_armTiltMotor.getSelectedSensorVelocity(Constants.kPIDLoopIdx));
+		//Some debug stuff
+//		System.out.println("Target Position: " + targetPos);		
+//		System.out.println("Current Encoder Position: " + encoderPos);
+//		System.out.println("Velocity: "+_armTiltMotor.getSelectedSensorVelocity(Constants.kPIDLoopIdx));
 		//System.out.println("Axis: " + leftYstick);
 				
 		//Run the drive train based on the controller input
@@ -350,40 +370,48 @@ public class Robot extends IterativeRobot {
 		}
 //		
 		//Drive grabberator motors in and out
-		if (_armJoystick.getRawButton(6)) {
-//			_grabMotor1.set(-1);
-//			_grabMotor2.set(1);
-			_grabMotor.set(-1);
-		} else if (_armJoystick.getRawButton(7)) {
-//			_grabMotor1.set(1);
-//			_grabMotor2.set(-1);
-			_grabMotor.set(1);
+		if (_armJoystick.getRawButton(7)) {
+			_grabMotor1.set(-1);
+			_grabMotor2.set(1);
+			//_grabMotor.set(-1);
+		} else if (_armJoystick.getRawButton(6)) {
+			_grabMotor1.set(1);
+			_grabMotor2.set(-1);
+//			_grabMotor.set(1);
 		} else {
-//			_grabMotor1.set(0);
-//			_grabMotor2.set(0);
-			_grabMotor.set(0);
+			_grabMotor1.set(0);
+			_grabMotor2.set(0);
+//			_grabMotor.set(0);
 		}
 		
-		// Scissor Lift Control	
+		// Scissor Lift Control
+		//we set a new lower limit when extended to ensure we stay within the frame perimiter
+		
+		//retracting
 		if (_armJoystick.getRawButton(2)) {	
 			_scissorLiftSolDown.set(true);
 		} else {
 			_scissorLiftSolDown.set(false);
 		}
 		
+		//extending and setting limits
 		if (_armJoystick.getRawButton(3)) {
-			if (encoderPos < 400) {
-				_lowerLimit = 400;
+			if (encoderPos < 1000) {
+				_lowerLimit = 1000;
 				_scissorLiftSolUp.set(true);
 			} 
 		} else {
 			_scissorLiftSolUp.set(false);
 		}
 		
+		
+		//reset lower limit when retracted
 		if (! _armNotRetractedSwitch.get()) {
 			_lowerLimit = 6500;
 		}
 		
+		
+		//climbing controls
 		if (_armJoystick.getRawButton(8)) {
 			_climbSol.set(true);
 			_scissorLiftSolDown.set(true);
@@ -408,9 +436,5 @@ public class Robot extends IterativeRobot {
 		} else {
 			startingPos = "right";
 		}
-		
-		boolean isFmsAThing = DriverStation.getInstance().isFMSAttached();
-		System.out.println("Do we have some communicate to a FMS type thing? "+isFmsAThing);
-		System.out.println(startingPos);
 	}
 }
