@@ -16,7 +16,7 @@ Link to the [robot.py documentation](https://robotpy.readthedocs.io/en/stable/) 
 
 Crista | Joe | Kennedy 
 ------------ | ------------- | ------------ 
-Lead Programmer V.2| Lead Programmer V.3 | "MOrAl SuPpOrT" 
+Lead Programmer V.2| Lead Programmer V.1 | "MOrAl SuPpOrT" 
 ![FRC](http://i1239.photobucket.com/albums/ff510/drumsuperman/TheA-TeamWay.jpg) | ![Meme](https://i.imgur.com/67T3LN9.png) | ![code](https://i.imgflip.com/lotgw.jpg) |
 | :expressionless: | :eyes: | :scream: |
 
