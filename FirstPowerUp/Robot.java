@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
 	//timer for autonomous
 	Timer _timer = new Timer();
 	
-//	// Drive Train motors
+	// Drive Train motors
 	WPI_TalonSRX _left1 = new WPI_TalonSRX(3);
 	WPI_TalonSRX _left2 = new WPI_TalonSRX(4);
 	WPI_TalonSRX _right1 = new WPI_TalonSRX(1);
@@ -144,18 +144,17 @@ public class Robot extends IterativeRobot {
 		_armTiltMotor.config_kI(Constants.kSlotIdx, 0, Constants.kTimeoutMs);
 		_armTiltMotor.config_kD(Constants.kSlotIdx, 0, Constants.kTimeoutMs);
 		/* set acceleration and vcruise velocity - see documentation */
-		_armTiltMotor.configMotionCruiseVelocity(220, Constants.kTimeoutMs);
-		_armTiltMotor.configMotionAcceleration(220, Constants.kTimeoutMs);
+		_armTiltMotor.configMotionCruiseVelocity(300, Constants.kTimeoutMs);
+		_armTiltMotor.configMotionAcceleration(300, Constants.kTimeoutMs);
 		
 		//initial limits for tilting
 		_upperLimit = 0;
-		_lowerLimit = 6500;
-		
+		_lowerLimit = 6600;	
 	}
 	
 	@Override
 	public void autonomousInit() {
-		//home tilt motor by slowly incrimenting the position untill a switch is activated
+		//home tilt motor by slowly incrementing the position until a switch is activated
 		hasBeenHomed = false;
 		for (double i = _armTiltMotor.getSelectedSensorPosition(Constants.kPIDLoopIdx); _homeSwitch.get() && ! hasBeenHomed; i -= 0.001) {
 			_armTiltMotor.set(ControlMode.MotionMagic, i);
@@ -179,6 +178,10 @@ public class Robot extends IterativeRobot {
 					switchPosition = "right";
 					}
 	        	}
+		} else {
+			// For testing, if there is no FMS (you are not connected to an official FIRST field)
+			// The robot will assume in autonomous mode that our alliance's switch is on the right
+			switchPosition = "right";
 		}
 		
 		
@@ -200,31 +203,76 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		//System.out.println(startingPos);
-		//switchPosition = "right";
+		switchPosition = "left";
+		_grabberator.set(false);
 		//Auto functions for just driving straight forward
 		//We only use these when the switch and robot are on the same side
 		if(startingPos == "right" & switchPosition == "right") {
-			if(_timer.get() < 5.2) {
+			if(_timer.get() < 4) {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			} else {
-				_drive.arcadeDrive(0, 0);				_grabberator.set(true);
+				_drive.arcadeDrive(0, 0);				
+				_grabberator.set(true);
 			}
 			
-		} else if(startingPos == "left" & switchPosition == "left") {
+		} 
+		else if(startingPos == "left" & switchPosition == "left") {
+			if(_timer.get() < 2.3) {
+				_drive.arcadeDrive(-.85, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			} else if (_timer.get() < 4) {
+				_drive.arcadeDrive(0, 0);
+				_grabberator.set(true);
+			} else if (_timer.get() < 5.5) {
+				_drive.arcadeDrive(0.8, 0);
+			} else if (_timer.get() < 6.5) {
+				_drive.arcadeDrive(0, -.68);
+			} else if (_timer.get() < 7.3) {
+				_drive.arcadeDrive(0, 0);
+			} else if (_timer.get() < 8) {
+				_drive.arcadeDrive(-.85, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 6600);
+			} else if (_timer.get() < 8.2) {
+				_drive.arcadeDrive(0, 0);
+			} else if (_timer.get() < 9) {
+				_drive.arcadeDrive(0, 0.66);
+			} else if (_timer.get() < 9.1) {
+				_drive.arcadeDrive(0, 0);
+			} else if (_timer.get() < 9.8) {
+				_drive.arcadeDrive(-0.85, 0);
+				_grabberator.set(true);
+				_grabMotor1.set(-1);
+				_grabMotor2.set(1);
+			} else if (_timer.get() < 9.9) {
+				_drive.arcadeDrive(0, 0);
+				_grabberator.set(false);
+			} else if (_timer.get() < 10.5) {
+				_drive.arcadeDrive(0.6, 0);
+				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			} else if (_timer.get() < 10.6) {
+				_drive.arcadeDrive(0, 0);
+				_grabMotor1.set(0);
+				_grabMotor2.set(0);
+			} // TODO: Turn left and drive forward then shoot cube in switch and victory!
+		}
+		
+		/*if(startingPos == "right" & switchPosition == "right") {
 			if(_timer.get() < 5.2) {
 				_drive.arcadeDrive(-.8, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+			} else if (_timer.get() < 6) {
+				_drive.arcadeDrive(0, .65);;
 			} else {
 				_drive.arcadeDrive(0, 0);
 				_grabberator.set(true);
 			}
-		}
+		}*/
 		
 		//Auto function for switches on opposite sides of the robot
 		if(startingPos == "right" & switchPosition == "left") {
 			if(_timer.get() < 1) {
-				_drive.arcadeDrive(-.8, 0);
+				_drive.arcadeDrive(-.7, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			}else if(_timer.get() < 2) {
 				_drive.arcadeDrive(0, .65);
@@ -239,9 +287,30 @@ public class Robot extends IterativeRobot {
 				_grabberator.set(true);
 			}
 			
+//			if(startingPos == "right" & switchPosition == "left") {
+//				if(_timer.get() < 1) {
+//					_drive.arcadeDrive(-.8, 0);
+//					_armTiltMotor.set(ControlMode.MotionMagic, 3000);
+//				}else if(_timer.get() < 2) {
+//					_drive.arcadeDrive(0, .65);
+			// Increase This (6.5 sec)
+//				}else if(_timer.get() < 6.5) {
+//					_drive.arcadeDrive( -.66, 0);
+//				} else if(_timer.get() < 7.35) {
+//					_drive.arcadeDrive(0, -.78);
+			// Decrease this (10.7)
+//				} else if(_timer.get() < 10.7) {
+//					_drive.arcadeDrive(-.8, 0);
+//				} else if(_timer.get() < 12.0) {
+//			_drive.arcadeDrive(0, -.78);
+//				} else {
+//					_drive.stopMotor();
+//					_grabberator.set(true);
+//				}
+			
 		} else if(startingPos == "left" & switchPosition == "right") {
 			if(_timer.get() < 1) {
-				_drive.arcadeDrive(-.8, 0);
+				_drive.arcadeDrive(-.7, 0);
 				_armTiltMotor.set(ControlMode.MotionMagic, 3000);
 			}else if(_timer.get() < 2) {
 				_drive.arcadeDrive(0, -.65);
@@ -320,7 +389,7 @@ public class Robot extends IterativeRobot {
 		//Here we increment a target position which we then command the
 		//tilt motor to drive to using motion magic
 		
-		//only incriment if we are out of the dead zone
+		//only increment if we are out of the dead zone
 		if(leftYstick > .05) {
 			 
 			if(targetPos > _upperLimit + 20) {
@@ -407,7 +476,7 @@ public class Robot extends IterativeRobot {
 		
 		//reset lower limit when retracted
 		if (! _armNotRetractedSwitch.get()) {
-			_lowerLimit = 6500;
+			_lowerLimit = 6600;
 		}
 		
 		
