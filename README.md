@@ -16,5 +16,3 @@ The mission of FIRST is to inspire young people to be science and technology lea
 
 ## Methodology
 Engage kids in kindergarten through high school in exciting, Mentor-based, research and robotics programs that help them become science and technology leaders, as well as well-rounded contributors to society.
-
-Link to the [robot.py documentation](https://robotpy.readthedocs.io/en/stable/) we use to program the robot
