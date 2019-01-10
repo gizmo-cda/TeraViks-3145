@@ -1,5 +1,10 @@
 # TeraViks-3145
-2017 TeraViks FIRST Robotics Team *code*
+2019 TeraViks FIRST Robotics Team
+
+# Members
+- Crista (captain)
+- Joe 
+- Killian
 
 # [FIRST Robotics standards](https://www.firstinspires.org/about/vision-and-mission)
 
