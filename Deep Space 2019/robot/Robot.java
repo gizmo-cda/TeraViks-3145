@@ -12,12 +12,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.SwerveMath;
+import edu.wpi.first.wpilibj.SPI;
+import com.kauailabs.navx.frc.*;
 import frc.robot.commands.Vision;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import com.ctre.phoenix.motorcontrol.can.*;
-import com.kauailabs.navx.frc.AHRS;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,11 +24,12 @@ import com.kauailabs.navx.frc.AHRS;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-
 public class Robot extends TimedRobot {
   // public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
-  public static OI m_oi;
-  
+  public static OI m_oi = new OI();
+  public static Drivetrain m_drivetrain = new Drivetrain();
+  public static AHRS m_navx = new AHRS(SPI.Port.kMXP);
+
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -41,8 +40,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    m_navx.reset();
 
-    m_oi = new OI();
+
     // m_chooser.setDefaultOption("Default Swerve", new SwerveMath());
     m_chooser.setDefaultOption("Default Swerve", new Vision());
     // m_chooser.setObject("Any Text", new SomeCommand());
