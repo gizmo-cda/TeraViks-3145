@@ -12,6 +12,7 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Command;
 
 
@@ -23,7 +24,7 @@ public class Drive extends Command {
   public Drive() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    //requires(Robot.m_drivetrain);
+    requires(Robot.m_drivetrain);
   }
 
   // Called just before this Command runs the first time
@@ -37,11 +38,52 @@ public class Drive extends Command {
     // Get joystick inputs, apply the negative value to change the polarity
     // of the Y axis so a positive is forward.  Swerve Math expects normal
     // cartesian coordinates to calculate the directional vectors per wheel.
+
+    // setting fwd values to raw input from the joystick's y axis
     fwd = -Robot.m_oi.getSwerveJoy().getY();
+
+    // setting str values to raw input from the joystick's x axis
     str = Robot.m_oi.getSwerveJoy().getX();
+
+    // setting rcw values to raw input from the joystick's z axis
     rcw = Robot.m_oi.getSwerveJoy().getZ();
 
-    // Call Drivetrain Subsystem //
+    // System.out.println("X: "+fwd);
+    // System.out.println("Y: "+str);
+    // System.out.println("Z: "+rcw);
+
+    if ((fwd > -RobotMap.X_AXIS_THREASHOLD) && (fwd < RobotMap.X_AXIS_THREASHOLD)) {
+      fwd = 0.;
+    }
+
+    if ((str > -RobotMap.Y_AXIS_THREASHOLD) && (str < RobotMap.Y_AXIS_THREASHOLD)) {
+      str = 0.;
+    }
+
+    if ((rcw > -RobotMap.Z_AXIS_THREASHOLD) && (rcw < RobotMap.Z_AXIS_THREASHOLD)) {
+      rcw = 0.;
+    }
+
+    // squaring to double precision and improves operator control; if-else loops lets us retain the sign values
+    if (fwd < 0) {
+      fwd *= fwd * -1;
+    } else {
+      fwd *= fwd;
+    }
+
+    if (str < 0) {
+      str *= str * -1;
+    } else {
+      str *= str;
+    }
+
+    if (rcw < 0) {
+      rcw *= rcw * -1;
+    } else {
+      rcw *= rcw;
+    }
+
+    // Call Drivetrain Subsystem 
     Robot.m_drivetrain.move(fwd, str, rcw);
   }
 
