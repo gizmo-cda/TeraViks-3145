@@ -34,7 +34,7 @@ package frc.robot.swerve;
 import frc.robot.RobotMap;
 import java.lang.Math;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 
 public class SwerveMath {
 
@@ -47,10 +47,10 @@ public class SwerveMath {
   private static Double str; //Strafe, X axis, 1 to -1 from Joystick//
   private static Double rcw; //Rotate CW, Z axis, 1 to -1 from Joystick, refernced 1=180 CW -1=-180 CW//
 
-  private static Double rads = 180./Math.PI;  //Radians//
+  private static Double rads = 180./Math.PI;  //Radians
 
   // Chose ArrayList type and defined the size because the size will never change and it's easy to modify members //
-  private ArrayList<Double> wheelVectors = new ArrayList<Double>(8);
+  private ArrayList<Double> wheelVectors = new ArrayList<Double>(Arrays.asList(0.,0.,0.,0.,0.,0.,0.,0.));
   
   // Null Constructor for SwerveMath for Object Instanitation //
   public SwerveMath(){
@@ -58,6 +58,7 @@ public class SwerveMath {
 
   // First Method of SwerveMath that returns the vector (speed, angle) for each wheel as a list//
   public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn){
+
     fwd = fwdIn;
     str = strIn;
     rcw = rcwIn;
@@ -133,6 +134,8 @@ public class SwerveMath {
     wheelVectors.set(5,wa3);
     wheelVectors.set(6,ws4);
     wheelVectors.set(7,wa4);
+
+    // System.out.println(wheelVectors+":\n"+wheelVectors.size());
 
     return wheelVectors;
   }

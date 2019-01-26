@@ -34,21 +34,21 @@ public class SwerveDrive {
 
     public void setMotors(double fwd, double str, double rcw){
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw);
-
+        // System.out.println(swerveVectors);
         frontRight.setSpeed(swerveVectors.get(0));
         frontRight.setAngle(swerveVectors.get(1));
-        frontLeft.setSpeed(swerveVectors.get(2));
-        frontLeft.setAngle(swerveVectors.get(3));
-        rearLeft.setSpeed(swerveVectors.get(4));
-        rearLeft.setAngle(swerveVectors.get(5));
-        rearRight.setSpeed(swerveVectors.get(6));
-        rearRight.setAngle(swerveVectors.get(7));
+        // frontLeft.setSpeed(swerveVectors.get(2));
+        // frontLeft.setAngle(swerveVectors.get(3));
+        // rearLeft.setSpeed(swerveVectors.get(4));
+        // rearLeft.setAngle(swerveVectors.get(5));
+        // rearRight.setSpeed(swerveVectors.get(6));
+        // rearRight.setAngle(swerveVectors.get(7));
     }
 
     public void stopMotors(){
         frontRight.stop();
-        frontLeft.stop();
-        rearLeft.stop();
-        rearRight.stop();
+        // frontLeft.stop();
+        // rearLeft.stop();
+        // rearRight.stop();
     }
 }
