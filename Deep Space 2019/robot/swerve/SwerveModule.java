@@ -10,6 +10,8 @@ package frc.robot.swerve;
 
 import frc.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
@@ -22,6 +24,8 @@ public class SwerveModule {
     private String name;
     private WPI_TalonSRX driveMotor;
     private WPI_TalonSRX steerMotor;
+    private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
+    private double STEER_GEAR_RATIO = RobotMap.FINAL_STEER_WHEEL_GEAR_RATIO;
 
     //private double driveMotorRatio = RobotMap.FINAL_DRIVE_WHEEL_GEAR_RATIO;
     private double steerMotorRatio = RobotMap.FINAL_STEER_WHEEL_GEAR_RATIO;
@@ -57,4 +61,28 @@ public class SwerveModule {
         return name;
     }
 
+    public void initSteerMotor()
+    {
+        steerMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
+        steerMotor.configSelectedFeedbackCoefficient(1/STEER_GEAR_RATIO, 0, TIMEOUT);
+    	
+    	steerMotor.selectProfileSlot(0, 0); //slot #, PID #
+    	
+        steerMotor.setSelectedSensorPosition(0);
+        //steerMotor.configPulseWidthPeriod_EdgesPerRot(4096*STEER_GEAR_RATIO, TIMEOUT);
+    	steerMotor.configPeakOutputForward(1, TIMEOUT);
+    	steerMotor.configPeakOutputReverse(-1, TIMEOUT);
+    	
+    	steerMotor.configNominalOutputForward(0, TIMEOUT);
+    	steerMotor.configNominalOutputReverse(0, TIMEOUT);
+    	
+    	steerMotor.setNeutralMode(NeutralMode.Brake);
+    	
+    	steerMotor.configAllowableClosedloopError(0, 4, TIMEOUT);
+    	
+    	steerMotor.config_kP(0, 10, TIMEOUT);
+    	steerMotor.config_kI(0, 0, TIMEOUT);
+    	steerMotor.config_kD(0, 0, TIMEOUT);
+    	steerMotor.config_kF(0, 0, TIMEOUT);
+    }
 }

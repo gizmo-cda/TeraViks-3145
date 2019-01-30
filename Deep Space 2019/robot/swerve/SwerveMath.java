@@ -49,6 +49,9 @@ public class SwerveMath {
 
   private static Double rads = 180./Math.PI;  //Radians
 
+  private static boolean centric = false;
+  private static Double gyro;
+
   // Chose ArrayList type and defined the size because the size will never change and it's easy to modify members //
   private ArrayList<Double> wheelVectors = new ArrayList<Double>(Arrays.asList(0.,0.,0.,0.,0.,0.,0.,0.));
   
@@ -57,11 +60,25 @@ public class SwerveMath {
     }
 
   // First Method of SwerveMath that returns the vector (speed, angle) for each wheel as a list//
-  public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn){
+  public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn, boolean centricIn, double gyroIn){
 
     fwd = fwdIn;
     str = strIn;
     rcw = rcwIn;
+    centric = centricIn;
+    gyro = Math.toRadians(gyroIn);
+
+    if (centric) {
+
+      double y_f = fwd * Math.cos(gyro); // y component of field
+      double y_s = str * Math.sin(gyro); // y component of strafe
+      double x_f = fwd * Math.sin(gyro); // x component of field
+      double x_s = str * Math.cos(gyro); // x component of strafe
+
+      fwd = y_f + y_s;
+      str = -x_f + x_s;
+
+    }
     
     // Define common elements in wheel vector math //
     Double A = str - rcw * halfLength; 
