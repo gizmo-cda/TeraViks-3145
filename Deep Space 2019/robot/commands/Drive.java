@@ -21,7 +21,6 @@ public class Drive extends Command {
   private Double str; //Strafe, X axis, 1 to -1 from Joystick//
   private Double rcw; //Rotate CW, Z axis, 1 to -1 from Joystick, refernced 1=180 CW -1=-180 CW//
   private Double gyro;
-  private boolean centric = false;
 
   public Drive() {
     // Use requires() here to declare subsystem dependencies
@@ -32,8 +31,7 @@ public class Drive extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    centric = Robot.m_fieldMode.getCentric();
-  }
+   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
@@ -86,9 +84,11 @@ public class Drive extends Command {
       rcw *= rcw;
     }
 
+    // This is total accumulated Yaw angle in degrees, maybe should use Yaw?
     gyro = Robot.m_navx.getAngle();
+
     // Call Drivetrain Subsystem 
-    Robot.m_drivetrain.move(fwd, str, rcw, centric, gyro);
+    Robot.m_drivetrain.move(fwd, str, rcw, gyro);
   }
 
   // Make this return true when this Command no longer needs to run execute()
