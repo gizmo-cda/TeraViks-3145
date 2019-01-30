@@ -51,12 +51,7 @@ public class Robot extends TimedRobot {
     m_drivetrain = new Drivetrain();
     m_navx = new AHRS(SPI.Port.kMXP);
     m_vision = new VisionTable();
-    m_fieldMode = new FieldMode();
-
-    joyStick = m_oi.getSwerveJoy();
-    test_button = m_oi.getBtn1();
-
-
+  
     m_navx.reset();
 
     // m_chooser.setDefaultOption("Default Swerve", new SwerveMath());
