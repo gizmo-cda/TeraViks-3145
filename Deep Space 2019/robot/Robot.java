@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SPI;
+
 import com.kauailabs.navx.frc.*;
 import edu.wpi.first.wpilibj.buttons.*;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -30,9 +32,10 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Drivetrain m_drivetrain;
   public static AHRS m_navx;
-  public static Button btn1;
   public static VisionTable m_vision;
   public static FieldMode m_fieldMode;
+  public static Button test_button;
+  public static Joystick joyStick;
 
 
   Command m_autonomousCommand;
@@ -47,14 +50,17 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     m_drivetrain = new Drivetrain();
     m_navx = new AHRS(SPI.Port.kMXP);
-    btn1 = m_oi.getBtn1();
     m_vision = new VisionTable();
     m_fieldMode = new FieldMode();
+
+    joyStick = m_oi.getSwerveJoy();
+    test_button = m_oi.getBtn1();
+
 
     m_navx.reset();
 
     // m_chooser.setDefaultOption("Default Swerve", new SwerveMath());
-    m_chooser.setDefaultOption("Default Swerve", new Drive());
+    // m_chooser.setDefaultOption("Default Swerve", new Drive());
     // m_chooser.setObject("Any Text", new SomeCommand());
 
     // chooser.addOption("My Auto", new MyAutoCommand());
@@ -124,6 +130,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+    // System.out.println(test_button.get());
+    test_button.whenPressed(new FieldMode()); // TODO: how to run just once?
+
   }
 
   @Override
