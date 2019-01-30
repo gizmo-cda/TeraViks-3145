@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   public static AHRS m_navx;
   public static Button btn1;
   public static VisionTable m_vision;
+  public static FieldMode m_fieldMode;
 
 
   Command m_autonomousCommand;
@@ -48,6 +49,8 @@ public class Robot extends TimedRobot {
     m_navx = new AHRS(SPI.Port.kMXP);
     btn1 = m_oi.getBtn1();
     m_vision = new VisionTable();
+    m_fieldMode = new FieldMode();
+
     m_navx.reset();
 
     // m_chooser.setDefaultOption("Default Swerve", new SwerveMath());

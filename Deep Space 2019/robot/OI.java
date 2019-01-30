@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
+import frc.robot.commands.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -24,6 +25,10 @@ public class OI {
     //Instantiate the Object, SwerveJoy)
     swerveJoy = new Joystick(0);
     btn1 = new JoystickButton(swerveJoy, 0);
+
+    // toggle field centric
+    btn1.whenPressed(new FieldMode());
+
   }
   //First Method of OI to get all the Joystick inputs//
   public Joystick getSwerveJoy(){
