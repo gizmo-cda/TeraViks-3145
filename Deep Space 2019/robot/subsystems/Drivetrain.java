@@ -42,6 +42,8 @@ public class Drivetrain extends Subsystem {
 
   private SwerveDrive m_SwerveDrive;
 
+  private boolean centric = false;
+
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel//
     frontRightWheel = new SwerveModule("FrontRightWheel", frontRightDriveMotor, frontRightSteerMotor);
@@ -58,17 +60,18 @@ public class Drivetrain extends Subsystem {
      m_SwerveDrive.initSteerMotors();
   }
 
-  private void initDriveMotor(WPI_TalonSRX driveMotor){
-
+  public void toggleCentric(){
+    centric = !centric; 
+    System.out.println("Centric is: "+centric);
   }
 
-  //private void initSteerMotor(WPI_TalonSRX steerMotor){
+  public boolean getCentric(){
+    return centric;
+  }
 
-  //}
-
-  public void move(double fwd, double str, double rcw, boolean centric, Double gyro){
+  public void move(double fwd, double str, double rcw, double gyro){
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, gyro);
-    System.out.println(frontRightSteerMotor.getSelectedSensorPosition());
+  //  System.out.println(frontRightSteerMotor.getSelectedSensorPosition());
   }
 
   @Override
