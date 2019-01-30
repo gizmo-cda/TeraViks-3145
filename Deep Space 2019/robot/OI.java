@@ -19,15 +19,41 @@ import frc.robot.commands.*;
 public class OI {
 
   public Joystick swerveJoy;
-  public Button btn1;
+
+  //De buttons 0-11
+  public Button btn0; //Square Button
+  public Button btn1; //X Button
+  public Button btn2; //O Button
+  public Button btn3; //Triange Button
+  public Button btn4; //L1 Button
+  public Button btn5; //R1 Button
+  public Button btn6; //L2 Button
+  public Button btn7; //R2 Button
+  public Button btn8; //Select Button
+  public Button btn9; //Start Button
+  public Button btn10; //Left Stick Button
+  public Button btn11; //Right Stick Button
+
 
   public OI() {
     //Instantiate the Object, SwerveJoy)
     swerveJoy = new Joystick(0);
-    btn1 = new JoystickButton(swerveJoy, 0);
+    //Instantiate the buttons 0-11
+    btn0 = new JoystickButton(swerveJoy, 0); //Square Button
+    btn1 = new JoystickButton(swerveJoy, 1); //X Button
+    btn2 = new JoystickButton(swerveJoy, 2); //O Button
+    btn3 = new JoystickButton(swerveJoy, 3); //Triange Button
+    btn4 = new JoystickButton(swerveJoy, 4); //L1 Button
+    btn5 = new JoystickButton(swerveJoy, 5); //R1 Button
+    btn6 = new JoystickButton(swerveJoy, 6); //L2 Button
+    btn7 = new JoystickButton(swerveJoy, 7); //R2 Button
+    btn8 = new JoystickButton(swerveJoy, 8); //Select Button
+    btn9 = new JoystickButton(swerveJoy, 9); //Start Button
+    btn10 = new JoystickButton(swerveJoy, 10); //Left Stick Button
+    btn11 = new JoystickButton(swerveJoy, 11); //Right Stick Button
 
     // toggle field centric
-    btn1.whenPressed(new FieldMode());
+    btn0.whenPressed(new FieldMode());
 
   }
   //First Method of OI to get all the Joystick inputs//
@@ -35,9 +61,18 @@ public class OI {
     return swerveJoy;
   }
 
-  public Button getBtn1() {
-    return btn1;
-  }
+  public Button getBtn0(){return btn0;} //Square Button
+  public Button getBtn1(){return btn1;} //X Button
+  public Button getBtn2(){return btn2;} //O Button
+  public Button getBtn3(){return btn3;} //Triange Button
+  public Button getBtn4(){return btn4;} //L1 Button
+  public Button getBtn5(){return btn5;} //R1 Button
+  public Button getBtn6(){return btn6;} //L2 Button
+  public Button getBtn7(){return btn7;} //R2 Button
+  public Button getBtn8(){return btn8;} //Select Button
+  public Button getBtn9(){return btn9;} //Start Button
+  public Button getBtn10(){return btn10;} //Left Stick Button
+  public Button getBtn11(){return btn11;} //Right Stick Button
 
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
