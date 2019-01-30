@@ -39,18 +39,21 @@ import java.util.Arrays;
 public class SwerveMath {
 
   // Fields of SwerveMath, note they are local (ie private to SwerveMath) //
+  // These are intitialized as constants to reduce the math cycles in the class' methods
   private static Double halfLength = RobotMap.WHEELBASE_LENGTH/2; // length of chassis divided by 2
   private static Double halfWidth = RobotMap.WHEELBASE_TRACK_WIDTH/2; // width of chassis divided by 2
   private static Double ss = RobotMap.WHEEL_SPEED_SCALE; // speed scale
+
+  private static Double toDeg = 180./Math.PI;  //convert Radians to Degrees
+  private static Double toRad = Math.PI/180.;  //convert Degrees to Radians
 
   private static Double fwd; //Forward, Y axis, -1 to 1 from Joystick//
   private static Double str; //Strafe, X axis, 1 to -1 from Joystick//
   private static Double rcw; //Rotate CW, Z axis, 1 to -1 from Joystick, refernced 1=180 CW -1=-180 CW//
 
-  private static Double rads = 180./Math.PI;  //Radians
-
-  private static boolean centric = false;
   private static Double gyro;
+
+  private static boolean centric;
 
   // Chose ArrayList type and defined the size because the size will never change and it's easy to modify members //
   private ArrayList<Double> wheelVectors = new ArrayList<Double>(Arrays.asList(0.,0.,0.,0.,0.,0.,0.,0.));
@@ -66,7 +69,7 @@ public class SwerveMath {
     str = strIn;
     rcw = rcwIn;
     centric = centricIn;
-    gyro = Math.toRadians(gyroIn);
+    gyro = gyroIn * toRad;
 
     if (centric) {
 
@@ -98,10 +101,10 @@ public class SwerveMath {
     // System.out.println("Raw Wheel Speed 4: " + Double.toString(ws4));
 
     // Calculate the wheel angle for each wheel //
-    Double wa1 = Math.atan2(B, C) * rads; // Wheel Angle 1 = front right
-    Double wa2 = Math.atan2(B, D) * rads; // Wheel Angle 2 = front left
-    Double wa3 = Math.atan2(A, D) * rads; // Wheel Angle 3 = rear left
-    Double wa4 = Math.atan2(A, C) * rads; // Wheel Angle 4 = rear right
+    Double wa1 = Math.atan2(B, C) * toDeg; // Wheel Angle 1 = front right
+    Double wa2 = Math.atan2(B, D) * toDeg; // Wheel Angle 2 = front left
+    Double wa3 = Math.atan2(A, D) * toDeg; // Wheel Angle 3 = rear left
+    Double wa4 = Math.atan2(A, C) * toDeg; // Wheel Angle 4 = rear right
 
     // Wheel Speed Normalization, Can't have a wheel speed > 1 //
     Double max = ws1;
