@@ -55,18 +55,19 @@ public class Drivetrain extends Subsystem {
   }
 
   public void init(){
-
+     m_SwerveDrive.initSteerMotors();
   }
+
   private void initDriveMotor(WPI_TalonSRX driveMotor){
 
   }
 
-  private void initSteerMotor(WPI_TalonSRX steerMotor){
+  //private void initSteerMotor(WPI_TalonSRX steerMotor){
 
-  }
+  //}
 
-  public void move(double fwd, double str, double rcw){
-    m_SwerveDrive.setMotors(fwd, str, rcw);
+  public void move(double fwd, double str, double rcw, boolean centric, Double gyro){
+    m_SwerveDrive.setMotors(fwd, str, rcw, centric, gyro);
     System.out.println(frontRightSteerMotor.getSelectedSensorPosition());
   }
 
