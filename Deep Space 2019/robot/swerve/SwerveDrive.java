@@ -39,7 +39,7 @@ public class SwerveDrive {
         //rearRight.initSteerMotor();
     }
 
-    public void setMotors(double fwd, double str, double rcw, boolean centric, Double gyro){
+    public void setMotors(double fwd, double str, double rcw, boolean centric, double gyro){
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro);
         // System.out.println(swerveVectors);
         frontRight.setSpeed(swerveVectors.get(0));
