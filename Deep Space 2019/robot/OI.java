@@ -22,22 +22,22 @@ public class OI {
   public Joystick swerveJoy = new Joystick(0);
 
   //Instantiate the buttons 0-11
-  public Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button
-  public Button btn2 = new JoystickButton(swerveJoy, 2); //X Button
-  public Button btn3 = new JoystickButton(swerveJoy, 3); //O Button
-  public Button btn4 = new JoystickButton(swerveJoy, 4); //Triange Button
-  public Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button
-  public Button btn6 = new JoystickButton(swerveJoy, 6); //R1 Button
-  public Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button
-  public Button btn8 = new JoystickButton(swerveJoy, 8); //R2 Button
-  public Button btn9 = new JoystickButton(swerveJoy, 9); //Select Button
-  public Button btn10 = new JoystickButton(swerveJoy, 10); //Start Button
-  public Button btn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button
-  public Button btn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button
+  // public Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button
+  // public Button btn2 = new JoystickButton(swerveJoy, 2); //X Button
+  // public Button btn3 = new JoystickButton(swerveJoy, 3); //O Button
+  // public Button btn4 = new JoystickButton(swerveJoy, 4); //Triange Button
+  // public Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button
+  // public Button btn6 = new JoystickButton(swerveJoy, 6); //R1 Button
+  // public Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button
+  // public Button btn8 = new JoystickButton(swerveJoy, 8); //R2 Button
+  // public Button btn9 = new JoystickButton(swerveJoy, 9); //Select Button
+  // public Button btn10 = new JoystickButton(swerveJoy, 10); //Start Button
+  // public Button btn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button
+  // public Button btn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button
 
   public OI() {
     // Call FieldMode Commmand
-    btn1.whenPressed(new FieldMode()); 
+    // btn1.whenPressed(new FieldMode()); 
   }
 
   //First Method of OI to get all the Joystick inputs//
