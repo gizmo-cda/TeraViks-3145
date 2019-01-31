@@ -40,8 +40,8 @@ public class SwerveMath {
 
   // Fields of SwerveMath, note they are local (ie private to SwerveMath) //
   // These are intitialized as constants to reduce the math cycles in the class' methods
-  private static Double halfLength = RobotMap.WHEELBASE_LENGTH/2; // length of chassis divided by 2
-  private static Double halfWidth = RobotMap.WHEELBASE_TRACK_WIDTH/2; // width of chassis divided by 2
+  private static Double halfLength = RobotMap.WHEELBASE_LENGTH/2.; // length of chassis divided by 2
+  private static Double halfWidth = RobotMap.WHEELBASE_TRACK_WIDTH/2.; // width of chassis divided by 2
   private static Double ss = RobotMap.WHEEL_SPEED_SCALE; // speed scale
 
   private static Double toDeg = 180./Math.PI;  //convert Radians to Degrees
@@ -160,4 +160,3 @@ public class SwerveMath {
     return wheelVectors;
   }
 }
-

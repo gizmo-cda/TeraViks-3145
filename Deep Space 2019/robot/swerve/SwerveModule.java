@@ -41,7 +41,9 @@ public class SwerveModule {
     }
 
     public void setAngle(double wheelAngle){
-        steerMotor.set(ControlMode.Position,  wheelAngle * steerMotorRatio);
+        // steerMotor.set(ControlMode.Position,  wheelAngle * steerMotorRatio);
+        steerMotor.set(ControlMode.PercentOutput, wheelAngle * steerMotorRatio * .01); // Need to multiply by 1% in order to put into decimal form (it expects 0.0 to 1.0)
+        // System.out.println(wheelAngle * steerMotorRatio);
     }
     
     public void stop(){
