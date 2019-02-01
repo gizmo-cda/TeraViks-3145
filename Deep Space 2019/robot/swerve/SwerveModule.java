@@ -25,10 +25,6 @@ public class SwerveModule {
     private WPI_TalonSRX driveMotor;
     private WPI_TalonSRX steerMotor;
     private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
-    private double STEER_GEAR_RATIO = RobotMap.FINAL_STEER_WHEEL_GEAR_RATIO;
-
-    //private double driveMotorRatio = RobotMap.FINAL_DRIVE_WHEEL_GEAR_RATIO;
-    private double steerMotorRatio = RobotMap.FINAL_STEER_WHEEL_GEAR_RATIO;
 
     public SwerveModule(String wheelName, WPI_TalonSRX wheelDriveMotor, WPI_TalonSRX wheelSteerMotor){
         name = wheelName;
@@ -40,10 +36,12 @@ public class SwerveModule {
         driveMotor.set(ControlMode.PercentOutput, wheelSpeed);
     }
 
-    public void setAngle(double wheelAngle){
-        // steerMotor.set(ControlMode.Position,  wheelAngle * steerMotorRatio);
-        steerMotor.set(ControlMode.PercentOutput, wheelAngle * steerMotorRatio * .01); // Need to multiply by 1% in order to put into decimal form (it expects 0.0 to 1.0)
-        // System.out.println(wheelAngle * steerMotorRatio);
+    public void setPosition(double wheelPosition){
+        steerMotor.set(ControlMode.Position,  wheelPosition);
+    }
+
+    public int getPosition(){
+        return steerMotor.getSelectedSensorPosition();
     }
     
     public void stop(){
@@ -66,7 +64,7 @@ public class SwerveModule {
     public void initSteerMotor()
     {
         steerMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
-        steerMotor.configSelectedFeedbackCoefficient(1/STEER_GEAR_RATIO, 0, TIMEOUT);
+        //steerMotor.configSelectedFeedbackCoefficient(1/STEER_GEAR_RATIO, 0, TIMEOUT);
     	
     	steerMotor.selectProfileSlot(0, 0); //slot #, PID #
     	
