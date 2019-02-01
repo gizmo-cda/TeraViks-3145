@@ -40,12 +40,15 @@ public class SwerveMath {
 
   // Fields of SwerveMath, note they are local (ie private to SwerveMath) //
   // These are intitialized as constants to reduce the math cycles in the class' methods
-  private static Double halfLength = RobotMap.WHEELBASE_LENGTH/2.; // length of chassis divided by 2
-  private static Double halfWidth = RobotMap.WHEELBASE_TRACK_WIDTH/2.; // width of chassis divided by 2
+  private static Double halfLength = RobotMap.WHEELBASE_LENGTH/2; // length of chassis divided by 2
+  private static Double halfWidth = RobotMap.WHEELBASE_TRACK_WIDTH/2; // width of chassis divided by 2
   private static Double ss = RobotMap.WHEEL_SPEED_SCALE; // speed scale
+  private static Double steerGearRatio = RobotMap.FINAL_STEER_WHEEL_GEAR_RATIO;
 
   private static Double toDeg = 180./Math.PI;  //convert Radians to Degrees
   private static Double toRad = Math.PI/180.;  //convert Degrees to Radians
+  private static Double toPos = (steerGearRatio/2.)/Math.PI;
+  private static Double twoPi = 2 * Math.PI;
 
   private static Double fwd; //Forward, Y axis, -1 to 1 from Joystick//
   private static Double str; //Strafe, X axis, 1 to -1 from Joystick//
@@ -71,8 +74,8 @@ public class SwerveMath {
     centric = centricIn;
     gyro = gyroIn * toRad;
 
+    // Modify the Joystick Inputs for Centric Mode //
     if (centric) {
-
       double y_f = fwd * Math.cos(gyro); // y component of field
       double y_s = str * Math.sin(gyro); // y component of strafe
       double x_f = fwd * Math.sin(gyro); // x component of field
@@ -80,7 +83,6 @@ public class SwerveMath {
 
       fwd = y_f + y_s;
       str = -x_f + x_s;
-
     }
     
     // Define common elements in wheel vector math //
@@ -94,20 +96,15 @@ public class SwerveMath {
     Double ws2 = Math.sqrt(B*B + D*D);  // Wheel Speed 2 = front left
     Double ws3 = Math.sqrt(A*A + D*D);  // Wheel Speed 3 = rear left
     Double ws4 = Math.sqrt(A*A + C*C); // Wheel Speed 4 = rear right
-
-    // System.out.println("Raw Wheel Speed 1: " + Double.toString(ws1));
-    // System.out.println("Raw Wheel Speed 2: " + Double.toString(ws2));
-    // System.out.println("Raw Wheel Speed 3: " + Double.toString(ws3));
-    // System.out.println("Raw Wheel Speed 4: " + Double.toString(ws4));
-
-    // Calculate the wheel angle for each wheel //
-    Double wa1 = Math.atan2(B, C) * toDeg; // Wheel Angle 1 = front right
-    Double wa2 = Math.atan2(B, D) * toDeg; // Wheel Angle 2 = front left
-    Double wa3 = Math.atan2(A, D) * toDeg; // Wheel Angle 3 = rear left
-    Double wa4 = Math.atan2(A, C) * toDeg; // Wheel Angle 4 = rear right
+    
+    // System.out.println("Wheel Speed 1: " + Double.toString(ws1));
+    // System.out.println("Wheel Speed 2: " + Double.toString(ws2));
+    // System.out.println("Wheel Speed 3: " + Double.toString(ws3));
+    // System.out.println("Wheel Speed 4: " + Double.toString(ws4));
 
     // Wheel Speed Normalization, Can't have a wheel speed > 1 //
     Double max = ws1;
+
     if (ws2 > max) {
       max = ws2;
     }
@@ -130,33 +127,69 @@ public class SwerveMath {
     ws3 *= ss;
     ws4 *= ss;
 
-    // System.out.println("Wheel Speed 1: " + Double.toString(ws1));
-    // System.out.println("Wheel Speed 2: " + Double.toString(ws2));
-    // System.out.println("Wheel Speed 3: " + Double.toString(ws3));
-    // System.out.println("Wheel Speed 4: " + Double.toString(ws4));
+    // System.out.println("Raw Wheel Speed 1: " + Double.toString(ws1));
+    // System.out.println("Raw Wheel Speed 2: " + Double.toString(ws2));
+    // System.out.println("Raw Wheel Speed 3: " + Double.toString(ws3));
+    // System.out.println("Raw Wheel Speed 4: " + Double.toString(ws4));
+
+    // Calculate the wheel angle for each wheel in radians: +/-pi referenced to Y axis 
+    // Then convert with toPos to absolute ticks for encoder in one rotation
+    Double wa1 = Math.atan2(B, C); // Wheel Angle 1 = front right
+    Double wa2 = Math.atan2(B, D); // Wheel Angle 2 = front left
+    Double wa3 = Math.atan2(A, D); // Wheel Angle 3 = rear left
+    Double wa4 = Math.atan2(A, C); // Wheel Angle 4 = rear right
 
     // System.out.println("Wheel Angle 1: " + Double.toString(wa1));
     // System.out.println("Wheel Angle 2: " + Double.toString(wa2));
     // System.out.println("Wheel Angle 3: " + Double.toString(wa3));
     // System.out.println("Wheel Angle 4: " + Double.toString(wa4));
 
-    // Set the vector values (speed, angle) for each wheel vector//
+    Double wp1 = toPosition(wa1);
+    Double wp2 = toPosition(wa2);
+    Double wp3 = toPosition(wa3);
+    Double wp4 = toPosition(wa4);
+
+    // System.out.println("Wheel Position 1: " + Double.toString(wp1));
+    // System.out.println("Wheel Position 2: " + Double.toString(wp2));
+    // System.out.println("Wheel Position 3: " + Double.toString(wp3));
+    // System.out.println("Wheel Position 4: " + Double.toString(wp4));
+
+    // Set the vector values (speed, position (ie angle converted to position)) for each wheel vector//
     /* Because this method will be running constantly speed is 
     *  important and since this is a very simple array the 
     *  SwerveDrive class can reference it quickly.  The indices
     *  are self documented here
     */ 
     wheelVectors.set(0,ws1);
-    wheelVectors.set(1,wa1);
+    wheelVectors.set(1,wp1);
     wheelVectors.set(2,ws2);
-    wheelVectors.set(3,wa2);
+    wheelVectors.set(3,wp2);
     wheelVectors.set(4,ws3);
-    wheelVectors.set(5,wa3);
+    wheelVectors.set(5,wp3);
     wheelVectors.set(6,ws4);
-    wheelVectors.set(7,wa4);
+    wheelVectors.set(7,wp4);
 
     // System.out.println(wheelVectors+":\n"+wheelVectors.size());
 
     return wheelVectors;
   }
+
+  //This method converts the angle from +/-Pi to 0-4096 for the Quad Encoder 
+  //and is scaled by the steer motor final drive ratio
+  private Double toPosition(Double angle){
+    Double position;
+
+    if (angle < 0) {
+      position = (angle + twoPi) * toPos;
+    }
+    else {
+      position = angle * toPos;
+    }
+
+    return position;
+
+    //Round to the nearest Integer and convert to type integer
+     //return Integer.valueOf((int) Math.round(position));
+  }
 }
+
