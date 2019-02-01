@@ -43,11 +43,10 @@ public class RobotMap {
 
   public static final int TalonSRX_TIMEOUT = 1000; //units in msec
 
-  // HAVE TO BE IN DECIMAL FORM
   // Gear Ratio Constants.  All Gear Ratios expressed in Motor revs TO Wheel Revs (ie M:W).  10:1 = 10 revs motor for 1 rev of the wheel //
-  public static final int FINAL_DRIVE_WHEEL_GEAR_RATIO = 10/1;       // Motor drives the wheel directly, ratio is based on pully sizes //
-  public static final double STEER_MOTOR_GEAR_REDUCTION_RATIO = 5.;   // Motor drives gear reduction unit //
-  public static final double STEER_WHEEL_GEAR_RATIO = .05;              // Output of gear reduction drives the steering pully //
+  public static final int FINAL_DRIVE_WHEEL_GEAR_RATIO = 10;       // Motor drives the wheel directly, ratio is based on pully sizes //
+  public static final double STEER_MOTOR_GEAR_REDUCTION_RATIO = 12.;    // Motor drives gear reduction unit //
+  public static final double STEER_WHEEL_GEAR_RATIO = 5.;              // Output of gear reduction drives the steering pully //
   public static final double FINAL_STEER_WHEEL_GEAR_RATIO = STEER_MOTOR_GEAR_REDUCTION_RATIO * STEER_WHEEL_GEAR_RATIO;
 
   // Deadband Joystick Constants
