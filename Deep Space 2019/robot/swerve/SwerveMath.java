@@ -73,7 +73,8 @@ public class SwerveMath {
     str = strIn;
     rcw = rcwIn;
     centric = centricIn;
-    gyro = gyroIn * toRad;
+    // gyro = gyroIn * toRad;
+    gyro = 0.;
 
     // Modify the Joystick Inputs for Centric Mode //
     if (centric) {
@@ -180,12 +181,7 @@ public class SwerveMath {
   private Double toPosition(Double angle){
     Double position;
 
-    if (angle < 0) {
-      position = (angle + twoPi) * toPos;
-    }
-    else {
-      position = angle * toPos;
-    }
+    position = angle*toPos;
 
     return position;
 

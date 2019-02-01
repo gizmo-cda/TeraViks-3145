@@ -22,11 +22,13 @@ public class SwerveUtils {
     public double normEncoder(int currentPosition){
 
         int position = currentPosition;
-        double rotations;
+        int rotations;
 
-        rotations = (int)(currentPosition / (ticks * steerGearRatio)); // do math and truncate to int, then implicitly typecast to double for return
+        rotations = position / (int)(ticks * steerGearRatio); // do math and truncate to int, then implicitly typecast to double for return
 
+        System.out.println(rotations);
         rotations *= (ticks * steerGearRatio);
+        System.out.println(rotations);
 
         return rotations;
     }

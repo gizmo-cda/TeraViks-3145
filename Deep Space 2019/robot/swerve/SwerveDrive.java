@@ -53,9 +53,13 @@ public class SwerveDrive {
         //frontLeftPosition = frontLeft.getPosition();
         //rearLeftPosition = rearLeft.getPosition();
         //rearRightPosition = rearRight.getPosition();
-
+        double temp = frontRight.getPosition();
         frontRight.setSpeed(swerveVectors.get(0));
-        frontRight.setPosition(swerveVectors.get(1)+frontRightPosition);
+        double temp2 = swerveVectors.get(1)+frontRightPosition;
+        frontRight.setPosition(temp2);
+
+        System.out.println("Get raw: "+temp);
+        System.out.println("Set swerve vectors: "+temp2);
         // frontLeft.setSpeed(swerveVectors.get(2));
         // frontLeft.setAngle(swerveVectors.get(3));
         // rearLeft.setSpeed(swerveVectors.get(4));

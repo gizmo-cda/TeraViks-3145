@@ -80,9 +80,10 @@ public class SwerveModule {
     	
     	steerMotor.configAllowableClosedloopError(0, 4, TIMEOUT);
     	
-    	steerMotor.config_kP(0, 10, TIMEOUT);
+    	steerMotor.config_kP(0, .001, TIMEOUT);
     	steerMotor.config_kI(0, 0, TIMEOUT);
     	steerMotor.config_kD(0, 0, TIMEOUT);
-    	steerMotor.config_kF(0, 0, TIMEOUT);
+        steerMotor.config_kF(0, 0, TIMEOUT);
+        
     }
 }
