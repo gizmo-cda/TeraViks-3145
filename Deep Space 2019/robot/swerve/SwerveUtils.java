@@ -13,6 +13,7 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class SwerveUtils {
+    private static double ticks = RobotMap.STEER_MOTOR_PULSES_PER_REVOLUTION;
     private static double steerGearRatio = RobotMap.FINAL_STEER_WHEEL_GEAR_RATIO;
 
     SwerveUtils(){
@@ -21,12 +22,12 @@ public class SwerveUtils {
     public double normEncoder(int currentPosition){
 
         int position = currentPosition;
-        int rotations;
+        double rotations;
 
-        rotations = currentPosition / 4096;
+        rotations = (int)(currentPosition / (ticks * steerGearRatio)); // do math and truncate to int, then implicitly typecast to double for return
 
-        if (rotations > 0) {
-         
-        }
+        rotations *= (ticks * steerGearRatio);
+
+        return rotations;
     }
 }

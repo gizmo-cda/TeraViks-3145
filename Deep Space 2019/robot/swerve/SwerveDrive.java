@@ -14,10 +14,10 @@ import java.util.ArrayList;
  * Add your docs here.
  */
 public class SwerveDrive {
-    private int frontRightPosition;
-    private int frontLeftPosition;
-    private int rearLeftPosition;
-    private int rearRightPosition;
+    private double frontRightPosition;
+    private double frontLeftPosition;
+    private double rearLeftPosition;
+    private double rearRightPosition;
 
     private SwerveModule frontRight;
     private SwerveModule frontLeft;
@@ -25,6 +25,7 @@ public class SwerveDrive {
     private SwerveModule rearRight;
 
     private SwerveMath m_swerveMath;
+    private SwerveUtils m_swerveUtils;
 
     private ArrayList<Double> swerveVectors = new ArrayList<Double>(8);
 
@@ -35,6 +36,7 @@ public class SwerveDrive {
         rearRight = rearRightWheel;
 
         m_swerveMath = new SwerveMath();
+        m_swerveUtils = new SwerveUtils();
     }
 
     public void initSteerMotors(){
@@ -47,13 +49,13 @@ public class SwerveDrive {
     public void setMotors(double fwd, double str, double rcw, boolean centric, double gyro){
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro);
         // System.out.println(swerveVectors);
-        frontRightPosition = frontRight.getPosition();
+        frontRightPosition = m_swerveUtils.normEncoder(frontRight.getPosition());
         //frontLeftPosition = frontLeft.getPosition();
         //rearLeftPosition = rearLeft.getPosition();
         //rearRightPosition = rearRight.getPosition();
 
         frontRight.setSpeed(swerveVectors.get(0));
-        frontRight.setPosition(swerveVectors.get(1));
+        frontRight.setPosition(swerveVectors.get(1)+frontRightPosition);
         // frontLeft.setSpeed(swerveVectors.get(2));
         // frontLeft.setAngle(swerveVectors.get(3));
         // rearLeft.setSpeed(swerveVectors.get(4));

@@ -44,10 +44,11 @@ public class SwerveMath {
   private static Double halfWidth = RobotMap.WHEELBASE_TRACK_WIDTH/2; // width of chassis divided by 2
   private static Double ss = RobotMap.WHEEL_SPEED_SCALE; // speed scale
   private static Double steerGearRatio = RobotMap.FINAL_STEER_WHEEL_GEAR_RATIO;
+  private static Double ticks = RobotMap.STEER_MOTOR_PULSES_PER_REVOLUTION;
 
   private static Double toDeg = 180./Math.PI;  //convert Radians to Degrees
   private static Double toRad = Math.PI/180.;  //convert Degrees to Radians
-  private static Double toPos = (steerGearRatio/2.)/Math.PI;
+  private static Double toPos = ticks * (steerGearRatio/2.)/Math.PI;
   private static Double twoPi = 2 * Math.PI;
 
   private static Double fwd; //Forward, Y axis, -1 to 1 from Joystick//
