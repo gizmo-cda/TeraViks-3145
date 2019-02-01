@@ -48,6 +48,7 @@ public class RobotMap {
   public static final double STEER_MOTOR_GEAR_REDUCTION_RATIO = 12.;    // Motor drives gear reduction unit //
   public static final double STEER_WHEEL_GEAR_RATIO = 5.;              // Output of gear reduction drives the steering pully //
   public static final double FINAL_STEER_WHEEL_GEAR_RATIO = STEER_MOTOR_GEAR_REDUCTION_RATIO * STEER_WHEEL_GEAR_RATIO;
+  public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 4096.;
 
   // Deadband Joystick Constants
   public static final double X_AXIS_THREASHOLD = 0.1;
