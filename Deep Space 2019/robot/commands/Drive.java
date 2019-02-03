@@ -25,12 +25,14 @@ public class Drive extends Command {
   public Drive() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.m_drivetrain);
+    requires(Robot.m_drivetrain);    
+    Robot.m_drivetrain.init();
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    
    }
 
   // Called repeatedly when this Command is scheduled to run
@@ -41,13 +43,13 @@ public class Drive extends Command {
     // cartesian coordinates to calculate the directional vectors per wheel.
 
     // setting fwd values to raw input from the joystick's y axis
-    fwd = -Robot.m_oi.getSwerveJoy().getY();
+    fwd = -Robot.m_oi.getDriverY();
 
     // setting str values to raw input from the joystick's x axis
-    str = Robot.m_oi.getSwerveJoy().getX();
+    str = Robot.m_oi.getDriverX();
 
     // setting rcw values to raw input from the joystick's z axis
-    rcw = Robot.m_oi.getSwerveJoy().getZ();
+    rcw = Robot.m_oi.getDriverZ();
 
     // System.out.println("X: "+fwd);
     // System.out.println("Y: "+str);
