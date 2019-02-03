@@ -47,10 +47,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_oi = new OI();
     m_drivetrain = new Drivetrain();
+    m_oi = new OI();
     m_navx = new AHRS(SPI.Port.kMXP);
     m_vision = new VisionTable();
+    m_drivetrain.init();
   
     m_navx.reset();
 
@@ -83,6 +84,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+
   }
 
   @Override

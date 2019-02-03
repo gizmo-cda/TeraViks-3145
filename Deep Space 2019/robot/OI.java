@@ -22,7 +22,7 @@ public class OI {
   private Joystick swerveJoy = new Joystick(0);
 
   //Instantiate the buttons 0-11
- // private Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button
+ private Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button
   // public Button btn2 = new JoystickButton(swerveJoy, 2); //X Button
   // public Button btn3 = new JoystickButton(swerveJoy, 3); //O Button
   // public Button btn4 = new JoystickButton(swerveJoy, 4); //Triange Button
@@ -37,24 +37,24 @@ public class OI {
 
   public OI() {
     // Call FieldMode Commmand
-    //btn1.whenPressed(new FieldMode()); 
+    btn1.whenPressed(new FieldMode()); 
   }
 
   //First Method of OI to get all the Joystick inputs//
-  public Joystick getSwerveJoy(){
-    return swerveJoy;
-  }
+  //public Joystick getSwerveJoy(){
+  //  return swerveJoy;
+  //}
 
   public double getDriverX(){
-    return getSwerveJoy().getX();
+    return swerveJoy.getX();
   }
 
   public double getDriverY(){
-    return getSwerveJoy().getY();
+    return swerveJoy.getY();
   }
 
   public double getDriverZ(){
-    return getSwerveJoy().getZ();
+    return swerveJoy.getZ();
   }
 
   //// CREATING BUTTONS
