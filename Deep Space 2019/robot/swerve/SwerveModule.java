@@ -9,6 +9,7 @@ package frc.robot.swerve;
 
 
 import frc.robot.RobotMap;
+import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -24,26 +25,44 @@ public class SwerveModule {
     private String name;
     private WPI_TalonSRX driveMotor;
     private WPI_TalonSRX steerMotor;
+    private Faults driveMotorFaults;
+    private Faults steerMotorFaults;
+
     private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
+
 
     public SwerveModule(String wheelName, WPI_TalonSRX wheelDriveMotor, WPI_TalonSRX wheelSteerMotor){
         name = wheelName;
         driveMotor = wheelDriveMotor;
         steerMotor = wheelSteerMotor;
+        steerMotorFaults = new Faults();
+        driveMotorFaults = new Faults();
     }
 
     public void setSpeed(double wheelSpeed){
-        driveMotor.set(ControlMode.PercentOutput, wheelSpeed);
+        driveMotor.set(ControlMode.Velocity, wheelSpeed);
     }
 
     public void setPosition(double wheelPosition){
-        steerMotor.set(ControlMode.Position,  wheelPosition);
+        steerMotor.set(ControlMode.Position, wheelPosition);
+    }
+
+    public int getSpeed(){
+        return driveMotor.getSelectedSensorVelocity();
     }
 
     public int getPosition(){
         return steerMotor.getSelectedSensorPosition();
     }
     
+    public void setBrake(){
+        driveMotor.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void setCoast(){
+        driveMotor.setNeutralMode(NeutralMode.Coast);
+    }
+
     public void stop(){
         driveMotor.stopMotor();
         steerMotor.stopMotor();
@@ -61,29 +80,103 @@ public class SwerveModule {
         return name;
     }
 
-    public void initSteerMotor()
-    {
+    public void initSteerMotor(){
+        steerMotor.configFactoryDefault();
+
+        steerMotor.setInverted(false);
+
         steerMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
-        //steerMotor.configSelectedFeedbackCoefficient(1/STEER_GEAR_RATIO, 0, TIMEOUT);
-    	
     	steerMotor.selectProfileSlot(0, 0); //slot #, PID #
-    	
-        steerMotor.setSelectedSensorPosition(0);
-        //steerMotor.configPulseWidthPeriod_EdgesPerRot(4096*STEER_GEAR_RATIO, TIMEOUT);
-    	steerMotor.configPeakOutputForward(1, TIMEOUT);
-    	steerMotor.configPeakOutputReverse(-1, TIMEOUT);
+
+        steerMotor.setSensorPhase(false);
+
+        steerMotor.configPeakOutputForward(.3, TIMEOUT);
+    	steerMotor.configPeakOutputReverse(-.3, TIMEOUT);
     	
     	steerMotor.configNominalOutputForward(0, TIMEOUT);
     	steerMotor.configNominalOutputReverse(0, TIMEOUT);
     	
     	steerMotor.setNeutralMode(NeutralMode.Brake);
     	
-    	steerMotor.configAllowableClosedloopError(0, 4, TIMEOUT);
+        steerMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
     	
-    	steerMotor.config_kP(0, .001, TIMEOUT);
+    	steerMotor.config_kP(0, .15, TIMEOUT);
     	steerMotor.config_kI(0, 0, TIMEOUT);
-    	steerMotor.config_kD(0, 0, TIMEOUT);
+    	steerMotor.config_kD(0, 1, TIMEOUT);
         steerMotor.config_kF(0, 0, TIMEOUT);
+
+        steerMotor.setSelectedSensorPosition(0);
+
+        // steerMotor.set(ControlMode.PercentOutput, 0.1);
+        // steerMotor.set(ControlMode.PercentOutput, 0.0);
+
+        // System.out.println("Steer Sensor Out Of Phase - "+steerMotorFaults.SensorOutOfPhase);
+
+        // steerMotor.getFaults(steerMotorFaults);
+
+        // if (steerMotorFaults.SensorOutOfPhase){
+        //     steerMotor.setSensorPhase(true);
+        // }
+        // System.out.println("Steer Sensor Out Of Phase - "+steerMotorFaults.SensorOutOfPhase);
+
+        // steerMotor.setSelectedSensorPosition(0);
         
+        System.out.println("Steer Motor Initialized - "+steerMotor.getName());
     }
+
+    public void initDriveMotor(){
+        driveMotor.configFactoryDefault();
+
+        driveMotor.setInverted(false);
+
+        driveMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
+    	driveMotor.selectProfileSlot(0, 0); //slot #, PID #
+
+        driveMotor.configPeakOutputForward(1, TIMEOUT);
+        driveMotor.configPeakOutputReverse(-1, TIMEOUT);
+        
+    	driveMotor.configNominalOutputForward(0, TIMEOUT);
+        driveMotor.configNominalOutputReverse(0, TIMEOUT);
+        
+        driveMotor.setNeutralMode(NeutralMode.Coast);
+        
+        driveMotor.configAllowableClosedloopError(0, 4, TIMEOUT);
+        
+    	driveMotor.config_kP(0, .5, TIMEOUT);
+    	driveMotor.config_kI(0, 0.0001, TIMEOUT);
+    	driveMotor.config_kD(0, 1, TIMEOUT);
+        driveMotor.config_kF(0, 1.624, TIMEOUT);
+
+        driveMotor.setSelectedSensorPosition(0);
+        
+        //driveMotor.set(ControlMode.Position, 240);
+        // driveMotor.set(ControlMode)
+
+        driveMotor.setSensorPhase(true);
+        
+
+        // PROCEDURE TO REVERSE SENSOR PHASE, NEEDS WORK
+        // try {
+        //     System.out.println("start Try");
+        //     driveMotor.set(ControlMode.PercentOutput, 0.5);
+        //     Thread.sleep(2000l);
+        //     driveMotor.getFaults(driveMotorFaults);
+        //     System.out.println("Drive Sensor Out Of Phase - "+driveMotorFaults.SensorOutOfPhase);
+            
+        //     System.out.println("it worked");
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
+
+        // driveMotor.set(ControlMode.PercentOutput, 0.0);
+
+        // if (driveMotorFaults.SensorOutOfPhase){
+        //     driveMotor.setSensorPhase(true);
+        //     System.out.println("Sensor phase flipped");
+        // }
+
+        // System.out.println("Drive Sensor Out Of Phase - "+driveMotorFaults.SensorOutOfPhase);
+
+    }
+
 }

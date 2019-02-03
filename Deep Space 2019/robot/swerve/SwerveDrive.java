@@ -14,18 +14,12 @@ import java.util.ArrayList;
  * Add your docs here.
  */
 public class SwerveDrive {
-    private double frontRightPosition;
-    private double frontLeftPosition;
-    private double rearLeftPosition;
-    private double rearRightPosition;
-
     private SwerveModule frontRight;
     private SwerveModule frontLeft;
     private SwerveModule rearLeft;
     private SwerveModule rearRight;
 
     private SwerveMath m_swerveMath;
-    private SwerveUtils m_swerveUtils;
 
     private ArrayList<Double> swerveVectors = new ArrayList<Double>(8);
 
@@ -36,7 +30,6 @@ public class SwerveDrive {
         rearRight = rearRightWheel;
 
         m_swerveMath = new SwerveMath();
-        m_swerveUtils = new SwerveUtils();
     }
 
     public void initSteerMotors(){
@@ -46,26 +39,51 @@ public class SwerveDrive {
         //rearRight.initSteerMotor();
     }
 
+    public void initDriveMotors(){
+        frontRight.initDriveMotor();
+        //frontLeft.initDriveMotor();
+        //rearLeft.initDriveMotor();
+        //rearRight.initDriveMotor();
+    }
     public void setMotors(double fwd, double str, double rcw, boolean centric, double gyro){
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro);
-        // System.out.println(swerveVectors);
-        frontRightPosition = m_swerveUtils.normEncoder(frontRight.getPosition());
-        //frontLeftPosition = frontLeft.getPosition();
-        //rearLeftPosition = rearLeft.getPosition();
-        //rearRightPosition = rearRight.getPosition();
-        double temp = frontRight.getPosition();
+       
         frontRight.setSpeed(swerveVectors.get(0));
-        double temp2 = swerveVectors.get(1)+frontRightPosition;
-        frontRight.setPosition(temp2);
-
-        System.out.println("Get raw: "+temp);
-        System.out.println("Set swerve vectors: "+temp2);
         // frontLeft.setSpeed(swerveVectors.get(2));
-        // frontLeft.setAngle(swerveVectors.get(3));
         // rearLeft.setSpeed(swerveVectors.get(4));
-        // rearLeft.setAngle(swerveVectors.get(5));
         // rearRight.setSpeed(swerveVectors.get(6));
+
+        // double temp = frontRight.getPosition();
+        // double temp2 = swerveVectors.get(1);
+
+        double temp = frontRight.getSpeed();
+        double temp2 = swerveVectors.get(0);
+
+        frontRight.setPosition(swerveVectors.get(1));
+
+        // System.out.println("Current Position: "+temp);
+        // System.out.println("Set position: "+temp2);
+
+        // System.out.println("Current Velocity: "+temp);
+        // System.out.println("Set Velocity: "+temp2);
+
+        // frontLeft.setAngle(swerveVectors.get(3));
+        // rearLeft.setAngle(swerveVectors.get(5));
         // rearRight.setAngle(swerveVectors.get(7));
+    }
+
+    public void setCoast(){
+        frontRight.setCoast();
+        //frontLeft.setCoast();
+        //rearLeft.setCoast();
+        //rearRight.setCoast();
+    }
+
+    public void setBrake(){
+        frontRight.setBrake();
+        //frontLeft.setBrake();
+        //rearLeft.setBrake();
+        //rearRight.setBrake();
     }
 
     public void stopMotors(){

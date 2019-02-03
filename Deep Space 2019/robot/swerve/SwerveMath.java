@@ -42,14 +42,15 @@ public class SwerveMath {
   // These are intitialized as constants to reduce the math cycles in the class' methods
   private static Double halfLength = RobotMap.WHEELBASE_LENGTH/2; // length of chassis divided by 2
   private static Double halfWidth = RobotMap.WHEELBASE_TRACK_WIDTH/2; // width of chassis divided by 2
-  private static Double ss = RobotMap.WHEEL_SPEED_SCALE; // speed scale
+  private static Double ss = RobotMap.DRIVE_WHEEL_UNITS_PER_100MS; // speed scale
   private static Double steerGearRatio = RobotMap.FINAL_STEER_WHEEL_GEAR_RATIO;
   private static Double ticks = RobotMap.STEER_MOTOR_PULSES_PER_REVOLUTION;
 
-  private static Double toDeg = 180./Math.PI;  //convert Radians to Degrees
-  private static Double toRad = Math.PI/180.;  //convert Degrees to Radians
-  private static Double toPos = ticks * (steerGearRatio/2.)/Math.PI;
-  private static Double twoPi = 2 * Math.PI;
+  private static Double toPos = (ticks * steerGearRatio / 2.)/Math.PI;
+
+  //private static Double toDeg = 180./Math.PI;  //convert Radians to Degrees
+  //private static Double toRad = Math.PI/180.;  //convert Degrees to Radians
+  //private static Double twoPi = 2 * Math.PI;
 
   private static Double fwd; //Forward, Y axis, -1 to 1 from Joystick//
   private static Double str; //Strafe, X axis, 1 to -1 from Joystick//
@@ -123,8 +124,8 @@ public class SwerveMath {
       ws4 /= max;
     }
 
-    // Scale the wheel speeds based on the constant Defined in RobotMap //
-    ws1 *= ss;
+    // modify wheel speeds from % => ticks per 100 ms
+    ws1 *= ss; 
     ws2 *= ss;
     ws3 *= ss;
     ws4 *= ss;
@@ -135,21 +136,21 @@ public class SwerveMath {
     // System.out.println("Raw Wheel Speed 4: " + Double.toString(ws4));
 
     // Calculate the wheel angle for each wheel in radians: +/-pi referenced to Y axis 
-    // Then convert with toPos to absolute ticks for encoder in one rotation
-    Double wa1 = Math.atan2(B, C); // Wheel Angle 1 = front right
-    Double wa2 = Math.atan2(B, D); // Wheel Angle 2 = front left
-    Double wa3 = Math.atan2(A, D); // Wheel Angle 3 = rear left
-    Double wa4 = Math.atan2(A, C); // Wheel Angle 4 = rear right
+    // Then convert with toPos to absolute ticks for encoder over +/-pi range
+    Double wp1 = Math.atan2(B, C) * toPos; // Wheel Angle 1 = front right
+    Double wp2 = Math.atan2(B, D) * toPos; // Wheel Angle 2 = front left
+    Double wp3 = Math.atan2(A, D) * toPos; // Wheel Angle 3 = rear left
+    Double wp4 = Math.atan2(A, C) * toPos; // Wheel Angle 4 = rear right
 
     // System.out.println("Wheel Angle 1: " + Double.toString(wa1));
     // System.out.println("Wheel Angle 2: " + Double.toString(wa2));
     // System.out.println("Wheel Angle 3: " + Double.toString(wa3));
     // System.out.println("Wheel Angle 4: " + Double.toString(wa4));
 
-    Double wp1 = toPosition(wa1);
-    Double wp2 = toPosition(wa2);
-    Double wp3 = toPosition(wa3);
-    Double wp4 = toPosition(wa4);
+    // Double wp1 = toPosition(wa1);
+    // Double wp2 = toPosition(wa2);
+    // Double wp3 = toPosition(wa3);
+    // Double wp4 = toPosition(wa4);
 
     // System.out.println("Wheel Position 1: " + Double.toString(wp1));
     // System.out.println("Wheel Position 2: " + Double.toString(wp2));
@@ -171,22 +172,7 @@ public class SwerveMath {
     wheelVectors.set(6,ws4);
     wheelVectors.set(7,wp4);
 
-    // System.out.println(wheelVectors+":\n"+wheelVectors.size());
-
     return wheelVectors;
-  }
-
-  //This method converts the angle from +/-Pi to 0-4096 for the Quad Encoder 
-  //and is scaled by the steer motor final drive ratio
-  private Double toPosition(Double angle){
-    Double position;
-
-    position = angle*toPos;
-
-    return position;
-
-    //Round to the nearest Integer and convert to type integer
-     //return Integer.valueOf((int) Math.round(position));
   }
 }
 
