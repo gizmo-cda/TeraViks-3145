@@ -58,6 +58,7 @@ public class Drivetrain extends Subsystem {
 
   public void init(){
      m_SwerveDrive.initSteerMotors();
+     m_SwerveDrive.initDriveMotors();
   }
 
   public void toggleCentric(){
@@ -72,6 +73,14 @@ public class Drivetrain extends Subsystem {
   public void move(double fwd, double str, double rcw, double gyro){
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, gyro);
   //  System.out.println(frontRightSteerMotor.getSelectedSensorPosition());
+  }
+
+  public void coast(){
+    m_SwerveDrive.setCoast();
+  }
+
+  public void brake(){
+    m_SwerveDrive.setBrake();
   }
 
   @Override
