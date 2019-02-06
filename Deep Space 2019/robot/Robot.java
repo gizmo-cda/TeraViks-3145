@@ -5,8 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/**
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
+ * project.
+ */
+
 package frc.robot;
 
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -15,28 +24,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.kauailabs.navx.frc.*;
-import edu.wpi.first.wpilibj.buttons.*;
-import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
-  // public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
-  public static OI m_oi;
   public static Drivetrain m_drivetrain;
   public static AHRS m_navx;
   public static VisionTable m_vision;
-  public static FieldMode m_fieldMode;
-  public static Button test_button;
-  public static Joystick joyStick;
-
+  public static OI m_oi;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -47,19 +41,21 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    // This method is run automatically upon deploying the code to the RoboRio
+    // Instantiate objects for subsystems, operator input, commands, etc
+    // NOTE: ORDER DEPENDENT
     m_drivetrain = new Drivetrain();
-    m_oi = new OI();
     m_navx = new AHRS(SPI.Port.kMXP);
     m_vision = new VisionTable();
+    m_oi = new OI(); //Always instantiate OI last
+
     m_drivetrain.init();
-  
     m_navx.reset();
 
-    // m_chooser.setDefaultOption("Default Swerve", new SwerveMath());
-    // m_chooser.setDefaultOption("Default Swerve", new Drive());
-    // m_chooser.setObject("Any Text", new SomeCommand());
-
     // chooser.addOption("My Auto", new MyAutoCommand());
+    // m_chooser.setDefaultOption("Default Swerve", new Drive());
+
+ 
     SmartDashboard.putData("Auto mode", m_chooser);
   }
 
@@ -73,7 +69,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // btn1.whenPressed(command);
   }
 
   /**
@@ -84,7 +79,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-
   }
 
   @Override
@@ -106,7 +100,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
-  
+    
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -127,8 +121,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-    // System.out.println(test_button.get());
-
   }
 
   @Override
