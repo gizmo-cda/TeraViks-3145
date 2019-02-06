@@ -5,14 +5,36 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/* Robot Swerve Module Assignment
+*                        
+*              Front/Forward       
+*                   ^             
+*                   |             
+*                   |             
+*  front left |-----------| front right     
+*             |           |       
+*             |           |  l    
+*             |           |  e    
+*             |           |  n    
+*             |           |  g    
+*             |           |  t    
+*             |           |  h    
+*             |           |       
+*  rear left  |-----------| rear right     
+*                 width           
+*
+***********************
+ * This class pulls together four swerve modules into one object so the 
+ * Drivetrain subsystem can make simple calls to set speed, and position.
+ * This class aggregates the four modules and their motors.  This class
+ * also uses the swerve math object to call the vectors method and get the
+ * new speed and position settings.
+ */
+
 package frc.robot.swerve;
 
-//import frc.robot.swerve.SwerveModule;
 import java.util.ArrayList;
 
-/**
- * Add your docs here.
- */
 public class SwerveDrive {
     private SwerveModule frontRight;
     private SwerveModule frontLeft;
@@ -32,44 +54,51 @@ public class SwerveDrive {
         m_swerveMath = new SwerveMath();
     }
 
-    public void initSteerMotors(){
+    public void initMotors(){
         frontRight.initSteerMotor();
         //frontLeft.initSteerMotor();
         //rearLeft.initSteerMotor();
         //rearRight.initSteerMotor();
-    }
 
-    public void initDriveMotors(){
         frontRight.initDriveMotor();
         //frontLeft.initDriveMotor();
         //rearLeft.initDriveMotor();
         //rearRight.initDriveMotor();
     }
-    public void setMotors(double fwd, double str, double rcw, boolean centric, double gyro){
-        swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro);
-       
-        frontRight.setSpeed(swerveVectors.get(0));
-        // frontLeft.setSpeed(swerveVectors.get(2));
-        // rearLeft.setSpeed(swerveVectors.get(4));
-        // rearRight.setSpeed(swerveVectors.get(6));
 
-        // double temp = frontRight.getPosition();
-        // double temp2 = swerveVectors.get(1);
+    public boolean calSteerMotors(){
+        boolean clear = frontRight.rotateSteerForCal();
+        // frontLeft.rotateSteerForCal();
+        // rearLeft.rotateSteerForCal();
+        // rearRight.rotateSteerForCal();
+        return clear;
+    }
 
-        double temp = frontRight.getSpeed();
-        double temp2 = swerveVectors.get(0);
+    public void setMotors  (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn){
 
-        frontRight.setPosition(swerveVectors.get(1));
+        swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro, reverseEn);
 
-        // System.out.println("Current Position: "+temp);
-        // System.out.println("Set position: "+temp2);
+        // double temp = frontRight.getVelocity();
+        // double temp2 = swerveVectors.get(0);
+
+        frontRight.setVelocity(swerveVectors.get(0));
+        // frontLeft.setVelocity(swerveVectors.get(2));
+        // rearLeft.setVelocity(swerveVectors.get(4));
+        // rearRight.setVelocity(swerveVectors.get(6));
 
         // System.out.println("Current Velocity: "+temp);
         // System.out.println("Set Velocity: "+temp2);
 
-        // frontLeft.setAngle(swerveVectors.get(3));
-        // rearLeft.setAngle(swerveVectors.get(5));
-        // rearRight.setAngle(swerveVectors.get(7));
+        // double temp = frontRight.getPosition();
+        // double temp2 = swerveVectors.get(1);
+        
+        frontRight.setPosition(swerveVectors.get(1));
+        // frontLeft.setPosition(swerveVectors.get(3));
+        // rearLeft.setPosition(swerveVectors.get(5));
+        // rearRight.setPosition(swerveVectors.get(7));
+
+        // System.out.println("Current Position: "+temp);
+        // System.out.println("Set position: "+temp2);
     }
 
     public void setCoast(){
