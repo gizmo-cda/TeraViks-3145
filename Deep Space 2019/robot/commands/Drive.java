@@ -5,9 +5,10 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-//  ************************************************************************  //
-// This command gets joystick input and calls Drivetrain.Move to move the     //
-// the robot in the desired direction                                         //
+/*  This command gets joystick input, processes it for inaccuracies and precision
+*   enhacement, and then calls Drivetrain.Move to move in the desired direction
+*   and speed.                                        
+*/
 
 package frc.robot.commands;
 
@@ -17,22 +18,18 @@ import edu.wpi.first.wpilibj.command.Command;
 
 
 public class Drive extends Command {
-  private Double fwd; //Forward, Y axis, -1 to 1 from Joystick//
-  private Double str; //Strafe, X axis, 1 to -1 from Joystick//
-  private Double rcw; //Rotate CW, Z axis, 1 to -1 from Joystick, refernced 1=180 CW -1=-180 CW//
-  private Double gyro;
+  private Double fwd; //Forward, Y axis, -1 to 1 from Joystick
+  private Double str; //Strafe, X axis, 1 to -1 from Joystick
+  private Double rcw; //Rotate CW, Z axis, 1 to -1 from Joystick, refernced 1=180 CW -1=-180 CW
+  private Double gyro; //NavX Gyro Yaw angle
 
   public Drive() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
     requires(Robot.m_drivetrain);    
-    Robot.m_drivetrain.init();
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    
    }
 
   // Called repeatedly when this Command is scheduled to run
@@ -42,54 +39,40 @@ public class Drive extends Command {
     // of the Y axis so a positive is forward.  Swerve Math expects normal
     // cartesian coordinates to calculate the directional vectors per wheel.
 
-    // setting fwd values to raw input from the joystick's y axis
+    // getting fwd values from raw input from the joystick's y axis
     fwd = -Robot.m_oi.getDriverY();
 
-    // setting str values to raw input from the joystick's x axis
+    // getting str values from raw input from the joystick's x axis
     str = Robot.m_oi.getDriverX();
 
-    // setting rcw values to raw input from the joystick's z axis
+    // getting rcw values from raw input from the joystick's z axis
     rcw = Robot.m_oi.getDriverZ();
 
     // System.out.println("X: "+fwd);
     // System.out.println("Y: "+str);
     // System.out.println("Z: "+rcw);
 
-    if ((fwd > -RobotMap.X_AXIS_THREASHOLD) && (fwd < RobotMap.X_AXIS_THREASHOLD)) {
-      fwd = 0.;
-    }
+    // Dead-band the joystick inputs to remove noise/errors when centered
+    if ((fwd > -RobotMap.X_AXIS_THREASHOLD) && (fwd < RobotMap.X_AXIS_THREASHOLD)) fwd = 0.;
 
-    if ((str > -RobotMap.Y_AXIS_THREASHOLD) && (str < RobotMap.Y_AXIS_THREASHOLD)) {
-      str = 0.;
-    }
+    if ((str > -RobotMap.Y_AXIS_THREASHOLD) && (str < RobotMap.Y_AXIS_THREASHOLD)) str = 0.;
 
-    if ((rcw > -RobotMap.Z_AXIS_THREASHOLD) && (rcw < RobotMap.Z_AXIS_THREASHOLD)) {
-      rcw = 0.;
-    }
+    if ((rcw > -RobotMap.Z_AXIS_THREASHOLD) && (rcw < RobotMap.Z_AXIS_THREASHOLD)) rcw = 0.;
 
-    // squaring to double precision and improves operator control; if-else loops lets us retain the sign values
-    if (fwd < 0) {
-      fwd *= fwd * -1;
-    } else {
-      fwd *= fwd;
-    }
+    // Squaring to double precision and improve operator control; if-else loops retain the sign values
+    if (fwd < 0) fwd *= fwd * -1.; else fwd *= fwd;
 
-    if (str < 0) {
-      str *= str * -1;
-    } else {
-      str *= str;
-    }
+    if (str < 0) str *= str * -1.; else str *= str;
 
-    if (rcw < 0) {
-      rcw *= rcw * -1;
-    } else {
-      rcw *= rcw;
-    }
+    if (rcw < 0) rcw *= rcw * -1.; else rcw *= rcw;
 
-    // This is total accumulated Yaw angle in degrees, maybe should use Yaw?
+    // This is total accumulated Yaw angle in degrees
     gyro = Robot.m_navx.getAngle();
 
-    // Call Drivetrain Subsystem 
+    // This is Yaw angle +/- 180 in degrees
+    //gyro = Robot.m_navx.getYaw();
+
+    // Call Drivetrain Subsystem to move
     Robot.m_drivetrain.move(fwd, str, rcw, gyro);
   }
 

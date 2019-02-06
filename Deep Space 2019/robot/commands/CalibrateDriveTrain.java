@@ -5,32 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-/* This command is invoked to toggle the Field Centric Mode off/on 
-*/
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class FieldMode extends Command {
-
-  boolean centric;
-
-  public FieldMode() {
-    requires(Robot.m_drivetrain);
+public class CalibrateDriveTrain extends Command {
+  boolean clear = false;
+  public CalibrateDriveTrain() {
+  requires(Robot.m_drivetrain);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    System.out.println("BTN1 was pressed - FieldMode Command Invoked");
-    Robot.m_drivetrain.toggleCentric();
+    //Robot.m_drivetrain.calSteering();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_drivetrain.calSteering();
   }
 
   // Make this return true when this Command no longer needs to run execute()
