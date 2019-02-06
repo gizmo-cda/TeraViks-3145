@@ -5,26 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+/**
+ * This class is the glue that binds the controls on the physical operator
+ * interface to the commands and command groups that allow control of the robot.
+ */
+
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
 import frc.robot.commands.*;
 
-/**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
- */
-
 public class OI {
 
-  //Instantiate the Object, SwerveJoy)
+  //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
   private Joystick swerveJoy = new Joystick(0);
 
   //Instantiate the buttons 0-11
- private Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button
-  // public Button btn2 = new JoystickButton(swerveJoy, 2); //X Button
-  // public Button btn3 = new JoystickButton(swerveJoy, 3); //O Button
+  private Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button
+  private Button btn2 = new JoystickButton(swerveJoy, 2); //X Button
+  public Button btn3 = new JoystickButton(swerveJoy, 3); //O Button
   // public Button btn4 = new JoystickButton(swerveJoy, 4); //Triange Button
   // public Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button
   // public Button btn6 = new JoystickButton(swerveJoy, 6); //R1 Button
@@ -36,14 +36,11 @@ public class OI {
   // public Button btn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button
 
   public OI() {
-    // Call FieldMode Commmand
+    // Call FieldMode Commmand to toggle Field Centric on/off
     btn1.whenPressed(new FieldMode()); 
+    btn2.whenPressed(new Brake());
+    btn3.whenPressed(new CalibrateDriveTrain());
   }
-
-  //First Method of OI to get all the Joystick inputs//
-  //public Joystick getSwerveJoy(){
-  //  return swerveJoy;
-  //}
 
   public double getDriverX(){
     return swerveJoy.getX();
