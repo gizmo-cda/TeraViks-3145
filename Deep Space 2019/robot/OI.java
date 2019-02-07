@@ -22,23 +22,29 @@ public class OI {
   private Joystick swerveJoy = new Joystick(0);
 
   //Instantiate the buttons 0-11
-  private Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button
-  private Button btn2 = new JoystickButton(swerveJoy, 2); //X Button
-  // public Button btn3 = new JoystickButton(swerveJoy, 3); //O Button
-  // public Button btn4 = new JoystickButton(swerveJoy, 4); //Triange Button
-  // public Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button
-  // public Button btn6 = new JoystickButton(swerveJoy, 6); //R1 Button
-  // public Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button
-  // public Button btn8 = new JoystickButton(swerveJoy, 8); //R2 Button
-  // public Button btn9 = new JoystickButton(swerveJoy, 9); //Select Button
-  // public Button btn10 = new JoystickButton(swerveJoy, 10); //Start Button
-  // public Button btn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button
-  // public Button btn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button
+  private Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button - Robot Centric Toggle - Default Robot
+  private Button btn2 = new JoystickButton(swerveJoy, 2); //X Button - Field Centric Toggle - Default Robot
+  private Button btn3 = new JoystickButton(swerveJoy, 3); //O Button - Crab Toggle - Default Crab
+  private Button btn4 = new JoystickButton(swerveJoy, 4); //Triange Button - Snake Toggle - Default Crab
+  private Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button - Targeting On/Off While Pressed / Normal Drive Camera While !Pressed
+  private Button btn6 = new JoystickButton(swerveJoy, 6); //R1 Button - No Key Binding
+  private Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button - No Key Binding
+  private Button btn8 = new JoystickButton(swerveJoy, 8); //R2 Button - Stop While Pressed
+  private Button btn9 = new JoystickButton(swerveJoy, 9); //Select Button - No Key Binding
+  private Button btn10 = new JoystickButton(swerveJoy, 10); //Start Button - No Key Binding
+  private Button btn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button - No Key Binding
+  private Button btn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button - No Key Binding
 
   public OI() {
     // Call FieldMode Commmand to toggle Field Centric on/off
-    btn1.whenPressed(new FieldMode()); 
-    btn2.whenPressed(new Brake());
+    btn1.whenPressed(new RobotMode()); 
+    btn2.whenPressed(new FieldMode());
+    //Call CrabMode Command to enable Crab Mode, call SnakeMode to toggle snake mode
+    btn3.whenPressed(new CrabMode());
+    btn4.whenPressed(new SnakeMode());
+    //Call TargettingMode to toggle vision targetting while held
+    btn5.whileHeld(new TargettingMode());
+    btn8.whileHeld(new Brake());
   }
 
   public double getDriverX(){
