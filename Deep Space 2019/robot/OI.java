@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------`--------*/
 /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
@@ -22,33 +22,58 @@ public class OI {
   private Joystick swerveJoy = new Joystick(0);
 
   //Instantiate the buttons 0-11
-  private Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button - Robot Centric Toggle - Default Robot
-  private Button btn2 = new JoystickButton(swerveJoy, 2); //X Button - Field Centric Toggle - Default Robot
-  private Button btn3 = new JoystickButton(swerveJoy, 3); //O Button - Crab Toggle - Default Crab
-  private Button btn4 = new JoystickButton(swerveJoy, 4); //Triange Button - Snake Toggle - Default Crab
-  private Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button - Targeting On/Off While Pressed / Normal Drive Camera While !Pressed
+  private Button btnrc = new JoystickButton(swerveJoy, 1); //Square Button - Robot Centric Toggle - Default Robot
+  private Button btnfc = new JoystickButton(swerveJoy, 2); //X Button - Field Centric Toggle - Default Robot
+  private Button btncm = new JoystickButton(swerveJoy, 3); //O Button - Crab Toggle - Default Crab
+  private Button btnsm = new JoystickButton(swerveJoy, 4); //Triange Button - Snake Toggle - Default Crab
+  private Button btnt = new JoystickButton(swerveJoy, 5); //L1 Button - Targeting On/Off While Pressed / Normal Drive Camera While !Pressed
   private Button btn6 = new JoystickButton(swerveJoy, 6); //R1 Button - No Key Binding
   private Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button - No Key Binding
-  private Button btn8 = new JoystickButton(swerveJoy, 8); //R2 Button - Stop While Pressed
+  private Button btnb = new JoystickButton(swerveJoy, 8); //R2 Button - Stop While Pressed
   private Button btn9 = new JoystickButton(swerveJoy, 9); //Select Button - No Key Binding
   private Button btn10 = new JoystickButton(swerveJoy, 10); //Start Button - No Key Binding
   private Button btn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button - No Key Binding
   private Button btn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button - No Key Binding
 
+  //Instantiate the Object, operatorJoy, the joystick that controls the grabber/arm
+  private Joystick operatorJoy = new Joystick(1);
+  //Instantiate the buttons 0-11
+  private Button obtnht = new JoystickButton(swerveJoy, 1); //X Button - Hatch Target
+  private Button obtn2 = new JoystickButton(swerveJoy, 2); //A Button
+  private Button obtnbt = new JoystickButton(swerveJoy, 3); //B Button - Ball Target
+  private Button obtn4 = new JoystickButton(swerveJoy, 4); //Y Button
+  private Button obtnhg = new JoystickButton(swerveJoy, 5); //LB Button - Hatch Grab
+  private Button obtnhr = new JoystickButton(swerveJoy, 6); //RB Button - Hatch Release
+  private Button obtnbi = new JoystickButton(swerveJoy, 7); //LT Button - Ball Intake
+  private Button obtnbr = new JoystickButton(swerveJoy, 8); //RT Button - Ball Shoot
+  private Button obtn9 = new JoystickButton(swerveJoy, 9); //Select Button
+  private Button obtn10 = new JoystickButton(swerveJoy, 10); //Start Button
+  private Button obtn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button
+  private Button obtn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button
+
   public OI() {
     // Call FieldMode Commmand to toggle Field Centric on/off
-    btn1.whenPressed(new RobotMode()); 
-    btn2.whenPressed(new FieldMode());
+    btnrc.whenPressed(new RobotMode()); 
+    btnfc.whenPressed(new FieldMode());
     //Call CrabMode Command to enable Crab Mode, call SnakeMode to toggle snake mode
-    btn3.whenPressed(new CrabMode());
-    btn4.whenPressed(new SnakeMode());
+    btncm.whenPressed(new CrabMode());
+    btnsm.whenPressed(new SnakeMode());
     //Call TargettingMode to toggle vision targetting while held
-    btn5.whileHeld(new TargettingMode());
-    btn8.whileHeld(new Brake());
+    btnt.whileHeld(new TargetingMode());
+    btnb.whileHeld(new Brake());
+    //Call HatchTargetMode or BallTargetMode to change targetting mode
+    obtnht.whenPressed(new HatchTargetMode());
+    obtnbt.whenPressed(new BallTargetMode());
+    //Call HatchGrabMode or HatchReleaseMode to change hatch grabbing mode
+    obtnhg.whenPressed(new HatchGrabMode());
+    obtnhr.whenPressed(new HatchReleaseMode());
+    //Call BallIntakeMode or BallShootMode to change grabber mode
+    obtnbi.whenPressed(new BallIntakeMode());
+    obtnbr.whenPressed(new BallShootMode());
   }
-
+  
   public double getDriverX(){
-    return swerveJoy.getX();
+  return swerveJoy.getX();
   }
 
   public double getDriverY(){
