@@ -15,13 +15,12 @@
 
 package frc.robot;
 
-import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.commands.*;
 
 import com.kauailabs.navx.frc.*;
 import frc.robot.subsystems.*;
@@ -33,6 +32,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
 
   Command m_autonomousCommand;
+  Command m_teleopCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
@@ -55,8 +55,6 @@ public class Robot extends TimedRobot {
     // chooser.addOption("My Auto", new MyAutoCommand());
     // m_chooser.setDefaultOption("Default Swerve", new Drive());
 
- 
-    SmartDashboard.putData("Auto mode", m_chooser);
   }
 
   /**
@@ -83,7 +81,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    Scheduler.getInstance().run();
+    // Scheduler.getInstance().run();
   }
 
   /**
@@ -99,7 +97,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+    // m_autonomousCommand = m_chooser.getSelected();
     
 
     /*
@@ -110,9 +108,9 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
-    }
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.start();
+    // }
   }
 
   /**
@@ -120,19 +118,23 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    // Scheduler.getInstance().run();
   }
 
   @Override
   public void teleopInit() {
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
+
+    // adding calDriveTrain to scheduler
+    Scheduler.getInstance().add(new CalibrateDriveTrain());
+    // m_teleopCommand = m_chooser.getSelected();
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
   }
 
   /**
@@ -140,6 +142,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    // m_drivetrain.calSteering();
     Scheduler.getInstance().run();
   }
 
