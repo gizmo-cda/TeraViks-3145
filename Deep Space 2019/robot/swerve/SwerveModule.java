@@ -100,7 +100,7 @@ public class SwerveModule {
 
         //Set current position to a known value and start the motor open-loop, but slow
         steerMotor.setSelectedSensorPosition(getCurrentPos);
-        steerMotor.set(ControlMode.PercentOutput, .1);
+        steerMotor.set(ControlMode.PercentOutput, .05);
         
         //While the motor is running check to see when the encoder has been reset
         while (!clear) {
