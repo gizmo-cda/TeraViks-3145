@@ -8,28 +8,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
 
-public class CameraMode extends Command {
-  int visionMode; // 0 is vision processing, 1 is driver mode
-
-  public CameraMode() {
+public class SnakeMode extends Command {
+  public SnakeMode() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_vision);
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    visionMode = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    visionMode = (visionMode == 1) ? 0 : 1;
-    Robot.m_vision.setCamMode(visionMode);
-    System.out.println(visionMode);
   }
 
   // Make this return true when this Command no longer needs to run execute()
