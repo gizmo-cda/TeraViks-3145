@@ -41,7 +41,8 @@ public class RobotMap {
   public static final double STEER_PPR = STEER_MOTOR_PULSES_PER_REVOLUTION * FINAL_STEER_WHEEL_GEAR_RATIO;
 
   // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
-  public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR / 4.;
+  // public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR / 4.;
+  public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = 0.;
   public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR  / 4.;
   public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  / 4.;
   public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * 3. / 4.;
