@@ -13,8 +13,8 @@ package frc.robot;
 
 public class RobotMap {
   // Constants for Robot Dimensions
-  public static final double WHEELBASE_LENGTH = 10.0;
-  public static final double WHEELBASE_TRACK_WIDTH = 10.0;
+  public static final double WHEELBASE_LENGTH = 23.38; // inches
+  public static final double WHEELBASE_TRACK_WIDTH = 19.88; // inches
   
   // CAN Bus IDs for Drivetrain Talon SRX controllers
   public static final int FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID = 1;
@@ -28,7 +28,15 @@ public class RobotMap {
   public static final int REAR_RIGHT_STEER_TalonSRX_CAN_ID  = 14;
 
   // CAN Bus IDs for All other Subsystem Talon SRX controllers
-
+  public static final int BOOMERANG_LIFT_TalonSRX_CAN_ID = 15;
+  public static final int INTAKE__TalonSRX_CAN_ID = 16;
+  public static final int SHOOT_TalonSRX_CAN_ID = 17;
+  public static final int BOOMERANG_ROTATE_LEFT_TalonSRX_CAN_ID = 18;
+  public static final int BOOMERANG_ROTATE_RIGHT_TalonSRX_CAN_ID = 19;
+  public static final int REAR_ROBOT_LIFT_TalonSRX_CAN_ID = 20;
+  public static final int REAR_ROBOT_DRIVE_TalonSRX_CAN_ID = 21;
+  public static final int HATCH_GRABBER_LEFT_TalonSRX_CAN_ID = 22;
+  public static final int HATCH_GRABBER_RIGHT_TalonSRX_CAN_ID = 23;
 
   // Talon controllers' timeout
   public static final int TalonSRX_TIMEOUT = 1000; //units in msec
