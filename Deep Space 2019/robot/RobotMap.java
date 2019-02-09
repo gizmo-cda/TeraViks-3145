@@ -16,7 +16,7 @@ public class RobotMap {
   public static final double WHEELBASE_LENGTH = 10.0;
   public static final double WHEELBASE_TRACK_WIDTH = 10.0;
   
-   // CAN Bus IDs for Drivetrain Talon SRX controllers
+  // CAN Bus IDs for Drivetrain Talon SRX controllers
   public static final int FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID = 1;
   public static final int FRONT_LEFT_DRIVE_TalonSRX_CAN_ID  = 2;
   public static final int REAR_LEFT_DRIVE_TalonSRX_CAN_ID   = 3;
@@ -27,6 +27,10 @@ public class RobotMap {
   public static final int REAR_LEFT_STEER_TalonSRX_CAN_ID   = 13;
   public static final int REAR_RIGHT_STEER_TalonSRX_CAN_ID  = 14;
 
+  // CAN Bus IDs for All other Subsystem Talon SRX controllers
+
+
+  // Talon controllers' timeout
   public static final int TalonSRX_TIMEOUT = 1000; //units in msec
 
   // Gear Ratio Constants.  All Gear Ratios expressed in Motor revs TO Wheel Revs (ie M:W).  10:1 = 10 revs motor for 1 rev of the wheel
@@ -41,11 +45,10 @@ public class RobotMap {
   public static final double STEER_PPR = STEER_MOTOR_PULSES_PER_REVOLUTION * FINAL_STEER_WHEEL_GEAR_RATIO;
 
   // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
-  // public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR / 4.;
-  public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = 0.;
-  public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR  / 4.;
-  public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  / 4.;
-  public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * 3. / 4.;
+  public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR * .125;
+  public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .625;
+  public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .875;
+  public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR  * .375;
   
   // Deadband Joystick Constants
   public static final double X_AXIS_THREASHOLD = 0.1;

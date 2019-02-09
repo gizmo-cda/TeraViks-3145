@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
 
     // chooser.addOption("My Auto", new MyAutoCommand());
     // m_chooser.setDefaultOption("Default Swerve", new Drive());
-
   }
 
   /**
@@ -99,7 +98,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // m_autonomousCommand = m_chooser.getSelected();
     
-
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -123,18 +121,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
-
-    // adding calDriveTrain to scheduler
-    Scheduler.getInstance().add(new CalibrateDriveTrain());
-    // m_teleopCommand = m_chooser.getSelected();
-
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    if (m_autonomousCommand != null) {
+    m_autonomousCommand.cancel();
+    }
+
+    // Adding calDriveTrain to scheduler
+    Scheduler.getInstance().add(new CalibrateDriveTrain());
+    // m_teleopCommand = m_chooser.getSelected();
   }
 
   /**
@@ -142,7 +139,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    // m_drivetrain.calSteering();
     Scheduler.getInstance().run();
   }
 

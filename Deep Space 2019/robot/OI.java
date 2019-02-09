@@ -37,6 +37,7 @@ public class OI {
 
   //Instantiate the Object, operatorJoy, the joystick that controls the grabber/arm
   private Joystick operatorJoy = new Joystick(1);
+
   //Instantiate the buttons 0-11
   private Button obtnht = new JoystickButton(swerveJoy, 1); //X Button - Hatch Target
   private Button obtn2 = new JoystickButton(swerveJoy, 2); //A Button
@@ -53,23 +54,23 @@ public class OI {
 
   public OI() {
     // Call FieldMode Commmand to toggle Field Centric on/off
-    btnrc.whenPressed(new RobotMode()); 
+    // btnrc.whenPressed(new RobotMode()); 
     btnfc.whenPressed(new FieldMode());
-    //Call CrabMode Command to enable Crab Mode, call SnakeMode to toggle snake mode
-    btncm.whenPressed(new CrabMode());
-    btnsm.whenPressed(new SnakeMode());
-    //Call TargettingMode to toggle vision targetting while held
-    btnt.whileHeld(new TargetingMode());
-    btnb.whileHeld(new Brake());
-    //Call HatchTargetMode or BallTargetMode to change targetting mode
-    obtnht.whenPressed(new HatchTargetMode());
-    obtnbt.whenPressed(new BallTargetMode());
-    //Call HatchGrabMode or HatchReleaseMode to change hatch grabbing mode
-    obtnhg.whenPressed(new HatchGrabMode());
-    obtnhr.whenPressed(new HatchReleaseMode());
-    //Call BallIntakeMode or BallShootMode to change grabber mode
-    obtnbi.whenPressed(new BallIntakeMode());
-    obtnbr.whenPressed(new BallShootMode());
+    // //Call CrabMode Command to enable Crab Mode, call SnakeMode to toggle snake mode
+    // btncm.whenPressed(new CrabMode());
+    // btnsm.whenPressed(new SnakeMode());
+    // //Call TargettingMode to toggle vision targetting while held
+    // btnt.whileHeld(new TargetingMode());
+    // btnb.whileHeld(new Brake());
+    // //Call HatchTargetMode or BallTargetMode to change targetting mode
+    // obtnht.whenPressed(new HatchTargetMode());
+    // obtnbt.whenPressed(new BallTargetMode());
+    // //Call HatchGrabMode or HatchReleaseMode to change hatch grabbing mode
+    // obtnhg.whenPressed(new HatchGrabMode());
+    // obtnhr.whenPressed(new HatchReleaseMode());
+    // //Call BallIntakeMode or BallShootMode to change grabber mode
+    // obtnbi.whenPressed(new BallIntakeMode());
+    // obtnbr.whenPressed(new BallShootMode());
   }
   
   public double getDriverX(){
