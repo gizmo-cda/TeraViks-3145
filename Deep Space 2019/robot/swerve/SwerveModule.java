@@ -89,7 +89,7 @@ public class SwerveModule {
     }
 
     // Steering Motor Calibration Routine to find the Index Sensor and set the wheel straight forward
-    public boolean rotateSteerForCal(){
+    public void rotateSteerForCal(){
         //Init local variables
         boolean clear = false;
         int getCurrentPos = 1024;
@@ -100,7 +100,7 @@ public class SwerveModule {
 
         //Set current position to a known value and start the motor open-loop, but slow
         steerMotor.setSelectedSensorPosition(getCurrentPos);
-        steerMotor.set(ControlMode.PercentOutput, .05);
+        steerMotor.set(ControlMode.PercentOutput, .1);
         
         //While the motor is running check to see when the encoder has been reset
         while (!clear) {
@@ -143,12 +143,11 @@ public class SwerveModule {
 
         //Set the position and clear the encoder position for the calibrated reference
         steerMotor.set(ControlMode.Position, offset);
+        error = (double) steerMotor.getSelectedSensorPosition();
         steerMotor.setSelectedSensorPosition(0);
 
         System.out.println(name+" Calibrated");
-        System.out.println(name+" Error = "+steerMotor.getSelectedSensorPosition());
-
-        return clear;
+        System.out.println(name+" Error = "+(int) error);
     }
 
     //Talon configuration for the Steer Motor

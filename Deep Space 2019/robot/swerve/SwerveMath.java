@@ -67,7 +67,9 @@ public class SwerveMath {
 
   private static boolean reverseEn; //Reverse Enable Mode
 
- //Initialize variables to store previous SwerveMath iteration's wheel position values - used for Reversing
+  private static boolean snakeMode; //Crab = false, Snake = true
+
+  //Initialize variables to store previous SwerveMath iteration's wheel position values - used for Reversing
   private static Double wp1Current = 0.;  
   private static Double wp2Current = 0.;  
   private static Double wp3Current = 0.;  
@@ -93,13 +95,14 @@ public class SwerveMath {
   }
 
   // First Method of SwerveMath that returns the vector (speed, position) for each wheel as a list
-  public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn, boolean centricIn, double gyroIn, boolean reverseEnIn){
+  public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn, boolean centricIn, double gyroIn, boolean reverseEnIn, boolean snakeModeIn){
     fwd = fwdIn;
     str = strIn;
     rcw = rcwIn;
     centric = centricIn;
     gyro = gyroIn * toRad;
     reverseEn = reverseEnIn;
+    snakeMode = snakeModeIn;
 
     // ********Modify the Joystick Inputs for Centric Mode*******
     if (centric) {
@@ -112,6 +115,12 @@ public class SwerveMath {
       str = -x_f + x_s;
     }
     
+    // ********Modify the Joystick Inputs for Snake Mode*********
+    if (snakeMode) {
+      rcw = str;
+      str = 0.;
+    }
+
     // ********Fundamental Math Block for Wheel Speed and Position*******
     // Define the common elements in wheel vector math
     Double A = str - rcw * halfLength; 
@@ -153,7 +162,7 @@ public class SwerveMath {
     // ********Continous Steering Rotation and Shortest Path Steering with Reversing************
     // With the output of the math block above there is a discontinuity from 180 degrees to 181 degrees.
   
-    // This code block tests each wheel to see if it needs to move > +/- 90 degrees.  If so it will add/sub
+    // This code block tests each wheel to see if it needs to move > +/- 90 degrees.  If so, it will add/sub
     // 180 degrees to provide the supplemental angle and reverse the drive wheel.  
     // If the steering motion is greater than +/- 270 degrees then no reversing will make sense and the 
     // code will add/sub 360 degrees and track the 360 degree rotation through the discontinuity, again
@@ -161,7 +170,7 @@ public class SwerveMath {
    
     // First, if any wheel was reversed by the last SwerveMath iteration then reverse it for this iteration
     // so the new comparison is done with the supplemental angles. Nested "if" statements calculate 
-    //the supplemental angle.
+    // the supplemental angle.
     
     if (reverseEn){
       if (wp1IsReversed) {
@@ -188,25 +197,24 @@ public class SwerveMath {
     // Now look to see if the wheel needs to move more than 90 degrees or more than 270 degrees
     // Do this for each wheel position
     switch (pulseDiff(wp1, wp1Current, wp1Rotate)){
-      case "< -90 or > 90":
+      case "< -90 or > 90":  //If true then reverse the wheel
         ws1 *= -1.;
         wp1IsReversed = !wp1IsReversed;
-        if ( wp1 >= 0) wp1 -= oneEighty; else  wp1 += oneEighty;
+        if (wp1 >= 0) wp1 -= oneEighty; else  wp1 += oneEighty;
       break;
-      case "< -270":
+      case "< -270":  //If true rotate through the discontinuity at +/- 180
         wp1Rotate += threeSixty; 
       break;
-      case "> 270":
+      case "> 270":  //If true rotate through the discontinuity at +/- 180
         wp1Rotate -= threeSixty;
       break;
     }
 
-    
     switch (pulseDiff(wp2, wp2Current, wp2Rotate)){
       case "< -90 or > 90":
-        ws1 *= -1.;
+        ws2 *= -1.;
         wp2IsReversed = !wp2IsReversed;
-        if ( wp2 >= 0) wp2 -= oneEighty; else  wp2 += oneEighty;
+        if (wp2 >= 0) wp2 -= oneEighty; else  wp2 += oneEighty;
       break;
       case "< -270":
         wp2Rotate += threeSixty; 
@@ -216,12 +224,11 @@ public class SwerveMath {
       break;
     }
 
-    
     switch (pulseDiff(wp3, wp3Current, wp3Rotate)){
       case "< -90 or > 90":
-        ws1 *= -1.;
+        ws3 *= -1.;
         wp3IsReversed = !wp3IsReversed;
-        if ( wp3 >= 0) wp3 -= oneEighty; else  wp3 += oneEighty;
+        if (wp3 >= 0) wp3 -= oneEighty; else  wp3 += oneEighty;
       break;
       case "< -270":
         wp3Rotate += threeSixty; 
@@ -231,12 +238,11 @@ public class SwerveMath {
       break;
     }
 
-    
     switch (pulseDiff(wp4, wp4Current, wp4Rotate)){
       case "< -90 or > 90":
-        ws1 *= -1.;
+        ws4 *= -1.;
         wp4IsReversed = !wp4IsReversed;
-        if ( wp4 >= 0) wp4 -= oneEighty; else  wp4 += oneEighty;
+        if (wp4 >= 0) wp4 -= oneEighty; else  wp4 += oneEighty;
       break;
       case "< -270":
         wp4Rotate += threeSixty; 
@@ -273,7 +279,7 @@ public class SwerveMath {
 
   // This is a private method to simplify angle finding and make the code more readable
   private String pulseDiff(Double wp, Double wpCurrent, Double wpRotate){
-    Double diff = wp - (wpCurrent - wpRotate);
+    Double diff = wp - (wpCurrent - wpRotate); //Find the rotation requested, backing out the rotate pulse accumulator
     String angle = "";
 
     if (diff < -twoSeventy) angle = "< -270"; else if ((diff < -ninety) && reverseEn) angle = "< -90 or > 90";

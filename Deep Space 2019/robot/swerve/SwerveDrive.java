@@ -66,17 +66,16 @@ public class SwerveDrive {
         //rearRight.initDriveMotor();
     }
 
-    public boolean calSteerMotors(){
-        boolean clear = frontRight.rotateSteerForCal();
+    public void calSteerMotors(){
+        frontRight.rotateSteerForCal();
         // frontLeft.rotateSteerForCal();
         // rearLeft.rotateSteerForCal();
         // rearRight.rotateSteerForCal();
-        return clear;
     }
 
-    public void setMotors  (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn){
+    public void setMotors  (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn, boolean snakeMode){
 
-        swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro, reverseEn);
+        swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro, reverseEn, snakeMode);
 
         // double temp = frontRight.getVelocity();
         // double temp2 = swerveVectors.get(0);
@@ -115,7 +114,15 @@ public class SwerveDrive {
         //rearRight.setBrake();
     }
 
-    public void stopMotors(){
+    public void stopDriveMotors(){
+        setBrake();
+        frontRight.setVelocity(0.);
+        // frontLeft.setVelocity(0.);
+        // rearLeft.setVelocity(0.);
+        // rearRight.setVelocity(0.);
+        setCoast();
+    }
+    public void emergencyStopMotors(){
         frontRight.stop();
         // frontLeft.stop();
         // rearLeft.stop();
