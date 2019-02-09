@@ -21,7 +21,6 @@ public class Drive extends Command {
   private Double fwd; //Forward, Y axis, -1 to 1 from Joystick
   private Double str; //Strafe, X axis, 1 to -1 from Joystick
   private Double rcw; //Rotate CW, Z axis, 1 to -1 from Joystick, refernced 1=180 CW -1=-180 CW
-  private Double gyro; //NavX Gyro Yaw angle
 
   public Drive() {
     requires(Robot.m_drivetrain);    
@@ -66,14 +65,8 @@ public class Drive extends Command {
 
     if (rcw < 0) rcw *= rcw * -1.; else rcw *= rcw;
 
-    // This is total accumulated Yaw angle in degrees
-    gyro = Robot.m_navx.getAngle();
-
-    // This is Yaw angle +/- 180 in degrees
-    //gyro = Robot.m_navx.getYaw();
-
     // Call Drivetrain Subsystem to move
-    Robot.m_drivetrain.move(fwd, str, rcw, gyro);
+    Robot.m_drivetrain.move(fwd, str, rcw);
   }
 
   // Make this return true when this Command no longer needs to run execute()

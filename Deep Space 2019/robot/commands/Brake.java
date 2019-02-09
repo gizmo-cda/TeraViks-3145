@@ -18,7 +18,7 @@ public class Brake extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.m_drivetrain.stop();
+    Robot.m_drivetrain.quickStop();
   }
 
   // Called repeatedly when this Command is scheduled to run
