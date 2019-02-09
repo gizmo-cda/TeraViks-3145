@@ -11,7 +11,7 @@
 *                                   ^             
 *                                   |             
 *                                   |             
-*  front left Drive and Steer |-----------| front right Drive & Steer    
+*  front left Drive and Steer |-----------| front right Drive and Steer    
 *                             |           |       
 *                             |           |  l    
 *                             |           |  e    
@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.Drive;
 import frc.robot.swerve.SwerveModule;
@@ -65,7 +66,11 @@ public class Drivetrain extends Subsystem {
 
   private boolean centric = false;
 
-  private boolean reverseEn = true;
+  private double gyro; //NavX Gyro Yaw angle
+
+  private boolean reverseEn = true;  //Enables reversing wheel drive motors
+
+  private boolean snakeMode = false; //Crab = false, Snake = True
 
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
@@ -83,9 +88,8 @@ public class Drivetrain extends Subsystem {
      m_SwerveDrive.initMotors();
   }
 
-  public boolean calSteering(){
-    boolean clear = m_SwerveDrive.calSteerMotors();
-    return clear;
+  public void calSteering(){
+    m_SwerveDrive.calSteerMotors();
   }
 
   public void toggleCentric(){
@@ -97,8 +101,22 @@ public class Drivetrain extends Subsystem {
     return centric;
   }
 
-  public void move(double fwd, double str, double rcw, double gyro){
-    m_SwerveDrive.setMotors(fwd, str, rcw, centric, gyro, reverseEn);
+  public void snakeMode(){
+    snakeMode = true;
+  }
+
+  public void crabMode(){
+    snakeMode = false;
+  }
+
+  public void move(double fwd, double str, double rcw){
+    // This is total accumulated Yaw angle in degrees
+    gyro = Robot.m_navx.getAngle();
+
+    // This is Yaw angle +/- 180 in degrees
+    //gyro = Robot.m_navx.getYaw();
+
+    m_SwerveDrive.setMotors(fwd, str, rcw, centric, gyro, reverseEn, snakeMode);
   }
 
   public void coast(){
@@ -109,11 +127,12 @@ public class Drivetrain extends Subsystem {
     m_SwerveDrive.setBrake();
   }
 
-  public void stop(){
-    frontRightWheel.stop();
-    // frontLeftWheel.stop();
-    // rearLeftWheel.stop();
-    // rearRightWheel.stop();
+  public void quickStop(){
+    m_SwerveDrive.stopDriveMotors();
+  }
+
+  public void emergencyStop(){
+    m_SwerveDrive.emergencyStopMotors();
   }
 
   @Override
