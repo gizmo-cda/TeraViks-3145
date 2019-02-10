@@ -56,6 +56,7 @@ public class OI {
     // Call FieldMode Commmand to toggle Field Centric on/off
     // btnrc.whenPressed(new RobotMode()); 
     btnfc.whenPressed(new FieldMode());
+    // btnt.whenPressed(new CameraMode());
     // //Call CrabMode Command to enable Crab Mode, call SnakeMode to toggle snake mode
     // btncm.whenPressed(new CrabMode());
     // btnsm.whenPressed(new SnakeMode());
