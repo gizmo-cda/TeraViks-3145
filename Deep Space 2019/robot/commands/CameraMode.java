@@ -29,7 +29,8 @@ public class CameraMode extends Command {
   protected void execute() {
     visionMode = (visionMode == 1) ? 0 : 1;
     Robot.m_vision.setCamMode(visionMode);
-    System.out.println(visionMode);
+    // System.out.println(visionMode);
+    // Robot.m_vision.getVisionTableValues();
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -8,21 +8,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
 public class TargetingMode extends Command {
   public TargetingMode() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    requires(Robot.m_vision);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    int camMode = Robot.m_vision.getCamMode();
+    if (camMode == 1) Robot.m_vision.setCamMode(0);
+    System.out.println("Camera Mode: "+camMode);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    // 
   }
 
   // Make this return true when this Command no longer needs to run execute()
