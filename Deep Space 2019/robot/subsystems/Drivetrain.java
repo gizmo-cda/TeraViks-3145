@@ -41,7 +41,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.Drive;
 import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveDrive;
 
@@ -66,7 +65,9 @@ public class Drivetrain extends Subsystem {
 
   private boolean centric = false;
 
-  private double gyro; //NavX Gyro Yaw angle
+  private double yaw; //NavX Gyro Yaw angle
+  private double pitch; //NavX Gyro Pitch angle
+  private double maxPitch = RobotMap.PITCH_THRESHOLD;
 
   private boolean reverseEn = true;  //Enables reversing wheel drive motors
 
@@ -110,13 +111,24 @@ public class Drivetrain extends Subsystem {
   }
 
   public void move(double fwd, double str, double rcw){
-    // This is total accumulated Yaw angle in degrees
-    gyro = Robot.m_navx.getAngle();
+    // This is Yaw angle +/- 180 in degrees
+    yaw = Robot.m_gyro.getYawDeg();
 
     // This is Yaw angle +/- 180 in degrees
-    //gyro = Robot.m_navx.getYaw();
+    pitch = Robot.m_gyro.getPitchDeg();
 
-    m_SwerveDrive.setMotors(fwd, str, rcw, centric, gyro, reverseEn, snakeMode);
+    // Detect too much lean angle and strafe into the lean to right the bot
+    if (pitch > maxPitch){
+      fwd = 0;
+      str = 1;
+      rcw = 0;
+    } else if (pitch < -maxPitch){
+      fwd = 0;
+      str = -1;
+      rcw = 0;
+    }
+
+    m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode);
   }
 
   public void coast(){
@@ -139,6 +151,6 @@ public class Drivetrain extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new Drive());
+    // setDefaultCommand(new Drive());
   }
 }

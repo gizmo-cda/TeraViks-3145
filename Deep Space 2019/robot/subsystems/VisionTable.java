@@ -8,56 +8,75 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import java.util.ArrayList;
+import frc.robot.gps.Target;
+
+import java.util.HashMap;
 
 
 public class VisionTable extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-
-  private Double x, y, area;
+  
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  private NetworkTableEntry tx, ty, ta;
-  private ArrayList<Double> visionTableValues = new ArrayList<Double>(3);
+  
+  private NetworkTableEntry tx= table.getEntry("tx");  //Horizontal (relatie to cam) offset from target: left 0<x<27, right -27<x<0
+  private NetworkTableEntry ty= table.getEntry("ty");  //Vertical (relative to cam) offset from target: below 0<y<20.5, above -20.5<y<0
+  private NetworkTableEntry ta= table.getEntry("ta");  //Area of target: 0-100% of image
+  private NetworkTableEntry tv= table.getEntry("tv");  //Valid target = 1
+
+  private HashMap<String, Double> visionValues = new HashMap<String, Double>();
+
+  private Target m_target = new Target();
 
   public VisionTable() {
   }
 
-  // Called repeatedly when this Command is scheduled to run
-  public ArrayList<Double> getVisionTableValues() {
-    tx = table.getEntry("tx");
-    ty = table.getEntry("ty");
-    ta = table.getEntry("ta");
+  public void setCamMode(int visionMode) {
+    table.getEntry("camMode").setNumber(visionMode);
+  }
 
-    // read table values periodically
-    x = tx.getDouble(0.0);
-    y = ty.getDouble(0.0);
-    area = ta.getDouble(0.0);
+  public int getCamMode(){
+    return (int) table.getEntry("camMode").getDouble(0.);
+  }
 
-    visionTableValues.set(0, x);
-    visionTableValues.set(1, y);
-    visionTableValues.set(2, area);
+  public boolean acquireTarget() {
+    double valid = getVisionValues().get("tv");
+
+    if ((int) valid == 1) {
+      m_target.moveToTarget();
+      return true; 
+    } 
+    else return false;
+}
+  // Network Table is quite verbose and contains more than needed, so clean it up and make it simple for just what is needed
+  public HashMap<String, Double> getVisionValues() {
+    // tx = table.getEntry("tx");
+    // ty = table.getEntry("ty");
+    // ta = table.getEntry("ta");
+    // tv = table.getEntry("tv");
+
+    visionValues.put("tx", tx.getDouble(0.));  
+    visionValues.put("ty", ty.getDouble(0.));  
+    visionValues.put("ta", ta.getDouble(0.));  
+    visionValues.put("tv", tv.getDouble(0.));  
 
     // test with print statement
-    System.out.println("X: "+x+"\nY: "+y+"\nArea: "+area);   
+    System.out.println("\nTx: "+visionValues.get("tx")
+                        +"\nTy: "+visionValues.get("ty")
+                        +"\nTa: "+visionValues.get("ta")
+                        +"\nTv: "+visionValues.get("tv"));
 
-    return visionTableValues;
-    }
-
-    public void updateTableValues() {
-        // post to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightX", x);
-        SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightArea", area); 
-    }
-
-    public void setCamMode(int visionMode) {
-        table.getEntry("camMode").setNumber(visionMode);
-      }
+    return visionValues;
+  }
+  
+  public void updateTableValues() {
+    // post to smart dashboard periodically
+    // SmartDashboard.putNumber("LimelightX", x);
+    // SmartDashboard.putNumber("LimelightY", y);
+    // SmartDashboard.putNumber("LimelightArea", area); 
+  }
 
   @Override
   public void initDefaultCommand() {
