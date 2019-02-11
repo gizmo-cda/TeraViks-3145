@@ -104,6 +104,12 @@ public class SwerveMath {
     reverseEn = reverseEnIn;
     snakeMode = snakeModeIn;
 
+    // ********Modify the Joystick Inputs for Snake Mode*********
+    if (snakeMode) {
+      rcw = str;
+      str = 0.;
+    }
+    
     // ********Modify the Joystick Inputs for Centric Mode*******
     if (centric) {
       Double y_f = fwd * Math.cos(gyro); // y component of field
@@ -113,12 +119,6 @@ public class SwerveMath {
 
       fwd = y_f + y_s;
       str = -x_f + x_s;
-    }
-    
-    // ********Modify the Joystick Inputs for Snake Mode*********
-    if (snakeMode) {
-      rcw = str;
-      str = 0.;
     }
 
     // ********Fundamental Math Block for Wheel Speed and Position*******
@@ -146,7 +146,7 @@ public class SwerveMath {
       ws4 /= max;
     }
 
-    // modify wheel speeds from +/- 1 => pulses per 100 ms
+    // modify wheel speeds from <=1 ---> pulses per 100 ms
     ws1 *= pp100msec; 
     ws2 *= pp100msec;
     ws3 *= pp100msec;
