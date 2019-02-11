@@ -63,6 +63,9 @@ public class RobotMap {
   public static final double Y_AXIS_THREASHOLD = 0.1;
   public static final double Z_AXIS_THREASHOLD = 0.1;
   
+  // Deadband Joystick Constants
+  public static final double PITCH_THRESHOLD = 30.; //Pitch in degrees
+  
   public static void init(){
   }
 }

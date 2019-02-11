@@ -19,15 +19,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.SPI;
 import frc.robot.commands.*;
 
-import com.kauailabs.navx.frc.*;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
   public static Drivetrain m_drivetrain;
-  public static AHRS m_navx;
+  public static Gyro m_gyro;
   public static VisionTable m_vision;
   public static OI m_oi;
 
@@ -45,12 +43,12 @@ public class Robot extends TimedRobot {
     // Instantiate objects for subsystems, operator input, commands, etc
     // NOTE: ORDER DEPENDENT
     m_drivetrain = new Drivetrain();
-    m_navx = new AHRS(SPI.Port.kMXP);
+    m_gyro = new Gyro();
     m_vision = new VisionTable();
     m_oi = new OI(); //Always instantiate OI last
 
     m_drivetrain.init();
-    m_navx.reset();
+    m_gyro.resetGyro();
 
     // chooser.addOption("My Auto", new MyAutoCommand());
     // m_chooser.setDefaultOption("Default Swerve", new Drive());
@@ -139,8 +137,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    
-    Scheduler.getInstance().add(new Drive()); // TODO: test if this works
+    Scheduler.getInstance().add(new Drive());
     Scheduler.getInstance().run();
   }
 
