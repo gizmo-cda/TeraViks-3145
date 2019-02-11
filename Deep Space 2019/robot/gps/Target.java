@@ -7,64 +7,77 @@
 
 package frc.robot.gps;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import java.util.ArrayList;
-import java.util.Arrays;
 import frc.robot.Robot;
-import frc.robot.subsystems.*;
 
 public class Target {
-    private ArrayList<Double> targetVals;
-    private double tx;
-    private double ty;
-    private double ta;
-    private double tv;
+    private double tx;  //Horizontal (relatie to cam) offset from target: left 0<x<27, right -27<x<0
+    private double ty;  //Vertical (relative to cam) offset from target: below 0<y<20.5, above -20.5
+    private double ta;  //Area of target: 0-100% of image
+    private double tv;  //Valid target = 1
+
+    private double gyroAngle;
 
     public Target (){
     }
 
-    public boolean aquireTarget(double tx, double ty, double ta, double tv) {
-        if ((int)tv == 1) return true; else return false;
+    // This is the primary method to move to the target.  It calls multiple private methods.
+    public void moveToTarget() {
+        Robot.m_drivetrain.crabMode();  //Make sure bot is not in snake mode
+        tx = Robot.m_vision.getVisionValues().get("tx");
+        tv = Robot.m_vision.getVisionValues().get("tv");
+
+        // Rotate the bot until on Target
+        rotateToTarget(tx, tv);
+
+        // Now check the gyro versus the defined target angles to find the desired target and it's angle
+        gyroAngle = Robot.m_gyro.getYawDeg();
+        double desiredAngle = getDesiredAngle(gyroAngle);
+
+        tx = Robot.m_vision.getVisionValues().get("tx");
+        tv = Robot.m_vision.getVisionValues().get("tv");
+
+        // Strafe left/right until perpendicular to the the target, continue to correct for x offset too
+        strafeToNormal(0., gyroAngle, desiredAngle, tx, tv);
+
+        strafeToNormal(0., gyroAngle, desiredAngle, tx, tv); // fwd should be some percent of a joystick output, 0.2?
     }
 
     private void rotateToTarget(double tx, double tv) {
-        while ((tx < 0.1) && (tx > -0.1) && ((int)tv == 1)) {
-            targetVals = Robot.m_vision.getVisionTableValues();
-            tx = targetVals.get(0);
-            tv = targetVals.get(3);
-            // adjust robot position until x = 0
+        // Adjust robot position until x = 0
+        while ((tx > 1 || tx < -1) && (int)tv == 1) {
+            tx = Robot.m_vision.getVisionValues().get("tx");
+            tv = Robot.m_vision.getVisionValues().get("tv");
+
+            // Only rotation for movement
             Robot.m_drivetrain.move(0.,0.,0.025*tx); // this acts as a gain, might become constant later
         }
     }
 
-    private double getDesiredAngle(double gyroAngle){
+    private double getDesiredAngle(double angle){
         double desiredAngle = 0;
         
-        if (gyroAngle > -150. && gyroAngle <= -105.) {
+        if (angle > -150. && angle <= -105.) {
             desiredAngle = -120.;
         }
-        if (gyroAngle > -105 && gyroAngle <= -75) {
+        if (angle > -105 && angle <= -75) {
             desiredAngle = -90.;
         }
-        if (gyroAngle > -75 && gyroAngle <= -30) {
+        if (angle > -75 && angle <= -30) {
             desiredAngle = -60.;
         }
-        if (gyroAngle > -30 && gyroAngle <= 30) {
+        if (angle > -30 && angle <= 30) {
             desiredAngle = 0.;
         }
-        if (gyroAngle > 30 && gyroAngle <= 75) {
+        if (angle > 30 && angle <= 75) {
             desiredAngle = 60.;
         }
-        if (gyroAngle > 75 && gyroAngle <= 105) {
+        if (angle > 75 && angle <= 105) {
             desiredAngle = 90.;
         }
-        if (gyroAngle > 105 && gyroAngle <= 150) {
+        if (angle > 105 && angle <= 150) {
             desiredAngle = 120.;
         }
-        if (gyroAngle < -150 || gyroAngle > 150) {
+        if (angle < -150 || angle > 150) {
             desiredAngle = 180.; // should be the same as -180 dicontinuity TODO: figure out
         }
         return desiredAngle;
@@ -73,32 +86,16 @@ public class Target {
     private void strafeToNormal(double forwardToTarget, double gyroAngle, double desiredAngle, double tx, double tv) {
         double deltaAngle = gyroAngle - desiredAngle; // TODO: check order here (sign checking)
 
-        while ((deltaAngle < 0.1) && (deltaAngle > -0.1) && ((int)tv == 1)) {
-            targetVals = Robot.m_vision.getVisionTableValues();
-            tx = targetVals.get(0);
-            tv = targetVals.get(3);
-            // adjust robot position until x = 0
+        // Adjust robot position until delta Angle ~= 0
+        while ((deltaAngle > 1 || deltaAngle < -1) && (int)tv == 1) {
+            tx = Robot.m_vision.getVisionValues().get("tx");
+            tv = Robot.m_vision.getVisionValues().get("tv");
+
+            gyroAngle = Robot.m_gyro.getYawDeg();
+            deltaAngle = gyroAngle - desiredAngle;
+
+            // Strafe while also continuing to monitor x and adjust if necessary
             Robot.m_drivetrain.move(forwardToTarget,0.025*deltaAngle,0.025*tx); // this acts as a gain, might become constant later
         }
-    }
-
-    public void moveToTarget(double gyroAngle) {
-        targetVals = Robot.m_vision.getVisionTableValues();
-        tx = targetVals.get(0);
-        tv = targetVals.get(3);
-
-        rotateToTarget(tx, tv);
-
-        double desiredAngle = getDesiredAngle(gyroAngle);
-
-        // TODO: make this into its own submethod
-        targetVals = Robot.m_vision.getVisionTableValues();
-        tx = targetVals.get(0);
-        tv = targetVals.get(3);
-
-        strafeToNormal(0., gyroAngle, desiredAngle, tx, tv);
-
-        strafeToNormal(0., gyroAngle, desiredAngle, tx, tv); // fwd should be some percent of a joystick output, 0.2?
-
     }
 }
