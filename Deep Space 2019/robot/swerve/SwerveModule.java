@@ -184,7 +184,23 @@ public class SwerveModule {
     public void initDriveMotor(){
         driveMotor.configFactoryDefault();
 
-        driveMotor.setInverted(false);
+        //Invert the drive motors on one side because the calibration routine will rotate 
+        //them after indexing an extra 180 degrees so the pullies face inward on the chassis
+        switch (name){
+            case "FrontRightWheel":
+            driveMotor.setInverted(true);
+            break;
+            case "FrontLeftWheel":
+            driveMotor.setInverted(false);
+            break;
+            case "RearLeftWheel":
+            driveMotor.setInverted(false);
+            break;
+            case "RearRightWheel":
+            driveMotor.setInverted(true);
+            break;
+        }
+
         driveMotor.setNeutralMode(NeutralMode.Coast);
 
         driveMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
