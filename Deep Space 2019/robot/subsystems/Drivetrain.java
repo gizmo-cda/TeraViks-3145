@@ -65,8 +65,8 @@ public class Drivetrain extends Subsystem {
 
   private boolean centric = false;
 
-  private double yaw; //NavX Gyro Yaw angle
-  private double pitch; //NavX Gyro Pitch angle
+  private double yaw = 0.; //NavX Gyro Yaw angle
+  private double pitch = 0.; //NavX Gyro Pitch angle
   private double maxPitch = RobotMap.PITCH_THRESHOLD;
 
   private boolean reverseEn = true;  //Enables reversing wheel drive motors
@@ -98,21 +98,24 @@ public class Drivetrain extends Subsystem {
     System.out.println("Centric is: "+centric);
   }
 
+  public void turnOffCentric(){
+    centric = false;
+  }
   public boolean getCentric(){
     return centric;
   }
 
-  public void snakeMode(){
+  public void setSnakeMode(){
     snakeMode = true;
   }
 
-  public void crabMode(){
+  public void setCrabMode(){
     snakeMode = false;
   }
 
   public void move(double fwd, double str, double rcw){
     // This is Yaw angle +/- 180 in degrees
-    yaw = Robot.m_gyro.getYawDeg();
+    if (centric) yaw = Robot.m_gyro.getYawDeg();
 
     // This is Yaw angle +/- 180 in degrees
     pitch = Robot.m_gyro.getPitchDeg();
