@@ -53,19 +53,24 @@ public class RobotMap {
   public static final double STEER_PPR = STEER_MOTOR_PULSES_PER_REVOLUTION * FINAL_STEER_WHEEL_GEAR_RATIO;
 
   // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
-  public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR * .125;
-  public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .625;
-  public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .875;
-  public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = -STEER_PPR  * .375;
+  public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .375; //Drive Motor needs to be inverted
+  public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125;
+  public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .375;
+  public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125; //Drive Motor needs to be inverted
   
   // Deadband Joystick Constants
   public static final double X_AXIS_THREASHOLD = 0.1;
   public static final double Y_AXIS_THREASHOLD = 0.1;
   public static final double Z_AXIS_THREASHOLD = 0.1;
   
-  // Deadband Joystick Constants
+  // Pitch & Roll Constants
   public static final double PITCH_THRESHOLD = 30.; //Pitch in degrees
   
+  // Vision System Constants
+  public static final double CAMERA_MOUNTING_ANGLE = 35;  //Units are in degrees and referenced to X axis, with CCW being positive
+  public static final double CAMERA_MOUNTING_HEIGHT = 42;  //Units are in inches
+  public static final double DOUBLE_STRIPE_REFLECTIVE_TAPE_TARGET_HEIGHT = 29;  //Units are in inches
+
   public static void init(){
   }
 }
