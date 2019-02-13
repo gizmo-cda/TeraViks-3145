@@ -66,8 +66,8 @@ public class Drivetrain extends Subsystem {
   private boolean centric = false;
 
   private double yaw = 0.; //NavX Gyro Yaw angle
-  private double pitch = 0.; //NavX Gyro Pitch angle
-  private double maxPitch = RobotMap.PITCH_THRESHOLD;
+  private double roll = 0.; //NavX Gyro Pitch angle
+  private double maxRoll = RobotMap.PITCH_THRESHOLD;
 
   private boolean reverseEn = true;  //Enables reversing wheel drive motors
 
@@ -86,16 +86,24 @@ public class Drivetrain extends Subsystem {
   }
 
   public void init(){
-     m_SwerveDrive.initMotors();
+    m_SwerveDrive.initMotors();
   }
 
-  public void calSteering(){
-    m_SwerveDrive.calSteerMotors();
+  public void reset(){
+    turnOffCentric();
+    setCrabMode();
+    coast();
+    System.out.println("  --Drivetrain reset to CrabMode, Centric Off, and Coast");
+    m_SwerveDrive.reset();
+  }
+
+  public void calSteering(boolean checkPhase){
+    m_SwerveDrive.calSteerMotors(checkPhase);
   }
 
   public void toggleCentric(){
     centric = !centric; 
-    System.out.println("Centric is: "+centric);
+    System.out.println("**Centric set to: "+centric);
   }
 
   public void turnOffCentric(){
@@ -118,19 +126,19 @@ public class Drivetrain extends Subsystem {
     if (centric) yaw = Robot.m_gyro.getYawDeg();
 
     // This is Yaw angle +/- 180 in degrees
-    pitch = Robot.m_gyro.getPitchDeg();
+    roll = Robot.m_gyro.getRollDeg();
 
     // Detect too much lean angle and strafe into the lean to right the bot
-    if (pitch > maxPitch){
+    if (roll > maxRoll){
       fwd = 0;
       str = 1;
       rcw = 0;
-    } else if (pitch < -maxPitch){
+    } else if (roll < -maxRoll){
       fwd = 0;
       str = -1;
       rcw = 0;
     }
-
+    //System.out.println("drive called");
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode);
   }
 

@@ -23,7 +23,7 @@ public class Gyro extends Subsystem {
         ahrs = new AHRS(SPI.Port.kMXP);
     }
 
-    public void resetGyro(){
+    public void reset(){
         ahrs.reset();
     }
 
@@ -37,10 +37,15 @@ public class Gyro extends Subsystem {
        return ahrs.getYaw();
     }
 
-    // This is Pitch angle +/- 180 in degrees, robot long axis tilt to right is positive
+    // This is Pitch angle +/- 180 in degrees, robot short axis tilt to front is positive
     public double getPitchDeg(){
         return ahrs.getPitch();
-     }
+    }
+
+    // This is Roll angle +/- 180 in degrees, robot long axis tilt to right is positive
+    public double getRollDeg(){
+        return ahrs.getRoll();
+    }
 
     @Override
     public void initDefaultCommand() {
