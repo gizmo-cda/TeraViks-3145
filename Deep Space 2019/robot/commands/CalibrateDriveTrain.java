@@ -9,11 +9,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class CalibrateDriveTrain extends Command {
-  boolean clear = false;
+  boolean checkPhase = RobotMap.CHECK_PHASE_DURING_STEERING_CALIBRATION;
+ 
   public CalibrateDriveTrain() {
-  requires(Robot.m_drivetrain);
+    requires(Robot.m_drivetrain);
   }
 
   // Called just before this Command runs the first time
@@ -25,7 +27,7 @@ public class CalibrateDriveTrain extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_drivetrain.calSteering();
+    Robot.m_drivetrain.calSteering(checkPhase);
   }
 
   // Make this return true when this Command no longer needs to run execute()
