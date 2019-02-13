@@ -35,9 +35,19 @@ public class SwerveModule {
         steerMotor = wheelSteerMotor;
     }
 
+    //Open-Loop Percentage Output Setting -1 to 1
+    public void setDriveSpeed(double driveSpeed){
+        driveMotor.set(ControlMode.PercentOutput, driveSpeed);
+    }
+
+    //Open-Loop Percentage Output Setting -1 to 1
+    public void setSteerSpeed(double steerSpeed){
+        steerMotor.set(ControlMode.PercentOutput, steerSpeed);
+    }
+
     //Closed-Loop Velocity Target Setting (+/- speed in pulses per 100 msec)
-    public void setVelocity(double wheelSpeed){
-        driveMotor.set(ControlMode.Velocity, wheelSpeed);
+    public void setVelocity(double wheelVelocity){
+        driveMotor.set(ControlMode.Velocity, wheelVelocity);
     }
 
     //Closed-Loop Position Target Setting (+/- pulses per +/-180 degrees)
@@ -88,32 +98,50 @@ public class SwerveModule {
         return steerFaults.SensorOutOfPhase;
     }
 
+    private void delay(int msec){
+        try{
+            Thread.sleep(msec);
+        }
+        catch (Exception e){
+            System.out.println("Error in Waitloop");
+        }
+    }
+
     // Steering Motor Calibration Routine to find the Index Sensor and set the wheel straight forward
     public void rotateSteerForCal(){
         //Init local variables
         boolean clear = false;
-        int getCurrentPos = 1024;
-        int getNewPos = 1048;
+        int currentPos = 0;
+        int newPos = 409600;
+
+        System.out.println("  --Calibrating - "+name);
 
         //Enable encoder clearing so when the index sensor goes active the reset executes.
         steerMotor.configClearPositionOnQuadIdx(true, TIMEOUT);
 
         //Set current position to a known value and start the motor open-loop, but slow
-        steerMotor.setSelectedSensorPosition(getCurrentPos);
+        steerMotor.setSelectedSensorPosition(currentPos);
         steerMotor.set(ControlMode.PercentOutput, .1);
         
+        //
+        delay(40);
+
         //While the motor is running check to see when the encoder has been reset
         while (!clear) {
-            getNewPos = steerMotor.getSelectedSensorPosition();
-           
-            if (getNewPos < getCurrentPos){
+            if (newPos < currentPos){
                 steerMotor.set(ControlMode.PercentOutput, 0.);
                 clear = true;
             }
             else {
-                getCurrentPos = getNewPos;
+                currentPos = newPos;
             }
+
+            delay(40);
+            newPos = steerMotor.getSelectedSensorPosition();
         }
+    
+        //Give the motor extra time to stop
+        delay(60);
 
         //Disabled index clearing and get the encoder position which will always be positive after stopping the open loop run
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
@@ -140,14 +168,26 @@ public class SwerveModule {
         //Negative offset means rotate CCW so error is subtracted to rotate more
         //Positive offset means rotate CW so error is subtracted to ratote less
         offset -= error;
+        System.out.println("    -Index Dectection Error = "+(int) error);
 
-        //Set the position and clear the encoder position for the calibrated reference
+        //Set the position off the wheel for the calibrated index correcting for index dection error
         steerMotor.set(ControlMode.Position, offset);
+
+        //Delay for the time it will take the wheel to move to the set position, this assumes ~ 2 sec per wheel revolution
+        double positionDelay = offset / RobotMap.STEER_PPR * 2.;
+        delay((int) positionDelay);
+      
+        //Check for the error in driving to the position and reset the encoder to the new 0 reference
         error = (double) steerMotor.getSelectedSensorPosition();
+        error = Math.abs(error) - Math.abs(offset);
+
         steerMotor.setSelectedSensorPosition(0);
 
-        System.out.println(name+" Calibrated");
-        System.out.println(name+" Error = "+(int) error);
+        //Delay to make sure it had time to set the reference to 0 before the next command is called
+        delay(40);
+
+        System.out.println("    -Calibration Error = "+(int) error);
+        System.out.println("    -Calibration Completed");
     }
 
     //Talon configuration for the Steer Motor
@@ -188,16 +228,16 @@ public class SwerveModule {
         //them after indexing an extra 180 degrees so the pullies face inward on the chassis
         switch (name){
             case "FrontRightWheel":
-            driveMotor.setInverted(true);
+            driveMotor.setInverted(RobotMap.FRONT_RIGHT_DRIVE_TalonSRX_Invert);
             break;
             case "FrontLeftWheel":
-            driveMotor.setInverted(false);
+            driveMotor.setInverted(RobotMap.FRONT_LEFT_DRIVE_TalonSRX_Invert);
             break;
             case "RearLeftWheel":
-            driveMotor.setInverted(false);
+            driveMotor.setInverted(RobotMap.REAR_LEFT_DRIVE_TalonSRX_Invert);
             break;
             case "RearRightWheel":
-            driveMotor.setInverted(true);
+            driveMotor.setInverted(RobotMap.REAR_RIGHT_DRIVE_TalonSRX_Invert);
             break;
         }
 

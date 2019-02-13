@@ -94,6 +94,24 @@ public class SwerveMath {
   public SwerveMath(){
   }
 
+  public void reset(){
+    wp1Current = 0.;  
+    wp2Current = 0.;  
+    wp3Current = 0.;  
+    wp4Current = 0.;  
+
+    wp1IsReversed = false;  
+    wp2IsReversed = false;  
+    wp3IsReversed = false;  
+    wp4IsReversed = false;  
+
+    wp1Rotate = 0.;  
+    wp2Rotate = 0.;  
+    wp3Rotate = 0.;  
+    wp4Rotate = 0.;  
+    System.out.println("  --Swerve Math Reset");
+  }  
+
   // First Method of SwerveMath that returns the vector (speed, position) for each wheel as a list
   public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn, boolean centricIn, double gyroIn, boolean reverseEnIn, boolean snakeModeIn){
     fwd = fwdIn;
