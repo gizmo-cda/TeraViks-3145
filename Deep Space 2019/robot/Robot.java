@@ -26,8 +26,9 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
   public static Drivetrain m_drivetrain;
   public static Gyro m_gyro;
-  public static VisionTable m_vision;
+  public static Vision m_vision;
   public static OI m_oi;
+  public static boolean bootCycle;
 
   Command m_autonomousCommand;
   Command m_teleopCommand;
@@ -44,11 +45,13 @@ public class Robot extends TimedRobot {
     // NOTE: ORDER DEPENDENT
     m_drivetrain = new Drivetrain();
     m_gyro = new Gyro();
-    m_vision = new VisionTable();
+    m_vision = new Vision();
     m_oi = new OI(); //Always instantiate OI last
 
     m_drivetrain.init();
-    m_gyro.resetGyro();
+    m_gyro.reset();
+
+    bootCycle = true;
 
     // chooser.addOption("My Auto", new MyAutoCommand());
     // m_chooser.setDefaultOption("Default Swerve", new Drive());
@@ -74,6 +77,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    //Reset Drivetrain Modes and Swerve Math Variables to clear rotation tracking and reverse
+    Robot.m_drivetrain.reset();
   }
 
   @Override
@@ -127,9 +132,15 @@ public class Robot extends TimedRobot {
     m_autonomousCommand.cancel();
     }
 
-    // Adding calDriveTrain to scheduler
-    Scheduler.getInstance().add(new CalibrateDriveTrain());
+    // Adding calDriveTrain to scheduler if booting (ie not enable/disable in DS)
+    if (bootCycle){
+      Scheduler.getInstance().add(new CalibrateDriveTrain());
+      Scheduler.getInstance().run();
+      bootCycle = false;
+    }
+
     // m_teleopCommand = m_chooser.getSelected();
+    //Robot.m_drivetrain.calSteering();
   }
 
   /**
@@ -137,6 +148,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    //Add Drive to the command stack, it is always running from here on until DS Disable
     Scheduler.getInstance().add(new Drive());
     Scheduler.getInstance().run();
   }

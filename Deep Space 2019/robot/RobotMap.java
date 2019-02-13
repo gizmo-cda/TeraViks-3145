@@ -52,19 +52,38 @@ public class RobotMap {
   public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 4096.; // Used for closed loop position
   public static final double STEER_PPR = STEER_MOTOR_PULSES_PER_REVOLUTION * FINAL_STEER_WHEEL_GEAR_RATIO;
 
+  // Encoder Phase Checking Constants
+  public static final boolean CHECK_PHASE_DURING_STEERING_CALIBRATION = true;
+  
+  public static final boolean FRONT_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE = true;
+  public static final boolean FRONT_LEFT_DRIVE_TalonSRX_ENCODER_PHASE = true;
+  public static final boolean REAR_LEFT_DRIVE_TalonSRX_ENCODER_PHASE = true;
+  public static final boolean REAR_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE = true;
+
+  public static final boolean FRONT_RIGHT_STEER_TalonSRX_ENCODER_PHASE = false;
+  public static final boolean FRONT_LEFT_STEER_TalonSRX_ENCODER_PHASE = false;
+  public static final boolean REAR_LEFT_STEER_TalonSRX_ENCODER_PHASE = false;
+  public static final boolean REAR_RIGHT_STEER_TalonSRX_ENCODER_PHASE = false;
+
   // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
   public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .375; //Drive Motor needs to be inverted
   public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125;
   public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .375;
   public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125; //Drive Motor needs to be inverted
   
+  // Drive Motor Inversion, Flips the polarity of the motor in the Talon Controller
+  public static final boolean FRONT_RIGHT_DRIVE_TalonSRX_Invert = true;
+  public static final boolean FRONT_LEFT_DRIVE_TalonSRX_Invert = false;
+  public static final boolean REAR_LEFT_DRIVE_TalonSRX_Invert = false;
+  public static final boolean REAR_RIGHT_DRIVE_TalonSRX_Invert = true;
+
   // Deadband Joystick Constants
   public static final double X_AXIS_THREASHOLD = 0.1;
   public static final double Y_AXIS_THREASHOLD = 0.1;
   public static final double Z_AXIS_THREASHOLD = 0.1;
   
   // Pitch & Roll Constants
-  public static final double PITCH_THRESHOLD = 30.; //Pitch in degrees
+  public static final double PITCH_THRESHOLD = 20.; //Pitch in degrees
   
   // Vision System Constants
   public static final double CAMERA_MOUNTING_ANGLE = 35;  //Units are in degrees and referenced to X axis, with CCW being positive
