@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     //Reset Drivetrain Modes and Swerve Math Variables to clear rotation tracking and reverse
+    System.out.println("//////////////////// DISABLED Init /////////////////");
     Robot.m_drivetrain.reset();
     
   }
@@ -134,12 +135,14 @@ public class Robot extends TimedRobot {
       }
       
       // Adding calDriveTrain to scheduler if booting (ie not enable/disable in DS)
+      System.out.println("//////////////////// TeleopInit /////////////////");
       if (bootCycle && RobotMap.ENABLE_DRIVETRAIN_CALIBRATION){
         Scheduler.getInstance().add(new CalibrateDriveTrain());
         Scheduler.getInstance().run();
-        bootCycle = false;
       }
-      
+      bootCycle = false;
+
+      System.out.println("//////////////////// Teleop /////////////////");
       // m_teleopCommand = m_chooser.getSelected();
       //Robot.m_drivetrain.calSteering();
     }
