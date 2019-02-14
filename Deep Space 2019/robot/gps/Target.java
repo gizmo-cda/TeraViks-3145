@@ -100,7 +100,7 @@ public class Target {
 
     private String strafeToNormal(double fwd, double targetAngle) {
         double botAngle = Robot.m_gyro.getYawDeg();
-        double deltaAngle = botAngle - targetAngle; // TODO: check order here (sign checking)
+        double deltaAngle = botAngle - targetAngle; // Check: check order here (sign checking)
         tx = Robot.m_vision.getVisionValues().get("tx");
         tv = Robot.m_vision.getVisionValues().get("tv");
         String statMsg =""; 
@@ -123,7 +123,7 @@ public class Target {
 
     private String forwardToTarget(double fwd, double targetAngle) {
         double botAngle = Robot.m_gyro.getYawDeg();
-        double deltaAngle = botAngle - targetAngle;  // TODO: check order here (sign checking)
+        double deltaAngle = botAngle - targetAngle;  //Check: check order here (sign checking)
         double distToTarget = Math.tan(camAngle+ty)/(camHeight-targetHeight);
         String statMsg =""; 
 
