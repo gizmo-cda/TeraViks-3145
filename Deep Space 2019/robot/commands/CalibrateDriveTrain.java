@@ -12,7 +12,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class CalibrateDriveTrain extends Command {
-  boolean checkPhase = RobotMap.CHECK_PHASE_DURING_STEERING_CALIBRATION;
+  boolean checkPhase = RobotMap.CHECK_PHASE_DURING_DRIVETRAIN_CALIBRATION;
  
   public CalibrateDriveTrain() {
     requires(Robot.m_drivetrain);
