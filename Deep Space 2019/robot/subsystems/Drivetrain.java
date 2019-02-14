@@ -66,8 +66,10 @@ public class Drivetrain extends Subsystem {
   private boolean centric = false;
 
   private double yaw = 0.; //NavX Gyro Yaw angle
-  private double roll = 0.; //NavX Gyro Pitch angle
+  private double roll = 0.; //NavX Gyro Roll angle
+  private double pitch = 0.; //NavX Gyro Pitch angle
   private double maxRoll = RobotMap.PITCH_THRESHOLD;
+  private double maxPitch = RobotMap.ROLL_THRESHOLD;
 
   private boolean reverseEn = true;  //Enables reversing wheel drive motors
 
@@ -87,13 +89,14 @@ public class Drivetrain extends Subsystem {
 
   public void init(){
     m_SwerveDrive.initMotors();
+    System.out.println("**Initializing Drivetrain Motors");
   }
 
   public void reset(){
     turnOffCentric();
     setCrabMode();
     coast();
-    System.out.println("  --Drivetrain reset to CrabMode, Centric Off, and Coast");
+    System.out.println("**Drivetrain reset to CrabMode, Centric Off, and Coast");
     m_SwerveDrive.reset();
   }
 
@@ -127,19 +130,32 @@ public class Drivetrain extends Subsystem {
 
     // This is Yaw angle +/- 180 in degrees
     roll = Robot.m_gyro.getRollDeg();
+    pitch = Robot.m_gyro.getPitchDeg();
+    
+    // Detect too much roll angle and strafe into the roll or too much pitch and drive FWD/Reverse accordingly
+    if (roll > maxRoll || roll < -maxRoll) antiRoll(roll);
+    if (pitch > maxPitch || pitch < -maxPitch) antiFlip(pitch);
 
-    // Detect too much lean angle and strafe into the lean to right the bot
-    if (roll > maxRoll){
-      fwd = 0;
-      str = 1;
-      rcw = 0;
-    } else if (roll < -maxRoll){
-      fwd = 0;
-      str = -1;
-      rcw = 0;
-    }
-    //System.out.println("drive called");
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode);
+  }
+
+  private void antiRoll(double roll){
+    setCrabMode();
+
+    while (roll > 1. || roll < -1.){
+      if (roll > 1.) m_SwerveDrive.setMotors(0, 1., 0., centric, yaw, reverseEn, snakeMode);
+      if (roll < -1.) m_SwerveDrive.setMotors(0, -1., 0., centric, yaw, reverseEn, snakeMode);
+      roll = Robot.m_gyro.getRollDeg();
+    }
+  }
+
+  private void antiFlip(double pitch){
+
+    while (pitch > 1. || pitch < -1.){
+      if (pitch > 1.) m_SwerveDrive.setMotors(1., 0., 0., centric, yaw, reverseEn, snakeMode);
+      if (pitch < -1.) m_SwerveDrive.setMotors(-1., 0., 0., centric, yaw, reverseEn, snakeMode);
+      pitch = Robot.m_gyro.getPitchDeg();
+    }
   }
 
   public void coast(){
