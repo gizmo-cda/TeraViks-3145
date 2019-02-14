@@ -66,6 +66,7 @@ public class RobotMap {
   public static final boolean REAR_RIGHT_STEER_TalonSRX_ENCODER_PHASE = false;
 
   // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
+  public static final boolean ENABLE_DRIVETRAIN_CALIBRATION = true;
   public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .375; //Drive Motor needs to be inverted
   public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125;
   public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .375;

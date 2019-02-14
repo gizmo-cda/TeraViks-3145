@@ -6,12 +6,12 @@
 /*----------------------------------------------------------------------------*/
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
+* The VM is configured to automatically run this class, and to call the
+* functions corresponding to each mode, as described in the TimedRobot
+* documentation. If you change the name of this class or the package after
+* creating this project, you must also update the build.gradle file in the
+* project.
+*/
 
 package frc.robot;
 
@@ -29,15 +29,15 @@ public class Robot extends TimedRobot {
   public static Vision m_vision;
   public static OI m_oi;
   public static boolean bootCycle;
-
+  
   Command m_autonomousCommand;
   Command m_teleopCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-
+  
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
-   */
+  * This function is run when the robot is first started up and should be
+  * used for any initialization code.
+  */
   @Override
   public void robotInit() {
     // This method is run automatically upon deploying the code to the RoboRio
@@ -47,116 +47,118 @@ public class Robot extends TimedRobot {
     m_gyro = new Gyro();
     m_vision = new Vision();
     m_oi = new OI(); //Always instantiate OI last
-
+    
     m_drivetrain.init();
     m_gyro.reset();
-
+    
     bootCycle = true;
-
+    
     // chooser.addOption("My Auto", new MyAutoCommand());
     // m_chooser.setDefaultOption("Default Swerve", new Drive());
   }
-
+  
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
-   */
+  * This function is called every robot packet, no matter the mode. Use
+  * this for items like diagnostics that you want ran during disabled,
+  * autonomous, teleoperated and test.
+  *
+  * <p>This runs after the mode specific periodic functions, but before
+  * LiveWindow and SmartDashboard integrated updating.
+  */
   @Override
   public void robotPeriodic() {
   }
-
+  
   /**
-   * This function is called once each time the robot enters Disabled mode.
-   * You can use it to reset any subsystem information you want to clear when
-   * the robot is disabled.
-   */
-
+  * This function is called once each time the robot enters Disabled mode.
+  * You can use it to reset any subsystem information you want to clear when
+  * the robot is disabled.
+  */
+  
   @Override
   public void disabledInit() {
     //Reset Drivetrain Modes and Swerve Math Variables to clear rotation tracking and reverse
     Robot.m_drivetrain.reset();
+    
   }
-
+  
   @Override
   public void disabledPeriodic() {
     // Scheduler.getInstance().run();
   }
-
+  
   /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString code to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional commands to the
-   * chooser code above (like the commented example) or additional comparisons
-   * to the switch structure below with additional strings & commands.
-   */
+  * This autonomous (along with the chooser code above) shows how to select
+  * between different autonomous modes using the dashboard. The sendable
+  * chooser code works with the Java SmartDashboard. If you prefer the
+  * LabVIEW Dashboard, remove all of the chooser code and uncomment the
+  * getString code to get the auto name from the text box below the Gyro
+  *
+  * <p>You can add additional auto modes by adding additional commands to the
+  * chooser code above (like the commented example) or additional comparisons
+  * to the switch structure below with additional strings & commands.
+  */
   @Override
   public void autonomousInit() {
     // m_autonomousCommand = m_chooser.getSelected();
     
     /*
-     * String autoSelected = SmartDashboard.getString("Auto Selector",
-     * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-     * = new MyAutoCommand(); break; case "Default Auto": default:
-     * autonomousCommand = new ExampleCommand(); break; }
-     */
-
+    * String autoSelected = SmartDashboard.getString("Auto Selector",
+    * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
+    * = new MyAutoCommand(); break; case "Default Auto": default:
+    * autonomousCommand = new ExampleCommand(); break; }
+    */
+    
     // schedule the autonomous command (example)
     // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.start();
-    // }
-  }
-
-  /**
-   * This function is called periodically during autonomous.
-   */
-  @Override
-  public void autonomousPeriodic() {
-    // Scheduler.getInstance().run();
-  }
-
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-    m_autonomousCommand.cancel();
+      //   m_autonomousCommand.start();
+      // }
     }
-
-    // Adding calDriveTrain to scheduler if booting (ie not enable/disable in DS)
-    if (bootCycle){
-      Scheduler.getInstance().add(new CalibrateDriveTrain());
+    
+    /**
+    * This function is called periodically during autonomous.
+    */
+    @Override
+    public void autonomousPeriodic() {
+      // Scheduler.getInstance().run();
+    }
+    
+    @Override
+    public void teleopInit() {
+      // This makes sure that the autonomous stops running when
+      // teleop starts running. If you want the autonomous to
+      // continue until interrupted by another command, remove
+      // this line or comment it out.
+      if (m_autonomousCommand != null) {
+        m_autonomousCommand.cancel();
+      }
+      
+      // Adding calDriveTrain to scheduler if booting (ie not enable/disable in DS)
+      if (bootCycle && RobotMap.ENABLE_DRIVETRAIN_CALIBRATION){
+        Scheduler.getInstance().add(new CalibrateDriveTrain());
+        Scheduler.getInstance().run();
+        bootCycle = false;
+      }
+      
+      // m_teleopCommand = m_chooser.getSelected();
+      //Robot.m_drivetrain.calSteering();
+    }
+    
+    /**
+    * This function is called periodically during operator control.
+    */
+    @Override
+    public void teleopPeriodic() {
+      //Add Drive to the command stack, it is always running from here on until DS Disable
+      Scheduler.getInstance().add(new Drive());
       Scheduler.getInstance().run();
-      bootCycle = false;
     }
-
-    // m_teleopCommand = m_chooser.getSelected();
-    //Robot.m_drivetrain.calSteering();
+    
+    /**
+    * This function is called periodically during test mode.
+    */
+    @Override
+    public void testPeriodic() {
+    }
   }
-
-  /**
-   * This function is called periodically during operator control.
-   */
-  @Override
-  public void teleopPeriodic() {
-    //Add Drive to the command stack, it is always running from here on until DS Disable
-    Scheduler.getInstance().add(new Drive());
-    Scheduler.getInstance().run();
-  }
-
-  /**
-   * This function is called periodically during test mode.
-   */
-  @Override
-  public void testPeriodic() {
-  }
-}
+  
