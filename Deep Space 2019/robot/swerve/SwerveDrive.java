@@ -67,6 +67,10 @@ public class SwerveDrive {
     }
 
     public void reset(){
+        frontRight.resetSteerEncoder();
+        frontLeft.resetSteerEncoder();
+        rearLeft.resetSteerEncoder();
+        rearRight.resetSteerEncoder();
         m_swerveMath.reset();
     }
 
@@ -122,20 +126,20 @@ public class SwerveDrive {
     }
 
     private void detectDriveEncoderPhase(){
-        frontRight.setDriveSpeed(.2);
-        frontLeft.setDriveSpeed(.2);
-        rearLeft.setDriveSpeed(.2);
-        rearRight.setDriveSpeed(.2);
-        delay(400);
+        frontRight.setDriveSpeed(1.);
+        frontLeft.setDriveSpeed(1.);
+        rearLeft.setDriveSpeed(1.);
+        rearRight.setDriveSpeed(1.);
+        delay(500);
         boolean frPhase = frontRight.detectDriveMotorPhase();
         boolean flPhase = frontLeft.detectDriveMotorPhase();
         boolean rlPhase = rearLeft.detectDriveMotorPhase();
         boolean rrPhase = rearRight.detectDriveMotorPhase();
         delay(100);
-        frontRight.setDriveSpeed(-.2);
-        frontLeft.setDriveSpeed(-.2);
-        rearLeft.setDriveSpeed(-.2);
-        rearRight.setDriveSpeed(-.2);
+        frontRight.setDriveSpeed(-1.);
+        frontLeft.setDriveSpeed(-1.);
+        rearLeft.setDriveSpeed(-1.);
+        rearRight.setDriveSpeed(-1.);
         delay(500);
         frontRight.setDriveSpeed(0);
         frontLeft.setDriveSpeed(0);
