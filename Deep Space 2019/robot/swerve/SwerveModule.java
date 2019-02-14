@@ -17,7 +17,6 @@ import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class SwerveModule {
@@ -92,7 +91,6 @@ public class SwerveModule {
     public boolean detectDriveMotorPhase(){
         driveMotor.getFaults(driveFaults);
         return driveFaults.SensorOutOfPhase;
-        
     }
     
     public boolean detectSteerMotorPhase(){
@@ -103,16 +101,8 @@ public class SwerveModule {
     public void resetSteerEncoder(){
         steerMotor.setSelectedSensorPosition(0);
     }
-    private void delay(int msec){
-        try{
-            Thread.sleep(msec);
-        }
-        catch (Exception e){
-            System.out.println("Error in Waitloop");
-        }
-    }
-    
-    // Steering Motor Calibration Routine to find the Index Sensor and set the wheel straight forward
+
+    // Steering Motor Calibration Method to find the Index Sensor and set the wheel straight forward
     public void rotateSteerForCal(){
         //Init local variables
         boolean clear = false;
@@ -172,9 +162,11 @@ public class SwerveModule {
         
         //Negative offset means rotate CCW so error is subtracted to rotate more
         //Positive offset means rotate CW so error is subtracted to ratote less
-        offset -= error;
+        System.out.println("    -Offset                 = "+(int) offset);
         System.out.println("    -Index Dectection Error = "+(int) error);
-        
+        offset -= error;
+        System.out.println("    -Final Offset           = "+(int) offset);
+
         //Set the position off the wheel for the calibrated index correcting for index dection error
         steerMotor.set(ControlMode.Position, offset);
         
@@ -194,17 +186,42 @@ public class SwerveModule {
         System.out.println("    -Calibration Error = "+(int) error);
         System.out.println("    -Calibration Completed");
     }
+
+    private void delay(int msec){
+        try{
+            Thread.sleep(msec);
+        }
+        catch (Exception e){
+            System.out.println("Error in Waitloop");
+        }
+    }
     
     //Talon configuration for the Steer Motor
     public void initSteerMotor(){
         steerMotor.configFactoryDefault();
         
-        steerMotor.setInverted(false);
-        steerMotor.setNeutralMode(NeutralMode.Brake);
-        
         steerMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
         steerMotor.selectProfileSlot(0, 0); //slot #, PID #
-        
+  
+        //Set Encoder Phase
+        switch (name){
+            case "FrontRightWheel":
+            driveMotor.setSensorPhase(RobotMap.FRONT_RIGHT_STEER_TalonSRX_ENCODER_PHASE);
+            break;
+            case "FrontLeftWheel":
+            driveMotor.setSensorPhase(RobotMap.FRONT_LEFT_STEER_TalonSRX_ENCODER_PHASE);
+            break;
+            case "RearLeftWheel":
+            driveMotor.setSensorPhase(RobotMap.REAR_LEFT_STEER_TalonSRX_ENCODER_PHASE);
+            break;
+            case "RearRightWheel":
+            driveMotor.setSensorPhase(RobotMap.REAR_RIGHT_STEER_TalonSRX_ENCODER_PHASE);
+            break;
+        }
+
+        steerMotor.setInverted(false);
+        steerMotor.setNeutralMode(NeutralMode.Brake);
+
         steerMotor.setSensorPhase(false);
         steerMotor.setSelectedSensorPosition(0);
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
@@ -222,36 +239,40 @@ public class SwerveModule {
         steerMotor.config_kD(0, 1, TIMEOUT);
         steerMotor.config_kF(0, 0, TIMEOUT);
         
-        System.out.println("Steer Motor Initialized - "+name);
+        System.out.println("  --Steer Motor Initialized - "+name);
     }
     
     //Talon configuration for the Drive Motor
     public void initDriveMotor(){
         driveMotor.configFactoryDefault();
         
+        driveMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
+        driveMotor.selectProfileSlot(0, 0); //slot #, PID #
+
         //Invert the drive motors on one side because the calibration routine will rotate 
         //them after indexing an extra 180 degrees so the pullies face inward on the chassis
+        //Also set Encoder Phase
         switch (name){
             case "FrontRightWheel":
             driveMotor.setInverted(RobotMap.FRONT_RIGHT_DRIVE_TalonSRX_Invert);
+            driveMotor.setSensorPhase(RobotMap.FRONT_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE);
             break;
             case "FrontLeftWheel":
             driveMotor.setInverted(RobotMap.FRONT_LEFT_DRIVE_TalonSRX_Invert);
+            driveMotor.setSensorPhase(RobotMap.FRONT_LEFT_DRIVE_TalonSRX_ENCODER_PHASE);
             break;
             case "RearLeftWheel":
             driveMotor.setInverted(RobotMap.REAR_LEFT_DRIVE_TalonSRX_Invert);
+            driveMotor.setSensorPhase(RobotMap.REAR_LEFT_DRIVE_TalonSRX_ENCODER_PHASE);
             break;
             case "RearRightWheel":
             driveMotor.setInverted(RobotMap.REAR_RIGHT_DRIVE_TalonSRX_Invert);
+            driveMotor.setSensorPhase(RobotMap.REAR_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE);
             break;
         }
         
         driveMotor.setNeutralMode(NeutralMode.Coast);
         
-        driveMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
-        driveMotor.selectProfileSlot(0, 0); //slot #, PID #
-        
-        driveMotor.setSensorPhase(false);
         driveMotor.setSelectedSensorPosition(0);
         
         driveMotor.configPeakOutputForward(1, TIMEOUT);
@@ -267,6 +288,6 @@ public class SwerveModule {
         driveMotor.config_kD(0, 1, TIMEOUT);
         driveMotor.config_kF(0, 1.624, TIMEOUT);
         
-        System.out.println("Drive Motor Initialized - "+name);
+        System.out.println("  --Drive Motor Initialized - "+name);
     }
 }

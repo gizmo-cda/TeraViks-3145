@@ -68,97 +68,10 @@ public class SwerveDrive {
 
     public void reset(){
         frontRight.resetSteerEncoder();
-        frontLeft.resetSteerEncoder();
-        rearLeft.resetSteerEncoder();
-        rearRight.resetSteerEncoder();
+        // frontLeft.resetSteerEncoder();
+        // rearLeft.resetSteerEncoder();
+        // rearRight.resetSteerEncoder();
         m_swerveMath.reset();
-    }
-
-    //Check for encoders correctly phased.  Otherwise closed-loop controls for driving won't work.
-    //As such this all has to run open-loop and the motors have to be spinning to detect the encoder phase.
-    //Drive the bot forward, detect phase, 
-    private void detectSteerEncoderPhase(){
-        frontRight.setSteerSpeed(.1);
-        frontLeft.setSteerSpeed(.1);
-        rearLeft.setSteerSpeed(.1);
-        rearRight.setSteerSpeed(.1);
-        delay(400);
-        boolean frPhase = frontRight.detectSteerMotorPhase();
-        boolean flPhase = frontLeft.detectSteerMotorPhase();
-        boolean rlPhase = rearLeft.detectSteerMotorPhase();
-        boolean rrPhase = rearRight.detectSteerMotorPhase();
-        delay(100);
-        frontRight.setSteerSpeed(-.1);
-        frontLeft.setSteerSpeed(-.1);
-        rearLeft.setSteerSpeed(-.1);
-        rearRight.setSteerSpeed(-.1);
-        delay(500);
-        frontRight.setSteerSpeed(0);
-        frontLeft.setSteerSpeed(0);
-        rearLeft.setSteerSpeed(0);
-        rearRight.setSteerSpeed(0);
-        System.out.println("**Steer Motor Encoder Phase Checking"+
-                         "\n  --Front Right Steer Encoder Out-of-phase = "+frPhase+
-                         "\n  --Front Left  Steer Encoder Out-of-phase = "+flPhase+
-                         "\n  --Rear Left   Steer Encoder Out-of-phase = "+rlPhase+
-                         "\n  --Rear Right  Steer Encoder Out-of-phase = "+rrPhase);
-    }
-
-    public void calSteerMotors(boolean checkPhase){
-        if(checkPhase){
-            detectSteerEncoderPhase();
-
-            System.out.println("**Calibrating Steering");
-            frontRight.rotateSteerForCal();
-            // frontLeft.rotateSteerForCal();
-            // rearLeft.rotateSteerForCal();
-            // rearRight.rotateSteerForCal();
-            
-            detectDriveEncoderPhase();
-        }
-        else{
-            System.out.println("**Calibrating Steering");
-            frontRight.rotateSteerForCal();
-            // frontLeft.rotateSteerForCal();
-            // rearLeft.rotateSteerForCal();
-            // rearRight.rotateSteerForCal();
-        }
-    }
-
-    private void detectDriveEncoderPhase(){
-        frontRight.setDriveSpeed(1.);
-        frontLeft.setDriveSpeed(1.);
-        rearLeft.setDriveSpeed(1.);
-        rearRight.setDriveSpeed(1.);
-        delay(500);
-        boolean frPhase = frontRight.detectDriveMotorPhase();
-        boolean flPhase = frontLeft.detectDriveMotorPhase();
-        boolean rlPhase = rearLeft.detectDriveMotorPhase();
-        boolean rrPhase = rearRight.detectDriveMotorPhase();
-        delay(100);
-        frontRight.setDriveSpeed(-1.);
-        frontLeft.setDriveSpeed(-1.);
-        rearLeft.setDriveSpeed(-1.);
-        rearRight.setDriveSpeed(-1.);
-        delay(500);
-        frontRight.setDriveSpeed(0);
-        frontLeft.setDriveSpeed(0);
-        rearLeft.setDriveSpeed(0);
-        rearRight.setDriveSpeed(0);
-        System.out.println("**Drive Motor Encoder Phase Checking"+
-                         "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase+
-                         "\n  --Front Left  Drive Encoder Out-of-phase = "+flPhase+
-                         "\n  --Rear Left   Drive Encoder Out-of-phase = "+rlPhase+
-                         "\n  --Rear Right  Drive Encoder Out-of-phase = "+rrPhase);
-    }
-
-     private void delay(int msec){
-        try{
-            Thread.sleep(msec);
-        }
-        catch (Exception e){
-            System.out.println("Error in Waitloop");
-        }
     }
 
     public void setMotors  (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn, boolean snakeMode){
@@ -210,10 +123,103 @@ public class SwerveDrive {
         // rearRight.setVelocity(0.);
         setCoast();
     }
+
     public void emergencyStopMotors(){
         frontRight.stop();
         // frontLeft.stop();
         // rearLeft.stop();
         // rearRight.stop();
+    }
+
+    //Calls calibration method in SwerveDrive, enable CheckPhase boolean in RobotMap, if a mechanical module is swapped
+    public void calSteerMotors(boolean checkPhase){
+        if(checkPhase){
+            detectSteerEncoderPhase();
+
+            System.out.println("**Calibrating Steering");
+            frontRight.rotateSteerForCal();
+            // frontLeft.rotateSteerForCal();
+            // rearLeft.rotateSteerForCal();
+            // rearRight.rotateSteerForCal();
+            
+            detectDriveEncoderPhase();
+        }
+        else{
+            System.out.println("**Calibrating Steering");
+            frontRight.rotateSteerForCal();
+            // frontLeft.rotateSteerForCal();
+            // rearLeft.rotateSteerForCal();
+            // rearRight.rotateSteerForCal();
+        }
+    }
+
+    //Check for encoders correctly phased.  Otherwise closed-loop controls for driving won't work.
+    //As such this all has to run open-loop and the motors have to be spinning to detect the encoder phase.
+    //Drive the bot forward, detect phase, 
+    private void detectSteerEncoderPhase(){
+        frontRight.setSteerSpeed(.1);
+        // frontLeft.setSteerSpeed(.1);
+        // rearLeft.setSteerSpeed(.1);
+        // rearRight.setSteerSpeed(.1);
+        delay(400);
+        boolean frPhase = frontRight.detectSteerMotorPhase();
+        // boolean flPhase = frontLeft.detectSteerMotorPhase();
+        // boolean rlPhase = rearLeft.detectSteerMotorPhase();
+        // boolean rrPhase = rearRight.detectSteerMotorPhase();
+        delay(100);
+        frontRight.setSteerSpeed(-.1);
+        // frontLeft.setSteerSpeed(-.1);
+        // rearLeft.setSteerSpeed(-.1);
+        // rearRight.setSteerSpeed(-.1);
+        delay(500);
+        frontRight.setSteerSpeed(0);
+        // frontLeft.setSteerSpeed(0);
+        // rearLeft.setSteerSpeed(0);
+        // rearRight.setSteerSpeed(0);
+        // System.out.println("**Steer Motor Encoder Phase Checking"+
+        //                  "\n  --Front Right Steer Encoder Out-of-phase = "+frPhase+
+        //                  "\n  --Front Left  Steer Encoder Out-of-phase = "+flPhase+
+        //                  "\n  --Rear Left   Steer Encoder Out-of-phase = "+rlPhase+
+        //                  "\n  --Rear Right  Steer Encoder Out-of-phase = "+rrPhase);
+        System.out.println("**Steer Motor Encoder Phase Checking"+
+                         "\n  --Rear Right  Steer Encoder Out-of-phase = "+frPhase);
+    }
+
+    private void detectDriveEncoderPhase(){
+        frontRight.setDriveSpeed(1.);
+        // frontLeft.setDriveSpeed(1.);
+        // rearLeft.setDriveSpeed(1.);
+        // rearRight.setDriveSpeed(1.);
+        delay(400);
+        boolean frPhase = frontRight.detectDriveMotorPhase();
+        // boolean flPhase = frontLeft.detectDriveMotorPhase();
+        // boolean rlPhase = rearLeft.detectDriveMotorPhase();
+        // boolean rrPhase = rearRight.detectDriveMotorPhase();
+        delay(100);
+        frontRight.setDriveSpeed(-1.);
+        // frontLeft.setDriveSpeed(-1.);
+        // rearLeft.setDriveSpeed(-1.);
+        // rearRight.setDriveSpeed(-1.);
+        delay(500);
+        frontRight.setDriveSpeed(0);
+        // frontLeft.setDriveSpeed(0);
+        // rearLeft.setDriveSpeed(0);
+        // rearRight.setDriveSpeed(0);
+        // System.out.println("**Drive Motor Encoder Phase Checking"+
+        //                  "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase+
+        //                  "\n  --Front Left  Drive Encoder Out-of-phase = "+flPhase+
+        //                  "\n  --Rear Left   Drive Encoder Out-of-phase = "+rlPhase+
+        //                  "\n  --Rear Right  Drive Encoder Out-of-phase = "+rrPhase);
+        System.out.println("**Drive Motor Encoder Phase Checking"+
+                        "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase);
+    }
+
+    private void delay(int msec){
+        try{
+            Thread.sleep(msec);
+        }
+        catch (Exception e){
+            System.out.println("Error in Waitloop");
+        }
     }
 }
