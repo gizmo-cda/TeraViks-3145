@@ -41,9 +41,9 @@ public class RobotMap {
   public static final int TalonSRX_TIMEOUT = 1000; //units in msec
 
   // Talon Encoder Phase Checking Constants
-  public static final boolean CHECK_PHASE_DURING_DRIVETRAIN_CALIBRATION = true;
+  public static final boolean CHECK_PHASE_DURING_DRIVETRAIN_CALIBRATION = false;
 
-  public static final boolean FRONT_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE = false;
+  public static final boolean FRONT_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE = true;
   public static final boolean FRONT_LEFT_DRIVE_TalonSRX_ENCODER_PHASE = false;
   public static final boolean REAR_LEFT_DRIVE_TalonSRX_ENCODER_PHASE = false;
   public static final boolean REAR_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE = false;
