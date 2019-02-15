@@ -107,7 +107,7 @@ public class SwerveModule {
         //Init local variables
         boolean clear = false;
         int currentPos = 0;
-        int newPos = 409600;
+        int newPos = 0;
         
         System.out.println("  --Calibrating - "+name);
         
@@ -174,6 +174,10 @@ public class SwerveModule {
         double positionDelay = offset / RobotMap.STEER_PPR * 2000.;
         delay((int) positionDelay);
         
+        //Now disable the motor before resetting the encoder to the new calibrated reference
+        steerMotor.set(ControlMode.PercentOutput, 0.);
+        delay(40);
+
         //Check for the error in driving to the position and reset the encoder to the new 0 reference
         error = (double) steerMotor.getSelectedSensorPosition();
         error = Math.abs(error) - Math.abs(offset);
@@ -206,23 +210,22 @@ public class SwerveModule {
         //Set Encoder Phase
         switch (name){
             case "FrontRightWheel":
-            driveMotor.setSensorPhase(RobotMap.FRONT_RIGHT_STEER_TalonSRX_ENCODER_PHASE);
+            steerMotor.setSensorPhase(RobotMap.FRONT_RIGHT_STEER_TalonSRX_ENCODER_PHASE);
             break;
             case "FrontLeftWheel":
-            driveMotor.setSensorPhase(RobotMap.FRONT_LEFT_STEER_TalonSRX_ENCODER_PHASE);
+            steerMotor.setSensorPhase(RobotMap.FRONT_LEFT_STEER_TalonSRX_ENCODER_PHASE);
             break;
             case "RearLeftWheel":
-            driveMotor.setSensorPhase(RobotMap.REAR_LEFT_STEER_TalonSRX_ENCODER_PHASE);
+            steerMotor.setSensorPhase(RobotMap.REAR_LEFT_STEER_TalonSRX_ENCODER_PHASE);
             break;
             case "RearRightWheel":
-            driveMotor.setSensorPhase(RobotMap.REAR_RIGHT_STEER_TalonSRX_ENCODER_PHASE);
+            steerMotor.setSensorPhase(RobotMap.REAR_RIGHT_STEER_TalonSRX_ENCODER_PHASE);
             break;
         }
 
         steerMotor.setInverted(false);
         steerMotor.setNeutralMode(NeutralMode.Brake);
 
-        steerMotor.setSensorPhase(false);
         steerMotor.setSelectedSensorPosition(0);
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
         
