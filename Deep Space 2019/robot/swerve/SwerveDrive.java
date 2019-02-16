@@ -35,6 +35,8 @@ package frc.robot.swerve;
 
 import java.util.ArrayList;
 
+import frc.robot.RobotMap;
+
 public class SwerveDrive {
     private SwerveModule frontRight;
     private SwerveModule frontLeft;

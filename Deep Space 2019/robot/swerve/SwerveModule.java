@@ -131,7 +131,7 @@ public class SwerveModule {
                 currentPos = newPos;
             }
             
-            delay(40);
+            delay(20);
             newPos = steerMotor.getSelectedSensorPosition();
         }
         
@@ -140,7 +140,6 @@ public class SwerveModule {
         
         //Disabled index clearing and get the encoder position which will always be positive after stopping the open loop run
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-        double error = (double) steerMotor.getSelectedSensorPosition();
         
         //Find the index offset in pulses for the wheel being calibrated
         double offset = 0.;
@@ -160,12 +159,10 @@ public class SwerveModule {
             break;
         }
         
-        //Negative offset means rotate CCW so error is subtracted to rotate more
-        //Positive offset means rotate CW so error is subtracted to ratote less
-        System.out.println("    -Offset                 = "+(int) offset);
-        System.out.println("    -Index Dectection Error = "+(int) error);
-        offset -= error;
-        System.out.println("    -Final Offset           = "+(int) offset);
+        //Add small increment to offset to account for closed loop error
+        offset += RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL;
+
+        System.out.println("    -Offset            = "+(int) offset);
 
         //Set the position off the wheel for the calibrated index correcting for index dection error
         steerMotor.set(ControlMode.Position, offset);
@@ -179,7 +176,7 @@ public class SwerveModule {
         delay(40);
 
         //Check for the error in driving to the position and reset the encoder to the new 0 reference
-        error = (double) steerMotor.getSelectedSensorPosition();
+        double error = (double) steerMotor.getSelectedSensorPosition();
         error = Math.abs(error) - Math.abs(offset);
         
         steerMotor.setSelectedSensorPosition(0);
