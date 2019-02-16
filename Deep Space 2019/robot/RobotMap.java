@@ -65,15 +65,16 @@ public class RobotMap {
   // Encoder Constants
   public static final double DRIVE_WHEEL_PULSES_PER_100MS = 600.;       // Used for closed loop velocity
   public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 4096.; // Used for closed loop position
-  public static final double STEER_PPR = STEER_MOTOR_PULSES_PER_REVOLUTION * FINAL_STEER_WHEEL_GEAR_RATIO;
+  public static final double STEER_PPR = 226831.;
 
   // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
-  public static final boolean ENABLE_DRIVETRAIN_CALIBRATION = true;
+  public static final boolean ENABLE_DRIVETRAIN_CALIBRATION = false;
   public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .375; //Drive Motor needs to be inverted
   public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125;
   public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .375;
   public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125; //Drive Motor needs to be inverted
-  
+  public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL = 500.; //Small adjustment to cal for error in driving to final cal position & delay in index detection
+
   // Drive Motor Inversion, Flips the polarity of the motor in the Talon Controller
   public static final boolean FRONT_RIGHT_DRIVE_TalonSRX_Invert = true;
   public static final boolean FRONT_LEFT_DRIVE_TalonSRX_Invert = false;

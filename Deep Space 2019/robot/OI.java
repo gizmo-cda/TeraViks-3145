@@ -39,23 +39,28 @@ public class OI {
   private Joystick operatorJoy = new Joystick(1);
 
   //Instantiate the buttons 0-11
-  private Button obtnht = new JoystickButton(swerveJoy, 1); //X Button - Hatch Target
-  private Button obtn2 = new JoystickButton(swerveJoy, 2); //A Button
-  private Button obtnbt = new JoystickButton(swerveJoy, 3); //B Button - Ball Target
-  private Button obtn4 = new JoystickButton(swerveJoy, 4); //Y Button
-  private Button obtnhg = new JoystickButton(swerveJoy, 5); //LB Button - Hatch Grab
-  private Button obtnhr = new JoystickButton(swerveJoy, 6); //RB Button - Hatch Release
-  private Button obtnbi = new JoystickButton(swerveJoy, 7); //LT Button - Ball Intake
-  private Button obtnbr = new JoystickButton(swerveJoy, 8); //RT Button - Ball Shoot
-  private Button obtn9 = new JoystickButton(swerveJoy, 9); //Select Button
-  private Button obtn10 = new JoystickButton(swerveJoy, 10); //Start Button
-  private Button obtn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button
-  private Button obtn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button
+  private Button obtnht = new JoystickButton(operatorJoy, 1); //X Button - Hatch Target
+  private Button obtn2 = new JoystickButton(operatorJoy, 2); //A Button
+  private Button obtnbt = new JoystickButton(operatorJoy, 3); //B Button - Ball Target
+  private Button obtn4 = new JoystickButton(operatorJoy, 4); //Y Button
+  private Button obtnhg = new JoystickButton(operatorJoy, 5); //LB Button - Hatch Grab
+  private Button obtnhr = new JoystickButton(operatorJoy, 6); //RB Button - Hatch Release
+  private Button obtnbi = new JoystickButton(operatorJoy, 7); //LT Button - Ball Intake
+  private Button obtnbr = new JoystickButton(operatorJoy, 8); //RT Button - Ball Shoot
+  private Button obtn9 = new JoystickButton(operatorJoy, 9); //Select Button
+  private Button obtn10 = new JoystickButton(operatorJoy, 10); //Start Button
+  private Button obtn11 = new JoystickButton(operatorJoy, 11); //Left Stick Button
+  private Button obtn12 = new JoystickButton(operatorJoy, 12); //Right Stick Button
 
   public OI() {
     // Call FieldMode Commmand to toggle Field Centric on/off
     // btnrc.whenPressed(new RobotMode()); 
     btnfc.whenPressed(new FieldMode());
+    obtn2.whenPressed(new LiftBoomerang());
+    obtnbi.whenPressed(new BallIntake());
+    obtnbi.whenReleased(new BallStop());
+    obtnbr.whenPressed(new BallShoot());
+    obtnbr.whenReleased(new BallStop());
     // btnt.whenPressed(new CameraMode());
     // //Call CrabMode Command to enable Crab Mode, call SnakeMode to toggle snake mode
     // btncm.whenPressed(new CrabMode());
@@ -66,9 +71,9 @@ public class OI {
     // //Call HatchTargetMode or BallTargetMode to change targetting mode
     // obtnht.whenPressed(new HatchTargetMode());
     // obtnbt.whenPressed(new BallTargetMode());
-    // //Call HatchGrabMode or HatchReleaseMode to change hatch grabbing mode
-    // obtnhg.whenPressed(new HatchGrabMode());
-    // obtnhr.whenPressed(new HatchReleaseMode());
+    // // Call HatchGrab or HatchRelease to change hatch grabbing mode
+    // obtnhg.whenPressed(new HatchGrab());
+    // obtnhr.whenPressed(new HatchRelease());
     // //Call BallIntakeMode or BallShootMode to change grabber mode
     // obtnbi.whenPressed(new BallIntakeMode());
     // obtnbr.whenPressed(new BallShootMode());

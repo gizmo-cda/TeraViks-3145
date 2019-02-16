@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   public static Gyro m_gyro;
   public static Vision m_vision;
   public static OI m_oi;
+  public static Boomerang m_boomerang;
   public static boolean bootCycle;
   
   Command m_autonomousCommand;
@@ -46,6 +47,7 @@ public class Robot extends TimedRobot {
     m_drivetrain = new Drivetrain();
     m_gyro = new Gyro();
     m_vision = new Vision();
+    m_boomerang = new Boomerang();
     m_oi = new OI(); //Always instantiate OI last
     
     m_drivetrain.init();
@@ -78,9 +80,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     //Reset Drivetrain Modes and Swerve Math Variables to clear rotation tracking and reverse
-    System.out.println("//////////////////// DISABLED Init /////////////////");
-    Robot.m_drivetrain.reset();
-    
+    System.out.println("//////////////////// DISABLED Init /////////////////");    
   }
   
   @Override
@@ -140,11 +140,14 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().add(new CalibrateDriveTrain());
         Scheduler.getInstance().run();
       }
+      else{
+        Robot.m_drivetrain.reset(); //Move back to disabled init once cal is fixed?
+      }
       bootCycle = false;
 
       System.out.println("//////////////////// Teleop /////////////////");
       // m_teleopCommand = m_chooser.getSelected();
-      //Robot.m_drivetrain.calSteering();
+      Scheduler.getInstance().add(new Drive());
     }
     
     /**
@@ -153,7 +156,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
       //Add Drive to the command stack, it is always running from here on until DS Disable
-      Scheduler.getInstance().add(new Drive());
       Scheduler.getInstance().run();
     }
     
