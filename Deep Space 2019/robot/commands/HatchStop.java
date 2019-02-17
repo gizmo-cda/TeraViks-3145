@@ -10,8 +10,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BallStop extends Command {
-  public BallStop() {
+public class HatchStop extends Command {
+  public HatchStop() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.m_boomerang);
   }
@@ -24,7 +24,7 @@ public class BallStop extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_boomerang.stopBallMotors();
+    Robot.m_boomerang.stopHatchMotors();
   }
   
   // Make this return true when this Command no longer needs to run execute()
