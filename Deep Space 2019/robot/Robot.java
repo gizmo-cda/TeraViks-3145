@@ -50,8 +50,9 @@ public class Robot extends TimedRobot {
     m_boomerang = new Boomerang();
     m_oi = new OI(); //Always instantiate OI last
     
-    m_drivetrain.init();
-    m_gyro.reset();
+    //m_drivetrain.init();
+   // m_gyro.reset();
+      m_boomerang.init();
     
     bootCycle = true;
     
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotPeriodic() {
+    System.out.println("Lift Position = "+Robot.m_boomerang.getLiftPosition());
   }
   
   /**
@@ -141,14 +143,17 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
       }
       else{
-        Robot.m_drivetrain.reset(); //Move back to disabled init once cal is fixed?
+        //Robot.m_drivetrain.reset(); //Move back to disabled init once cal is fixed?
       }
       bootCycle = false;
 
       System.out.println("//////////////////// Teleop /////////////////");
       // m_teleopCommand = m_chooser.getSelected();
-      Scheduler.getInstance().add(new Drive());
-    }
+      //Scheduler.getInstance().add(new Drive());
+      Scheduler.getInstance().add(new BoomerangLift());
+     // Scheduler.getInstance().add(new LiftTest());
+
+      }
     
     /**
     * This function is called periodically during operator control.

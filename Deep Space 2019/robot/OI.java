@@ -39,9 +39,9 @@ public class OI {
   private Joystick operatorJoy = new Joystick(1);
 
   //Instantiate the buttons 0-11
-  private Button obtnht = new JoystickButton(operatorJoy, 1); //X Button - Hatch Target
-  private Button obtn2 = new JoystickButton(operatorJoy, 2); //A Button
-  private Button obtnbt = new JoystickButton(operatorJoy, 3); //B Button - Ball Target
+  private Button obtnht = new JoystickButton(operatorJoy, 3); //X Button - Hatch Target
+  private Button obtn2 = new JoystickButton(operatorJoy, 1); //A Button
+  private Button obtnbt = new JoystickButton(operatorJoy, 2); //B Button - Ball Target
   private Button obtn4 = new JoystickButton(operatorJoy, 4); //Y Button
   private Button obtnhg = new JoystickButton(operatorJoy, 5); //LB Button - Hatch Grab
   private Button obtnhr = new JoystickButton(operatorJoy, 6); //RB Button - Hatch Release
@@ -56,11 +56,11 @@ public class OI {
     // Call FieldMode Commmand to toggle Field Centric on/off
     // btnrc.whenPressed(new RobotMode()); 
     btnfc.whenPressed(new FieldMode());
-    obtn2.whenPressed(new LiftBoomerang());
-    obtnbi.whenPressed(new BallIntake());
-    obtnbi.whenReleased(new BallStop());
-    obtnbr.whenPressed(new BallShoot());
-    obtnbr.whenReleased(new BallStop());
+    // obtn2.whenPressed(new LiftBoomerang());
+    obtnht.whenPressed(new BallIntake());
+    obtnht.whenReleased(new BallStop());
+    obtn4.whenPressed(new BallShoot());
+    obtn4.whenReleased(new BallStop());
     // btnt.whenPressed(new CameraMode());
     // //Call CrabMode Command to enable Crab Mode, call SnakeMode to toggle snake mode
     // btncm.whenPressed(new CrabMode());
@@ -72,8 +72,10 @@ public class OI {
     // obtnht.whenPressed(new HatchTargetMode());
     // obtnbt.whenPressed(new BallTargetMode());
     // // Call HatchGrab or HatchRelease to change hatch grabbing mode
-    // obtnhg.whenPressed(new HatchGrab());
-    // obtnhr.whenPressed(new HatchRelease());
+    obtnhg.whenPressed(new HatchGrab());
+    obtnhg.whenReleased(new HatchStop());
+    obtnhr.whenPressed(new HatchRelease());
+    obtnhr.whenReleased(new HatchStop());
     // //Call BallIntakeMode or BallShootMode to change grabber mode
     // obtnbi.whenPressed(new BallIntakeMode());
     // obtnbr.whenPressed(new BallShootMode());
@@ -89,6 +91,14 @@ public class OI {
 
   public double getDriverZ(){
     return swerveJoy.getZ();
+  }
+  
+  public double getOperatorY(){
+    return operatorJoy.getY();
+  }
+
+  public int getOperatorDpad(){
+    return operatorJoy.getPOV();
   }
 
   //// CREATING BUTTONS
