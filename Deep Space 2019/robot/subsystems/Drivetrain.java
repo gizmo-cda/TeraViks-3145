@@ -71,7 +71,7 @@ public class Drivetrain extends Subsystem {
   private double maxRoll = RobotMap.PITCH_THRESHOLD;
   private double maxPitch = RobotMap.ROLL_THRESHOLD;
 
-  private boolean reverseEn = false;  //Enables reversing wheel drive motors
+  private boolean reverseEn = true;  //Enables reversing wheel drive motors
 
   private boolean snakeMode = false; //Crab = false, Snake = True
 

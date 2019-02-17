@@ -35,45 +35,80 @@ public class Boomerang extends Subsystem {
     initLiftMotor();
     initIntakeMotor();
     initShootMotor();
-    initRotateMotor();
+    // initRotateMotor();
     initLeftHatchMotor();
     initRightHatchMotor();
   }
-  public void liftLevelBall(int level){
-    liftMotor.set(ControlMode.Position, level);
+
+  public void setLiftLevel(double position){
+    liftMotor.set(ControlMode.Position, position);
   }
-  public void ballIntake(){
+
+  public void setLiftLevelMotionMagic(double position){
+    liftMotor.set(ControlMode.MotionMagic, position);
+  }
+
+  public void setLiftVelocity(double velocity){
+    liftMotor.set(ControlMode.Velocity, velocity);
+  }
+
+  //Used for testing
+  public void setLiftSpeed(double speed){
+    liftMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  //Used for testing
+  public int getLiftPosition(){
+    return liftMotor.getSelectedSensorPosition();
+  }
+
+  public void startBallIntake(){
     intakeMotor.set(ControlMode.PercentOutput, 0.5);
   }
-  public void ballEject() {
-    shootMotor.set(ControlMode.PercentOutput, 0.5);
+
+  public void startBallEject() {
+    shootMotor.set(ControlMode.PercentOutput, 0.75);
   }
-  public void ballStop(){
+
+  public void stopBallMotors(){
     shootMotor.set(ControlMode.PercentOutput, 0.);
     intakeMotor.set(ControlMode.PercentOutput, 0.);
   }
-  public void boomerangDeploy() {
-    rotateMotor.set(ControlMode.Position, 180.); // pos will be a constant
+
+  public void deployBboomerang() {
+    rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION);
   }
-  public void deployHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, .5);
-    rightHatchMotor.set(ControlMode.PercentOutput, .5);
+
+  public void retractBoomerang() {
+    rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_RETRACTED_POSITION);
   }
+
+  public void extendHatchMotors() {
+    leftHatchMotor.set(ControlMode.PercentOutput, 1.);
+    rightHatchMotor.set(ControlMode.PercentOutput, 1.);
+  }
+
   public void retractHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, -.5);
-    rightHatchMotor.set(ControlMode.PercentOutput, -.5);
+    leftHatchMotor.set(ControlMode.PercentOutput, -1.);
+    rightHatchMotor.set(ControlMode.PercentOutput, -1.);
   }
-  public void holdHatchMotors() {
+
+  public void holdExtendedHatchMotors() {
     leftHatchMotor.set(ControlMode.PercentOutput, .05);
     rightHatchMotor.set(ControlMode.PercentOutput, .05);
   }
+
+  public void holdRetractedHatchMotors() {
+    leftHatchMotor.set(ControlMode.PercentOutput, -.05);
+    rightHatchMotor.set(ControlMode.PercentOutput, -.05);
+  }
+
+  public void stopHatchMotors() {
+    leftHatchMotor.set(ControlMode.PercentOutput, 0.);
+    rightHatchMotor.set(ControlMode.PercentOutput, 0.);
+  }
   
-  // // levels 1 - 6
-  // // intake
-  // // shoot
-  
-  
-  public void initLiftMotor(){
+  private void initLiftMotor(){
     liftMotor.configFactoryDefault();
     
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
@@ -82,9 +117,12 @@ public class Boomerang extends Subsystem {
     liftMotor.setInverted(false);
     liftMotor.setNeutralMode(NeutralMode.Brake);
     
-    liftMotor.setSensorPhase(false);
+    liftMotor.setSensorPhase(true);
     liftMotor.setSelectedSensorPosition(0);
     liftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
+
+    liftMotor.configMotionAcceleration(65000, TIMEOUT);
+    liftMotor.configMotionCruiseVelocity(65000, TIMEOUT);
     
     liftMotor.configPeakOutputForward(.5, TIMEOUT);
     liftMotor.configPeakOutputReverse(-.5, TIMEOUT);
@@ -102,65 +140,37 @@ public class Boomerang extends Subsystem {
     System.out.println("  --Boomerang Lift Motor Initialized");
   }
   
-  public void initIntakeMotor(){
+  private void initIntakeMotor(){
     intakeMotor.configFactoryDefault();
     
-    // intakeMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
-    // intakeMotor.selectProfileSlot(0, 0); //slot #, PID #
-    
-    intakeMotor.setInverted(false);
+    intakeMotor.setInverted(true);
     intakeMotor.setNeutralMode(NeutralMode.Brake);
     
-    // intakeMotor.setSensorPhase(false);
-    // intakeMotor.setSelectedSensorPosition(0);
-    // intakeMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-    
-    intakeMotor.configPeakOutputForward(.3, TIMEOUT);
-    intakeMotor.configPeakOutputReverse(-.3, TIMEOUT);
+    intakeMotor.configPeakOutputForward(1., TIMEOUT);
+    intakeMotor.configPeakOutputReverse(-1., TIMEOUT);
     
     intakeMotor.configNominalOutputForward(0, TIMEOUT);
     intakeMotor.configNominalOutputReverse(0, TIMEOUT);
     
-    //intakeMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
-    
-    // intakeMotor.config_kP(0, .15, TIMEOUT);
-    // intakeMotor.config_kI(0, 0, TIMEOUT);
-    // intakeMotor.config_kD(0, 1, TIMEOUT);
-    // intakeMotor.config_kF(0, 0, TIMEOUT);
-    
     System.out.println("  --Boomerang Intake Motor Initialized");
   }
   
-  public void initShootMotor(){
+  private void initShootMotor(){
     shootMotor.configFactoryDefault();
-    
-    // shootMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
-    // shootMotor.selectProfileSlot(0, 0); //slot #, PID #
-    
+ 
     shootMotor.setInverted(false);
     shootMotor.setNeutralMode(NeutralMode.Brake);
     
-    // shootMotor.setSensorPhase(false);
-    // shootMotor.setSelectedSensorPosition(0);
-    // shootMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-    
-    shootMotor.configPeakOutputForward(.3, TIMEOUT);
-    shootMotor.configPeakOutputReverse(-.3, TIMEOUT);
+    shootMotor.configPeakOutputForward(1., TIMEOUT);
+    shootMotor.configPeakOutputReverse(-1., TIMEOUT);
     
     shootMotor.configNominalOutputForward(0, TIMEOUT);
     shootMotor.configNominalOutputReverse(0, TIMEOUT);
     
-    // shootMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
-    
-    // shootMotor.config_kP(0, .15, TIMEOUT);
-    // shootMotor.config_kI(0, 0, TIMEOUT);
-    // shootMotor.config_kD(0, 1, TIMEOUT);
-    // shootMotor.config_kF(0, 0, TIMEOUT);
-    
     System.out.println("  --Boomerang Shoot Motor Initialized");
   }
   
-  public void initRotateMotor(){
+  private void initRotateMotor(){
     rotateMotor.configFactoryDefault();
     
     rotateMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
@@ -173,8 +183,11 @@ public class Boomerang extends Subsystem {
     rotateMotor.setSelectedSensorPosition(0);
     rotateMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
     
-    rotateMotor.configPeakOutputForward(.3, TIMEOUT);
-    rotateMotor.configPeakOutputReverse(-.3, TIMEOUT);
+    rotateMotor.configMotionAcceleration(30000, TIMEOUT);
+    rotateMotor.configMotionCruiseVelocity(30000, TIMEOUT);
+
+    rotateMotor.configPeakOutputForward(1., TIMEOUT);
+    rotateMotor.configPeakOutputReverse(-1., TIMEOUT);
     
     rotateMotor.configNominalOutputForward(0, TIMEOUT);
     rotateMotor.configNominalOutputReverse(0, TIMEOUT);
@@ -189,60 +202,32 @@ public class Boomerang extends Subsystem {
     System.out.println("  --Boomerang Rotate Motor Initialized");
   }
   
-  public void initLeftHatchMotor(){
+  private void initLeftHatchMotor(){
     leftHatchMotor.configFactoryDefault();
-    
-    // leftHatchMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
-    // leftHatchMotor.selectProfileSlot(0, 0); //slot #, PID #
     
     leftHatchMotor.setInverted(false);
     leftHatchMotor.setNeutralMode(NeutralMode.Brake);
     
-    // leftHatchMotor.setSensorPhase(false);
-    // leftHatchMotor.setSelectedSensorPosition(0);
-    // leftHatchMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-    
-    leftHatchMotor.configPeakOutputForward(.5, TIMEOUT);
-    leftHatchMotor.configPeakOutputReverse(-.5, TIMEOUT);
+    leftHatchMotor.configPeakOutputForward(1., TIMEOUT);
+    leftHatchMotor.configPeakOutputReverse(-1., TIMEOUT);
     
     leftHatchMotor.configNominalOutputForward(0, TIMEOUT);
     leftHatchMotor.configNominalOutputReverse(0, TIMEOUT);
     
-    // leftHatchMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
-    
-    // leftHatchMotor.config_kP(0, .15, TIMEOUT);
-    // leftHatchMotor.config_kI(0, 0, TIMEOUT);
-    // leftHatchMotor.config_kD(0, 1, TIMEOUT);
-    // leftHatchMotor.config_kF(0, 0, TIMEOUT);
-    
     System.out.println("  --Boomerang Left Hatch Motor Initialized");
   }
   
-  public void initRightHatchMotor(){
+  private void initRightHatchMotor(){
     rightHatchMotor.configFactoryDefault();
-    
-    // rightHatchMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
-    // rightHatchMotor.selectProfileSlot(0, 0); //slot #, PID #
-    
-    rightHatchMotor.setInverted(true);
+  
+    rightHatchMotor.setInverted(false);
     rightHatchMotor.setNeutralMode(NeutralMode.Brake);
     
-    // rightHatchMotor.setSensorPhase(false);
-    // rightHatchMotor.setSelectedSensorPosition(0);
-    // rightHatchMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-    
-    rightHatchMotor.configPeakOutputForward(.5, TIMEOUT);
-    rightHatchMotor.configPeakOutputReverse(-.5, TIMEOUT);
+    rightHatchMotor.configPeakOutputForward(1., TIMEOUT);
+    rightHatchMotor.configPeakOutputReverse(-1., TIMEOUT);
     
     rightHatchMotor.configNominalOutputForward(0, TIMEOUT);
     rightHatchMotor.configNominalOutputReverse(0, TIMEOUT);
-    
-    // rightHatchMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
-    
-    // rightHatchMotor.config_kP(0, .15, TIMEOUT);
-    // rightHatchMotor.config_kI(0, 0, TIMEOUT);
-    // rightHatchMotor.config_kD(0, 1, TIMEOUT);
-    // rightHatchMotor.config_kF(0, 0, TIMEOUT);
     
     System.out.println("  --Boomerang Right Hatch Motor Initialized");
   }
