@@ -47,6 +47,9 @@ public class BoomerangLift extends Command {
     switch (dpad) {
       case -1:
       break;
+      case 0:
+      position += 5000.; //Remove after positions are adjusted
+      System.out.println("-----Current Boomerang Lift Position ="+Robot.m_boomerang.getLiftPosition());
       case 90:
       position = RobotMap.HIGH_TARGET_LIFT_LEVEL;
       break;

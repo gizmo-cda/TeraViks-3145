@@ -10,23 +10,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class TargetingMode extends Command {
-  public TargetingMode() {
-    requires(Robot.m_vision);
+public class FieldCentric extends Command {
+  public FieldCentric() {
+    requires(Robot.m_drivetrain);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    int camMode = Robot.m_vision.getCamMode();
-    if (camMode == 1) Robot.m_vision.setCamMode(0);
-    System.out.println("**Camera Mode: "+camMode);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_vision.acquireTarget();
+    Robot.m_drivetrain.turnOnCentric();
   }
 
   // Make this return true when this Command no longer needs to run execute()
