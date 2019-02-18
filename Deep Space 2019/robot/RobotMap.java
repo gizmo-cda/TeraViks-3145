@@ -108,6 +108,9 @@ public class RobotMap {
   public static final double LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 1.;
   public static final double LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 1.;
 
+  // Collision Detection for NavX
+  public static final double COLLISION_THRESHOLD_Y = .5; // in Gs
+
 
   public static void init(){
   }
