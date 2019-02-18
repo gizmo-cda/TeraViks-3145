@@ -84,13 +84,13 @@ public class Boomerang extends Subsystem {
   }
 
   public void extendHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, .3);
-    rightHatchMotor.set(ControlMode.PercentOutput, .3);
+    leftHatchMotor.set(ControlMode.PercentOutput, 1.);
+    rightHatchMotor.set(ControlMode.PercentOutput, 1.);
   }
 
   public void retractHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, -.3);
-    rightHatchMotor.set(ControlMode.PercentOutput, -.3);
+    leftHatchMotor.set(ControlMode.PercentOutput, -1.);
+    rightHatchMotor.set(ControlMode.PercentOutput, -1.);
   }
 
   public void holdExtendedHatchMotors() {
@@ -99,8 +99,8 @@ public class Boomerang extends Subsystem {
   }
 
   public void holdRetractedHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, -.05);
-    rightHatchMotor.set(ControlMode.PercentOutput, -.05);
+    leftHatchMotor.set(ControlMode.PercentOutput, -.3);
+    rightHatchMotor.set(ControlMode.PercentOutput, -.3);
   }
 
   public void stopHatchMotors() {
@@ -124,8 +124,8 @@ public class Boomerang extends Subsystem {
     liftMotor.configMotionAcceleration(65000, TIMEOUT);
     liftMotor.configMotionCruiseVelocity(65000, TIMEOUT);
     
-    liftMotor.configPeakOutputForward(.5, TIMEOUT);
-    liftMotor.configPeakOutputReverse(-.5, TIMEOUT);
+    liftMotor.configPeakOutputForward(1., TIMEOUT);
+    liftMotor.configPeakOutputReverse(-1., TIMEOUT);
     
     liftMotor.configNominalOutputForward(0, TIMEOUT);
     liftMotor.configNominalOutputReverse(0, TIMEOUT);
