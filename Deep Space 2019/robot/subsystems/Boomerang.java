@@ -84,13 +84,13 @@ public class Boomerang extends Subsystem {
   }
 
   public void extendHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, 1.);
-    rightHatchMotor.set(ControlMode.PercentOutput, 1.);
+    leftHatchMotor.set(ControlMode.PercentOutput, .3);
+    rightHatchMotor.set(ControlMode.PercentOutput, .3);
   }
 
   public void retractHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, -1.);
-    rightHatchMotor.set(ControlMode.PercentOutput, -1.);
+    leftHatchMotor.set(ControlMode.PercentOutput, -.3);
+    rightHatchMotor.set(ControlMode.PercentOutput, -.3);
   }
 
   public void holdExtendedHatchMotors() {
