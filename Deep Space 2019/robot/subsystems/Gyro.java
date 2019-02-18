@@ -47,6 +47,14 @@ public class Gyro extends Subsystem {
         return ahrs.getRoll();
     }
 
+    public double getAccelX(){
+        return (double)ahrs.getWorldLinearAccelX();
+    }
+
+    public double getAccelY(){
+        return (double)ahrs.getWorldLinearAccelY();
+    }
+
     @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
