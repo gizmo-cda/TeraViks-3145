@@ -35,7 +35,7 @@ public class Boomerang extends Subsystem {
     initLiftMotor();
     initIntakeMotor();
     initShootMotor();
-    // initRotateMotor();
+    initRotateMotor();
     initLeftHatchMotor();
     initRightHatchMotor();
   }
