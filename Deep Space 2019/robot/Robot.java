@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotPeriodic() {
-    System.out.println("Lift Position = "+Robot.m_boomerang.getLiftPosition());
+    //System.out.println("Lift Position = "+Robot.m_boomerang.getLiftPosition());
   }
   
   /**
