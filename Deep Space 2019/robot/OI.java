@@ -73,10 +73,10 @@ public class OI {
     // obtnbt.whenPressed(new BallTargetMode());
     // // Call HatchGrab or HatchRelease to change hatch grabbing mode
     obtnhg.whenPressed(new HatchGrab());
-    obtnhg.whenReleased(new HatchStop());
+    obtnhg.whenReleased(new HatchGrabHold());
     obtnhr.whenPressed(new HatchRelease());
-    obtnhr.whenReleased(new HatchStop());
-    // //Call BallIntakeMode or BallShootMode to change grabber mode
+    obtnhr.whenReleased(new HatchReleaseHold());
+    // Call BallIntakeMode or BallShootMode to change grabber mode
     // obtnbi.whenPressed(new BallIntakeMode());
     // obtnbr.whenPressed(new BallShootMode());
   }
