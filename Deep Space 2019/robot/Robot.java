@@ -27,8 +27,10 @@ public class Robot extends TimedRobot {
   public static Drivetrain m_drivetrain;
   public static Gyro m_gyro;
   public static Vision m_vision;
-  public static OI m_oi;
+  public static RearLift m_rearLift;
   public static Boomerang m_boomerang;
+  public static OI m_oi;
+  
   public static boolean bootCycle;
   
   Command m_autonomousCommand;
