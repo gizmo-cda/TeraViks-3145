@@ -75,7 +75,7 @@ public class Boomerang extends Subsystem {
     intakeMotor.set(ControlMode.PercentOutput, 0.);
   }
 
-  public void deployBboomerang() {
+  public void deployBoomerang() {
     rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION);
   }
 
