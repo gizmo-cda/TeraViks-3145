@@ -104,13 +104,13 @@ public class Drivetrain extends Subsystem {
     m_SwerveDrive.calSteerMotors(checkPhase);
   }
 
-  public void toggleCentric(){
-    centric = !centric; 
+  public void turnOnCentric(){
+    centric = true;
     System.out.println("**Centric set to: "+centric);
   }
-
   public void turnOffCentric(){
     centric = false;
+    System.out.println("**Centric set to: "+centric);
   }
   public boolean getCentric(){
     return centric;
@@ -118,10 +118,12 @@ public class Drivetrain extends Subsystem {
 
   public void setSnakeMode(){
     snakeMode = true;
+    System.out.println("**Drivetrain Set To Snake Mode");
   }
 
   public void setCrabMode(){
     snakeMode = false;
+    System.out.println("**Drivetrain Set To Crab Mode");
   }
 
   public void move(double fwd, double str, double rcw){
