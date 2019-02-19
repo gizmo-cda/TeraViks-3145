@@ -24,50 +24,50 @@
 *                 width           
 *
 ***********************
- * This class pulls together four swerve modules into one object so the 
- * Drivetrain subsystem can make simple calls to set speed, and position.
- * This class aggregates the four modules and their motors.  This class
- * also uses the swerve math object to call the vectors method and get the
- * new speed and position settings.
- */
+* This class pulls together four swerve modules into one object so the 
+* Drivetrain subsystem can make simple calls to set speed, and position.
+* This class aggregates the four modules and their motors.  This class
+* also uses the swerve math object to call the vectors method and get the
+* new speed and position settings.
+*/
 
 package frc.robot.swerve;
 
 import java.util.ArrayList;
-
-import frc.robot.RobotMap;
+import java.util.Arrays;
 
 public class SwerveDrive {
     private SwerveModule frontRight;
     private SwerveModule frontLeft;
     private SwerveModule rearLeft;
     private SwerveModule rearRight;
-
+    
     private SwerveMath m_swerveMath;
-
+    
     private ArrayList<Double> swerveVectors = new ArrayList<Double>(8);
-
+    private ArrayList<Double> driveDistanceVectors = new ArrayList<Double>(Arrays.asList(0.,0.,0.,0.));
+    
     public SwerveDrive(SwerveModule frontRightWheel, SwerveModule frontLeftWheel, SwerveModule rearLeftWheel, SwerveModule rearRightWheel){
         frontRight = frontRightWheel;
         frontLeft = frontLeftWheel;
         rearLeft = rearLeftWheel;
         rearRight = rearRightWheel;
-
+        
         m_swerveMath = new SwerveMath();
     }
-
+    
     public void initMotors(){
         frontRight.initSteerMotor();
         frontLeft.initSteerMotor();
         rearLeft.initSteerMotor();
         rearRight.initSteerMotor();
-
+        
         frontRight.initDriveMotor();
         frontLeft.initDriveMotor();
         rearLeft.initDriveMotor();
         rearRight.initDriveMotor();
     }
-
+    
     public void reset(){
         frontRight.resetSteerEncoder();
         frontLeft.resetSteerEncoder();
@@ -76,47 +76,72 @@ public class SwerveDrive {
         m_swerveMath.reset();
     }
 
+    private ArrayList<Double> getDriveMotorPositions() {
+        driveDistanceVectors.set(0, (double)frontRight.getDrivePosition());
+        driveDistanceVectors.set(1, (double)frontLeft.getDrivePosition());
+        driveDistanceVectors.set(2, (double)rearLeft.getDrivePosition());
+        driveDistanceVectors.set(3, (double)rearRight.getDrivePosition());
+        return driveDistanceVectors;
+    }
+    
+    public void setMotorsForDistance (double fwd, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, double distance){
+        driveDistanceVectors = getDriveMotorPositions();
+
+        swerveVectors = m_swerveMath.getVectors(fwd, 0., 0., centric, gyro, reverseEn, snakeMode);
+        
+        frontRight.setWheelPosition(driveDistanceVectors.get(0)+distance);
+        frontLeft.setWheelPosition(driveDistanceVectors.get(1)+distance);
+        rearLeft.setWheelPosition(driveDistanceVectors.get(2)+distance);
+        rearRight.setWheelPosition(driveDistanceVectors.get(3)+distance);
+        
+        frontRight.setSteerPosition(swerveVectors.get(1));
+        frontLeft.setSteerPosition(swerveVectors.get(3));
+        rearLeft.setSteerPosition(swerveVectors.get(5));
+        rearRight.setSteerPosition(swerveVectors.get(7));
+    
+    }
+    
     public void setMotors  (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn, boolean snakeMode){
-
+        
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro, reverseEn, snakeMode);
-
+        
         // double temp = frontRight.getVelocity();
         // double temp2 = swerveVectors.get(0);
-
+        
         frontRight.setVelocity(swerveVectors.get(0));
         frontLeft.setVelocity(swerveVectors.get(2));
         rearLeft.setVelocity(swerveVectors.get(4));
         rearRight.setVelocity(swerveVectors.get(6));
-
+        
         // System.out.println("Current Velocity: "+temp);
         // System.out.println("Set Velocity: "+temp2);
-
+        
         // double temp = frontRight.getPosition();
         // double temp2 = swerveVectors.get(1);
         
-        frontRight.setPosition(swerveVectors.get(1));
-        frontLeft.setPosition(swerveVectors.get(3));
-        rearLeft.setPosition(swerveVectors.get(5));
-        rearRight.setPosition(swerveVectors.get(7));
-
+        frontRight.setSteerPosition(swerveVectors.get(1));
+        frontLeft.setSteerPosition(swerveVectors.get(3));
+        rearLeft.setSteerPosition(swerveVectors.get(5));
+        rearRight.setSteerPosition(swerveVectors.get(7));
+        
         // System.out.println("Current Position: "+temp);
         // System.out.println("Set position: "+temp2);
     }
-
+    
     public void setCoast(){
         frontRight.setCoast();
         frontLeft.setCoast();
         rearLeft.setCoast();
         rearRight.setCoast();
     }
-
+    
     public void setBrake(){
         frontRight.setBrake();
         frontLeft.setBrake();
         rearLeft.setBrake();
         rearRight.setBrake();
     }
-
+    
     public void stopDriveMotors(){
         setBrake();
         frontRight.setVelocity(0.);
@@ -125,19 +150,19 @@ public class SwerveDrive {
         rearRight.setVelocity(0.);
         setCoast();
     }
-
+    
     public void emergencyStopMotors(){
         frontRight.stop();
         frontLeft.stop();
         rearLeft.stop();
         rearRight.stop();
     }
-
+    
     //Calls calibration method in SwerveDrive, enable CheckPhase boolean in RobotMap, if a mechanical module is swapped
     public void calSteerMotors(boolean checkPhase){
         if(checkPhase){
             detectSteerEncoderPhase();
-
+            
             System.out.println("**Calibrating Steering");
             frontRight.rotateSteerForCal();
             frontLeft.rotateSteerForCal();
@@ -154,7 +179,7 @@ public class SwerveDrive {
             rearRight.rotateSteerForCal();
         }
     }
-
+    
     //Check for encoders correctly phased.  Otherwise closed-loop controls for driving won't work.
     //As such this all has to run open-loop and the motors have to be spinning to detect the encoder phase.
     //Drive the bot forward, detect phase, 
@@ -179,14 +204,14 @@ public class SwerveDrive {
         rearLeft.setSteerSpeed(0);
         rearRight.setSteerSpeed(0);
         System.out.println("**Steer Motor Encoder Phase Checking"+
-                         "\n  --Front Right Steer Encoder Out-of-phase = "+frPhase+
-                         "\n  --Front Left  Steer Encoder Out-of-phase = "+flPhase+
-                         "\n  --Rear Left   Steer Encoder Out-of-phase = "+rlPhase+
-                         "\n  --Rear Right  Steer Encoder Out-of-phase = "+rrPhase);
+        "\n  --Front Right Steer Encoder Out-of-phase = "+frPhase+
+        "\n  --Front Left  Steer Encoder Out-of-phase = "+flPhase+
+        "\n  --Rear Left   Steer Encoder Out-of-phase = "+rlPhase+
+        "\n  --Rear Right  Steer Encoder Out-of-phase = "+rrPhase);
         // System.out.println("**Steer Motor Encoder Phase Checking"+
         //                  "\n  --Rear Right  Steer Encoder Out-of-phase = "+frPhase);
     }
-
+    
     private void detectDriveEncoderPhase(){
         frontRight.setDriveSpeed(1.);
         frontLeft.setDriveSpeed(1.);
@@ -208,14 +233,14 @@ public class SwerveDrive {
         rearLeft.setDriveSpeed(0);
         rearRight.setDriveSpeed(0);
         System.out.println("**Drive Motor Encoder Phase Checking"+
-                         "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase+
-                         "\n  --Front Left  Drive Encoder Out-of-phase = "+flPhase+
-                         "\n  --Rear Left   Drive Encoder Out-of-phase = "+rlPhase+
-                         "\n  --Rear Right  Drive Encoder Out-of-phase = "+rrPhase);
+        "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase+
+        "\n  --Front Left  Drive Encoder Out-of-phase = "+flPhase+
+        "\n  --Rear Left   Drive Encoder Out-of-phase = "+rlPhase+
+        "\n  --Rear Right  Drive Encoder Out-of-phase = "+rrPhase);
         // System.out.println("**Drive Motor Encoder Phase Checking"+
         //                 "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase);
     }
-
+    
     private void delay(int msec){
         try{
             Thread.sleep(msec);

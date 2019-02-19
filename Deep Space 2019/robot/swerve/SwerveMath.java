@@ -169,6 +169,10 @@ public class SwerveMath {
     ws2 *= pp100msec;
     ws3 *= pp100msec;
     ws4 *= pp100msec;
+    ws1 *= RobotMap.SPEED_SCALE; 
+    ws2 *= RobotMap.SPEED_SCALE;
+    ws3 *= RobotMap.SPEED_SCALE;
+    ws4 *= RobotMap.SPEED_SCALE;
 
     // Calculate the wheel angle for each wheel in radians: +/-pi referenced to Y axis 
     // Then convert to wheel position, with toPos, to absolute pulses for encoder over +/-pi range
