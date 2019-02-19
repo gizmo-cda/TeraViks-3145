@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   
   public static boolean bootCycle;
+  public static boolean enableBoomDeploy = false;
   
   Command m_autonomousCommand;
   Command m_teleopCommand;
@@ -52,9 +53,9 @@ public class Robot extends TimedRobot {
     m_boomerang = new Boomerang();
     m_oi = new OI(); //Always instantiate OI last
     
-    //m_drivetrain.init();
-   // m_gyro.reset();
-      m_boomerang.init();
+    m_gyro.reset();
+    m_drivetrain.init();
+    m_boomerang.init();
     
     bootCycle = true;
     
@@ -147,11 +148,14 @@ public class Robot extends TimedRobot {
       else{
         //Robot.m_drivetrain.reset(); //Move back to disabled init once cal is fixed?
       }
+      // Scheduler.getInstance().add(new BoomerangReset());
+      Scheduler.getInstance().add(new HatchGrabHold());
+      Scheduler.getInstance().run();
       bootCycle = false;
 
       System.out.println("//////////////////// Teleop /////////////////");
       // m_teleopCommand = m_chooser.getSelected();
-      //Scheduler.getInstance().add(new Drive());
+      Scheduler.getInstance().add(new Drive());
       Scheduler.getInstance().add(new BoomerangLift());
      // Scheduler.getInstance().add(new LiftTest());
 

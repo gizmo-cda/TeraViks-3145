@@ -15,6 +15,7 @@ public class RobotMap {
   // Constants for Robot Dimensions
   public static final double WHEELBASE_LENGTH = 23.38; // inches
   public static final double WHEELBASE_TRACK_WIDTH = 19.88; // inches
+  public static final double SPEED_SCALE = .5;
   
   // CAN Bus IDs for Drivetrain Talon SRX controllers
   public static final int FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID = 1;
@@ -35,7 +36,6 @@ public class RobotMap {
   public static final int REAR_ROBOT_LIFT_TalonSRX_CAN_ID = 19;
   public static final int REAR_ROBOT_LIFT_DRIVE_TalonSRX_CAN_ID = 20;
   public static final int HATCH_GRABBER_LEFT_TalonSRX_CAN_ID = 21;
-  public static final int HATCH_GRABBER_RIGHT_TalonSRX_CAN_ID = 22;
 
   // Talon controllers' timeout
   public static final int TalonSRX_TIMEOUT = 1000; //units in msec
@@ -94,14 +94,14 @@ public class RobotMap {
 
   // Boomerang Lift Level Positions
   //public static final double SCOOP_LIFT_LEVEL = 38199;
-  public static final double LOW_TARGET_LIFT_LEVEL = 38199.;
+  public static final double LOW_TARGET_LIFT_LEVEL = 40724.;
   public static final double MID_TARGET_LIFT_LEVEL = 822788.;
   public static final double HIGH_TARGET_LIFT_LEVEL = 1759932.;
   public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.;
   public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 76000.;
 
   // Boomerang Rotate Positions
-  public static final double BOOMERANG_DEPLOYED_POSITION = 1.;
+  public static final double BOOMERANG_DEPLOYED_POSITION = -186890.;
   public static final double BOOMERANG_RETRACTED_POSITION = 1.;
 
   // Rear Lift Level Positions

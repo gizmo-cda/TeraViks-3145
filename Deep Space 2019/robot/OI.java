@@ -39,9 +39,9 @@ public class OI {
   private Joystick operatorJoy = new Joystick(1);
 
   //Instantiate the buttons 0-11
-  private Button obtn2 = new JoystickButton(operatorJoy, 1); //A Button
-  private Button obtnbt = new JoystickButton(operatorJoy, 2); //B Button - Ball Target
-  private Button obtnht = new JoystickButton(operatorJoy, 3); //X Button - Hatch Target
+  private Button obtn2 = new JoystickButton(operatorJoy, 2); //A Button - Used for Boomerang Deplay DURING TESTING
+  private Button obtnbt = new JoystickButton(operatorJoy, 3); //B Button - Ball Target
+  private Button obtnht = new JoystickButton(operatorJoy, 1); //X Button - Hatch Target
   private Button obtn4 = new JoystickButton(operatorJoy, 4); //Y Button
   private Button obtnhg = new JoystickButton(operatorJoy, 5); //LB Button - Hatch Grab
   private Button obtnhr = new JoystickButton(operatorJoy, 6); //RB Button - Hatch Release
@@ -69,7 +69,13 @@ public class OI {
     obtnhr.whenPressed(new HatchRelease());
     obtnhr.whenReleased(new HatchReleaseHold());
     obtnbi.whenPressed(new BallIntake());
-    obtnbr.whenReleased(new BallShoot());
+    obtnbi.whenReleased(new BallStop());
+    obtnbr.whenPressed(new BallShoot());
+    obtnbr.whenReleased(new BallStop());
+    obtn4.whenPressed(new LiftCountIncrement());
+
+    // test
+    obtn2.whenPressed(new BoomerangOut());
   }
   
   public double getDriverX(){
