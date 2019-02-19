@@ -28,6 +28,7 @@ public class BoomerangLift extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    position= RobotMap.LOW_TARGET_LIFT_LEVEL;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -43,13 +44,13 @@ public class BoomerangLift extends Command {
   //   Robot.m_boomerang.liftLevelBall(driveLevel);
   // }
     dpad = Robot.m_oi.getOperatorDpad();
-
+    
     switch (dpad) {
       case -1:
       break;
       case 0:
-      position += 5000.; //Remove after positions are adjusted
-      System.out.println("-----Current Boomerang Lift Position ="+Robot.m_boomerang.getLiftPosition());
+      //position = Robot.m_boomerang.getTestLiftPosition();
+      break;
       case 90:
       position = RobotMap.HIGH_TARGET_LIFT_LEVEL;
       break;
@@ -61,6 +62,11 @@ public class BoomerangLift extends Command {
       break;
     }
       Robot.m_boomerang.setLiftLevelMotionMagic(position);
+      Robot.m_boomerang.setDesiredLiftLevel(position);
+  }
+
+  public double setTestLiftPostion(){
+    return position;
   }
 
   // Make this return true when this Command no longer needs to run execute()
