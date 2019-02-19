@@ -14,53 +14,23 @@ import frc.robot.RobotMap;
 public class BoomerangLift extends Command {
   // int boomLevels[] = new int[] {0,100,200,300,400,500,600,700}; // determine at a later point
   // int currentLevel;
-  int dpad;
-  double position;
+  double position = 0.;
 
   // potential to increment to a set pos or decrement to a set pos with two different button calls
 
-  public BoomerangLift() {
-    // Use requires() here to declare subsystem dependencies
+  public BoomerangLift(double level) {
     requires(Robot.m_boomerang);
-    //currentLevel = 0;
+    position = level;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    position= RobotMap.LOW_TARGET_LIFT_LEVEL;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    // set up mechanism to increment or decrement currentLevel (or maybe separate commands for up and down)
-  //   if (currentLevel < boomLevels.length) {
-  //     currentLevel++;
-  //   } else {
-  //     currentLevel = 0;
-  //   }
-  //   int driveLevel = boomLevels[currentLevel];
-  //   Robot.m_boomerang.liftLevelBall(driveLevel);
-  // }
-    dpad = Robot.m_oi.getOperatorDpad();
-    
-    switch (dpad) {
-      case -1:
-      break;
-      case 0:
-      //position = Robot.m_boomerang.getTestLiftPosition();
-      break;
-      case 90:
-      position = RobotMap.HIGH_TARGET_LIFT_LEVEL;
-      break;
-      case 180:
-      position = RobotMap.MID_TARGET_LIFT_LEVEL;
-      break;
-      case 270:
-      position = RobotMap.LOW_TARGET_LIFT_LEVEL;
-      break;
-    }
       Robot.m_boomerang.setLiftLevelMotionMagic(position);
       Robot.m_boomerang.setDesiredLiftLevel(position);
   }
@@ -72,7 +42,7 @@ public class BoomerangLift extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true

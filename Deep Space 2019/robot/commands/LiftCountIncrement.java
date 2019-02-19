@@ -9,11 +9,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 
 public class LiftCountIncrement extends Command {
 
-  double position = RobotMap.LOW_TARGET_LIFT_LEVEL;
+  double position = 0.;
 
   public LiftCountIncrement() {
     requires(Robot.m_boomerang);
@@ -27,10 +26,11 @@ public class LiftCountIncrement extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    position += 5000.; //Remove after positions are adjusted
-    System.out.println("-----Current Boomerang Lift Position ="+Robot.m_boomerang.getLiftPosition());
+    position = Robot.m_boomerang.getLiftPosition();
+    System.out.println("-----Current Boomerang Lift Position ="+position);
+    position += 5000.;
     System.out.println("     New Boomerang set position will be = "+position);
-    Robot.m_boomerang.setTestLiftPosition(position);
+    Robot.m_boomerang.setLiftLevelMotionMagic(position);
   }
 
   // Make this return true when this Command no longer needs to run execute()
