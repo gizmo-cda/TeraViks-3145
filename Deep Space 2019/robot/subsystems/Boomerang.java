@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Boomerang extends Subsystem {
@@ -23,9 +24,10 @@ public class Boomerang extends Subsystem {
   private final WPI_TalonSRX shootMotor = new WPI_TalonSRX(RobotMap.SHOOT_TalonSRX_CAN_ID);
   private final WPI_TalonSRX rotateMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_ROTATE_TalonSRX_CAN_ID);
   private final WPI_TalonSRX leftHatchMotor = new WPI_TalonSRX(RobotMap.HATCH_GRABBER_LEFT_TalonSRX_CAN_ID);
-  private final WPI_TalonSRX rightHatchMotor = new WPI_TalonSRX(RobotMap.HATCH_GRABBER_RIGHT_TalonSRX_CAN_ID);
   
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
+  private double desiredLiftLevel = RobotMap.LOW_TARGET_LIFT_LEVEL;
+  private double positionTest;
   
   public Boomerang(){
   }
@@ -37,7 +39,20 @@ public class Boomerang extends Subsystem {
     initShootMotor();
     initRotateMotor();
     initLeftHatchMotor();
-    initRightHatchMotor();
+  }
+
+  public void reset(){
+    setLiftLevelMotionMagic(RobotMap.LOW_TARGET_LIFT_LEVEL);
+  }
+
+  //For testing
+  public void setTestLiftPosition(double position){
+    positionTest = position;
+  }
+
+  //For testing
+  public double getTestLiftPosition(){
+    return positionTest;
   }
 
   public void setLiftLevel(double position){
@@ -76,7 +91,13 @@ public class Boomerang extends Subsystem {
   }
 
   public void deployBoomerang() {
-    rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION);
+    rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION/3.);
+    delay(1500);
+    rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION/1.8);
+    delay(1500);
+    rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION/1.1);
+    delay(2000);
+    rotateMotor.set(ControlMode.PercentOutput, 0.);
   }
 
   public void retractBoomerang() {
@@ -85,27 +106,30 @@ public class Boomerang extends Subsystem {
 
   public void extendHatchMotors() {
     leftHatchMotor.set(ControlMode.PercentOutput, 1.);
-    rightHatchMotor.set(ControlMode.PercentOutput, 1.);
   }
 
   public void retractHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, -1.);
-    rightHatchMotor.set(ControlMode.PercentOutput, -1.);
+    leftHatchMotor.set(ControlMode.PercentOutput, -1.);   
   }
 
   public void holdExtendedHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, .05);
-    rightHatchMotor.set(ControlMode.PercentOutput, .05);
+    leftHatchMotor.set(ControlMode.PercentOutput, .05);   
   }
 
   public void holdRetractedHatchMotors() {
-    leftHatchMotor.set(ControlMode.PercentOutput, -.3);
-    rightHatchMotor.set(ControlMode.PercentOutput, -.3);
+    leftHatchMotor.set(ControlMode.PercentOutput, -.3);   
   }
 
   public void stopHatchMotors() {
     leftHatchMotor.set(ControlMode.PercentOutput, 0.);
-    rightHatchMotor.set(ControlMode.PercentOutput, 0.);
+  }
+
+  public void setDesiredLiftLevel(double desiredLiftLevel) {
+    this.desiredLiftLevel = desiredLiftLevel;
+  }
+
+  public double getDesiredLiftLevel(){
+    return desiredLiftLevel;
   }
   
   private void initLiftMotor(){
@@ -121,8 +145,8 @@ public class Boomerang extends Subsystem {
     liftMotor.setSelectedSensorPosition(0);
     liftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
 
-    liftMotor.configMotionAcceleration(65000, TIMEOUT);
-    liftMotor.configMotionCruiseVelocity(65000, TIMEOUT);
+    liftMotor.configMotionAcceleration(120000, TIMEOUT);
+    liftMotor.configMotionCruiseVelocity(120000, TIMEOUT);
     
     liftMotor.configPeakOutputForward(1., TIMEOUT);
     liftMotor.configPeakOutputReverse(-1., TIMEOUT);
@@ -183,8 +207,8 @@ public class Boomerang extends Subsystem {
     rotateMotor.setSelectedSensorPosition(0);
     rotateMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
     
-    rotateMotor.configMotionAcceleration(30000, TIMEOUT);
-    rotateMotor.configMotionCruiseVelocity(30000, TIMEOUT);
+    rotateMotor.configMotionAcceleration(7500, TIMEOUT);
+    rotateMotor.configMotionCruiseVelocity(7500, TIMEOUT);
 
     rotateMotor.configPeakOutputForward(1., TIMEOUT);
     rotateMotor.configPeakOutputReverse(-1., TIMEOUT);
@@ -194,7 +218,7 @@ public class Boomerang extends Subsystem {
     
     rotateMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
     
-    rotateMotor.config_kP(0, .15, TIMEOUT);
+    rotateMotor.config_kP(0, 1., TIMEOUT);
     rotateMotor.config_kI(0, 0, TIMEOUT);
     rotateMotor.config_kD(0, 1, TIMEOUT);
     rotateMotor.config_kF(0, 0, TIMEOUT);
@@ -216,21 +240,15 @@ public class Boomerang extends Subsystem {
     
     System.out.println("  --Boomerang Left Hatch Motor Initialized");
   }
-  
-  private void initRightHatchMotor(){
-    rightHatchMotor.configFactoryDefault();
-  
-    rightHatchMotor.setInverted(false);
-    rightHatchMotor.setNeutralMode(NeutralMode.Brake);
-    
-    rightHatchMotor.configPeakOutputForward(1., TIMEOUT);
-    rightHatchMotor.configPeakOutputReverse(-1., TIMEOUT);
-    
-    rightHatchMotor.configNominalOutputForward(0, TIMEOUT);
-    rightHatchMotor.configNominalOutputReverse(0, TIMEOUT);
-    
-    System.out.println("  --Boomerang Right Hatch Motor Initialized");
-  }
+
+  private void delay(int msec){
+    try{
+        Thread.sleep(msec);
+    }
+    catch (Exception e){
+        System.out.println("Error in Waitloop");
+    }
+}
   
   @Override
   public void initDefaultCommand() {

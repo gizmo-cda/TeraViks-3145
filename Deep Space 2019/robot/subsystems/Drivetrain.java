@@ -176,6 +176,10 @@ public class Drivetrain extends Subsystem {
     m_SwerveDrive.emergencyStopMotors();
   }
 
+  public void driveDistance(double gyro, double distance) {
+    m_SwerveDrive.setMotorsForDistance(0.5, centric, gyro, reverseEn, snakeMode, distance);
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
