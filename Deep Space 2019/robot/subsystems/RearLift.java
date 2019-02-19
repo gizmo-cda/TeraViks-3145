@@ -9,6 +9,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -36,14 +37,14 @@ public class RearLift extends Subsystem {
   }
 
   private void setDriveSpeed(){
-    rearLiftDriveMotor.set(ControlMode.PercentOutput, 0.5);
+    rearLiftDriveMotor.set(ControlMode.PercentOutput, 1.);
   }
 
   private void setDriveStop(){
     rearLiftDriveMotor.set(ControlMode.PercentOutput, 0.);
   }
 
-  private void setLiftPosition(double position){
+  public void setLiftPosition(double position){
     rearLiftMotor.set(ControlMode.Position, position);
   }
 
@@ -63,26 +64,28 @@ public class RearLift extends Subsystem {
     int frontPosition = Robot.m_boomerang.getLiftPosition();
     int rearPosition = getLiftPosition();
     double pitch = Robot.m_gyro.getPitchDeg();
-    double frontVel = 65000.;
-    double rearVel = 65000.;
+    double frontVel = 60000.;
+    double rearVel = 120000.;
 
-    setLiftVelocity(rearVel);
     Robot.m_boomerang.setLiftVelocity(frontVel);
 
     while (rearPosition < level){
-      if (frontPosition <= 5000){
+      setLiftVelocity(rearVel);
+      if (frontPosition <= 5000.){
         Robot.m_boomerang.setLiftLevel(0.);
       }
       if (pitch < -2){
-        rearVel+=1300;
+        rearVel += 1300;
       }
       else if (pitch > 2){
-        rearVel-=1300;
+        rearVel -= 1300;
       }
       frontPosition = Robot.m_boomerang.getLiftPosition();
       rearPosition = getLiftPosition();
       pitch = Robot.m_gyro.getPitchDeg();
+      Timer.delay(.02);
     }
+      setLiftPosition(rearPosition);
   }
   
   //Talon configuration for the lift motor
@@ -99,8 +102,8 @@ public class RearLift extends Subsystem {
     rearLiftMotor.setSelectedSensorPosition(0);
     rearLiftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
     
-    rearLiftMotor.configPeakOutputForward(.3, TIMEOUT);
-    rearLiftMotor.configPeakOutputReverse(-.3, TIMEOUT);
+    rearLiftMotor.configPeakOutputForward(1., TIMEOUT);
+    rearLiftMotor.configPeakOutputReverse(-1., TIMEOUT);
     
     rearLiftMotor.configNominalOutputForward(0, TIMEOUT);
     rearLiftMotor.configNominalOutputReverse(0, TIMEOUT);
@@ -114,7 +117,7 @@ public class RearLift extends Subsystem {
     
     System.out.println("  --Rear Lift Motor Initialized");
   }
-  //Talon configuration for the lift motor
+  //Talon configuration for the lift drive motor
   private void initRearLiftDriveMotor(){
     rearLiftDriveMotor.configFactoryDefault();
     
