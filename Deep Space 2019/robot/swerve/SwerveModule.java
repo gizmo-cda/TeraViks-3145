@@ -51,9 +51,13 @@ public class SwerveModule {
     }
     
     //Closed-Loop Position Target Setting (+/- pulses per +/-180 degrees)
+    // public void setSteerPosition(double wheelPosition){
+    //     steerMotor.set(ControlMode.Position, wheelPosition);
+    // }
     public void setSteerPosition(double wheelPosition){
-        steerMotor.set(ControlMode.Position, wheelPosition);
+        steerMotor.set(ControlMode.MotionMagic, wheelPosition);
     }
+
 
     public void setWheelPosition(double position){
          driveMotor.set(ControlMode.Position, position);
@@ -234,6 +238,9 @@ public class SwerveModule {
         steerMotor.setSelectedSensorPosition(0);
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
         
+        steerMotor.configMotionAcceleration(54000, TIMEOUT);
+        steerMotor.configMotionCruiseVelocity(54000, TIMEOUT);
+
         steerMotor.configPeakOutputForward(.3, TIMEOUT);
         steerMotor.configPeakOutputReverse(-.3, TIMEOUT);
         
