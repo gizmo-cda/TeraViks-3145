@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
@@ -29,17 +30,17 @@ public class CollisionSensor extends Command {
   protected void execute() {
     boolean collisionDetected = false;
     
+    Robot.m_drivetrain.move(.5, 0., 0.);
+
     while (!collisionDetected) {
       double currentAccelY = Robot.m_gyro.getAccelY();
       
       double currentJerkY = currentAccelY - prevAccelY;
       prevAccelY = currentAccelY;
       
-      if ( Math.abs(currentJerkY) > RobotMap.COLLISION_THRESHOLD_Y) {
-        collisionDetected = true;
-      }
+      if ( Math.abs(currentJerkY) > RobotMap.COLLISION_THRESHOLD_Y) collisionDetected = true;
 
-      Robot.m_drivetrain.move(.5, 0., 0.);
+      Timer.delay(1.0);
     } 
 
     Robot.m_drivetrain.move(0., 0., 0.);
