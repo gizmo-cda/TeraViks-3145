@@ -35,7 +35,7 @@ public class RobotMap {
   public static final int BOOMERANG_ROTATE_TalonSRX_CAN_ID = 18;
   public static final int REAR_ROBOT_LIFT_TalonSRX_CAN_ID = 19;
   public static final int REAR_ROBOT_LIFT_DRIVE_TalonSRX_CAN_ID = 20;
-  public static final int HATCH_GRABBER_LEFT_TalonSRX_CAN_ID = 21;
+  public static final int HATCH_GRABBER_TalonSRX_CAN_ID = 21;
 
   // Talon controllers' timeout
   public static final int TalonSRX_TIMEOUT = 1000; //units in msec
