@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 
 import frc.robot.subsystems.*;
@@ -51,11 +52,13 @@ public class Robot extends TimedRobot {
     m_gyro = new Gyro();
     m_vision = new Vision();
     m_boomerang = new Boomerang();
+    m_rearLift = new RearLift();
     m_oi = new OI(); //Always instantiate OI last
     
     m_gyro.reset();
     m_drivetrain.init();
     m_boomerang.init();
+    m_rearLift.init();
     
     bootCycle = true;
     
@@ -73,7 +76,8 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotPeriodic() {
-    //System.out.println("Lift Position = "+Robot.m_boomerang.getLiftPosition());
+    // System.out.println("Lift Position = "+Robot.m_boomerang.getLiftPosition());
+    System.out.println("Gyro Position = "+Robot.m_gyro.getPitchDeg());
   }
   
   /**
@@ -146,18 +150,17 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
       }
       else{
-        //Robot.m_drivetrain.reset(); //Move back to disabled init once cal is fixed?
+        Robot.m_drivetrain.reset(); //Move back to disabled init once cal is fixed?
       }
-      // Scheduler.getInstance().add(new BoomerangReset());
       Scheduler.getInstance().add(new HatchGrabHold());
+      Scheduler.getInstance().run();
+      Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
+      // Scheduler.getInstance().add(new RearLiftHold());
       Scheduler.getInstance().run();
       bootCycle = false;
 
       System.out.println("//////////////////// Teleop /////////////////");
-      // m_teleopCommand = m_chooser.getSelected();
       Scheduler.getInstance().add(new Drive());
-      Scheduler.getInstance().add(new BoomerangLift());
-     // Scheduler.getInstance().add(new LiftTest());
 
       }
     
@@ -168,6 +171,19 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
       //Add Drive to the command stack, it is always running from here on until DS Disable
       Scheduler.getInstance().run();
+      SmartDashboard.putData(Scheduler.getInstance());
+      SmartDashboard.getBoolean("Centric Set", m_drivetrain.getCentric());
+      SmartDashboard.getBoolean("Snake Mode", m_drivetrain.snakeMode);
+      SmartDashboard.getBoolean("Ball Target Mode", BallTargetMode.ballTarget);
+      SmartDashboard.getBoolean("Hatch Target Mode", HatchTargetMode.hatchTarget);
+      SmartDashboard.getNumber("Gyro Yaw", m_gyro.getYawDeg());
+      SmartDashboard.getNumber("Gyro Pitch", m_gyro.getPitchDeg());
+      SmartDashboard.getNumber("Gyro Roll", m_gyro.getRollDeg());
+      SmartDashboard.putData("Lvl 3 boomerang", new Level3Boomerang());
+      SmartDashboard.putData("Collision Sensor", new CollisionSensor());
+      SmartDashboard.putData("Rear Lift Drive", new RearLiftDrive());
+      SmartDashboard.putData("Rear Lift Retract", new RearLiftRetract());
+
     }
     
     /**

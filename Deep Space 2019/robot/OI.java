@@ -26,8 +26,8 @@ public class OI {
   private Button btnfc = new JoystickButton(swerveJoy, 2); //X Button - Field Centric - Default Robot
   private Button btncm = new JoystickButton(swerveJoy, 3); //O Button - Crab Mode - Default Crab
   private Button btnsm = new JoystickButton(swerveJoy, 4); //Triange Button - Snake Mode - Default Crab
-  private Button btntm = new JoystickButton(swerveJoy, 5); //L1 Button - Targeting On While Pressed / Normal Drive Camera While !Pressed
-  private Button btn6 = new JoystickButton(swerveJoy, 6); //R1 Button - No Key Binding
+  private Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button - Targeting On While Pressed / Normal Drive Camera While !Pressed
+  private Button btntm = new JoystickButton(swerveJoy, 6); //R1 Button - No Key Binding
   private Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button - No Key Binding
   private Button btnbk = new JoystickButton(swerveJoy, 8); //R2 Button - Stop While Pressed
   private Button btn9 = new JoystickButton(swerveJoy, 9); //Select Button - No Key Binding
@@ -39,18 +39,18 @@ public class OI {
   private Joystick operatorJoy = new Joystick(1);
 
   //Instantiate the buttons 0-11
-  private Button obtn2 = new JoystickButton(operatorJoy, 2); //A Button - Used for Boomerang Deplay DURING TESTING
-  private Button obtnbt = new JoystickButton(operatorJoy, 3); //B Button - Ball Target
-  private Button obtnht = new JoystickButton(operatorJoy, 1); //X Button - Hatch Target
-  private Button obtn4 = new JoystickButton(operatorJoy, 4); //Y Button
+  private Button obtnlm = new JoystickButton(operatorJoy, 1); //X Button - Lift to Middle Goal
+  private Button obtnll = new JoystickButton(operatorJoy, 2); //A Button - Lift to Low Goal
+  private Button obtn3 = new JoystickButton(operatorJoy, 3); //B Button - Increment up DURING TESTING
+  private Button obtnlh = new JoystickButton(operatorJoy, 4); //Y Button - Lift to High Goal
   private Button obtnhg = new JoystickButton(operatorJoy, 5); //LB Button - Hatch Grab
   private Button obtnhr = new JoystickButton(operatorJoy, 6); //RB Button - Hatch Release
   private Button obtnbi = new JoystickButton(operatorJoy, 7); //LT Button - Ball Intake
   private Button obtnbr = new JoystickButton(operatorJoy, 8); //RT Button - Ball Shoot
-  private Button obtn9 = new JoystickButton(operatorJoy, 9); //Select Button
-  private Button obtn10 = new JoystickButton(operatorJoy, 10); //Start Button
-  private Button obtn11 = new JoystickButton(operatorJoy, 11); //Left Stick Button
-  private Button obtn12 = new JoystickButton(operatorJoy, 12); //Right Stick Button
+  private Button obtnl3 = new JoystickButton(operatorJoy, 9); //Back Button
+  private Button obtn10 = new JoystickButton(operatorJoy, 10); //Start Button  - Used for Boomerang Deplay DURING TESTING
+  private Button obtnht = new JoystickButton(operatorJoy, 11); //Left Stick Button - Hatch Target
+  private Button obtnbt = new JoystickButton(operatorJoy, 12); //Right Stick Button - Ball Target
 
   public OI() {
     // Driver Buttons
@@ -72,10 +72,15 @@ public class OI {
     obtnbi.whenReleased(new BallStop());
     obtnbr.whenPressed(new BallShoot());
     obtnbr.whenReleased(new BallStop());
-    obtn4.whenPressed(new LiftCountIncrement());
+    //Lift Buttons (Operator)
+    obtnll.whenPressed(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
+    obtnlm.whenPressed(new BoomerangLift(RobotMap.MID_TARGET_LIFT_LEVEL));
+    obtnlh.whenPressed(new BoomerangLift(RobotMap.HIGH_TARGET_LIFT_LEVEL));
+    obtnl3.whenPressed(new Level3Lift());
 
     // test
-    obtn2.whenPressed(new BoomerangOut());
+    obtn10.whenPressed(new BoomerangOut());
+    obtn3.whenPressed(new LiftCountIncrement());
   }
   
   public double getDriverX(){

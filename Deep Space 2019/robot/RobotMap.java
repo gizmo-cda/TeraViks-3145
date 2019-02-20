@@ -36,7 +36,7 @@ public class RobotMap {
   public static final int REAR_ROBOT_LIFT_TalonSRX_CAN_ID = 19;
   public static final int REAR_ROBOT_LIFT_DRIVE_TalonSRX_CAN_ID = 20;
   public static final int HATCH_GRABBER_TalonSRX_CAN_ID = 21;
-
+  public static final int BOOMERANG_LIFT_BOOSTER_TalonSRX_CAN_ID = 22;
   // Talon controllers' timeout
   public static final int TalonSRX_TIMEOUT = 1000; //units in msec
 
@@ -94,9 +94,9 @@ public class RobotMap {
 
   // Boomerang Lift Level Positions
   //public static final double SCOOP_LIFT_LEVEL = 38199;
-  public static final double LOW_TARGET_LIFT_LEVEL = 40724.;
-  public static final double MID_TARGET_LIFT_LEVEL = 822788.;
-  public static final double HIGH_TARGET_LIFT_LEVEL = 1759932.;
+  public static final double LOW_TARGET_LIFT_LEVEL = 190467.;
+  public static final double MID_TARGET_LIFT_LEVEL = 2504789.;
+  public static final double HIGH_TARGET_LIFT_LEVEL = 5317995.;
   public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.;
   public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 76000.;
 
@@ -106,7 +106,7 @@ public class RobotMap {
 
   // Rear Lift Level Positions
   public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 1;
-  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 1;
+  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 3263420;
 
   // Collision Detection for NavX
   public static final double COLLISION_THRESHOLD_Y = .5; // in Gs
