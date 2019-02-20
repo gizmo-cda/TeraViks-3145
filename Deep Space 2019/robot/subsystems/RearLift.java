@@ -18,7 +18,10 @@ import frc.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.*;
 
 public class RearLift extends Subsystem {
   // Create the rear lift and drive motor Objects
@@ -36,11 +39,11 @@ public class RearLift extends Subsystem {
     initRearLiftDriveMotor();
   }
 
-  private void setDriveSpeed(){
-    rearLiftDriveMotor.set(ControlMode.PercentOutput, 1.);
+  public void setDriveSpeed(double speed){
+    rearLiftDriveMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  private void setDriveStop(){
+  public void setDriveStop(){
     rearLiftDriveMotor.set(ControlMode.PercentOutput, 0.);
   }
 
@@ -56,7 +59,7 @@ public class RearLift extends Subsystem {
     return rearLiftMotor.getSelectedSensorPosition();
   }
 
-  private void setLiftVelocity(double velocity){
+  private void setLocalLiftVelocity(double velocity){
     rearLiftMotor.set(ControlMode.Velocity, velocity);
   }
 
@@ -64,26 +67,26 @@ public class RearLift extends Subsystem {
     int frontPosition = Robot.m_boomerang.getLiftPosition();
     int rearPosition = getLiftPosition();
     double pitch = Robot.m_gyro.getPitchDeg();
-    double frontVel = 60000.;
-    double rearVel = 120000.;
+    double frontVel = -30000.;
+    double rearVel = 60000.;
 
     Robot.m_boomerang.setLiftVelocity(frontVel);
 
     while (rearPosition < level){
-      setLiftVelocity(rearVel);
+      setLocalLiftVelocity(rearVel);
       if (frontPosition <= 5000.){
         Robot.m_boomerang.setLiftLevel(0.);
       }
-      if (pitch < -2){
-        rearVel += 1300;
-      }
-      else if (pitch > 2){
+      if (pitch < -5){
         rearVel -= 1300;
+      }
+      else if (pitch > 5){
+        rearVel += 1300;
       }
       frontPosition = Robot.m_boomerang.getLiftPosition();
       rearPosition = getLiftPosition();
       pitch = Robot.m_gyro.getPitchDeg();
-      Timer.delay(.02);
+      // Timer.delay(.02);
     }
       setLiftPosition(rearPosition);
   }
@@ -98,7 +101,7 @@ public class RearLift extends Subsystem {
     rearLiftMotor.setInverted(false);
     rearLiftMotor.setNeutralMode(NeutralMode.Brake);
 
-    rearLiftMotor.setSensorPhase(false);
+    rearLiftMotor.setSensorPhase(true);
     rearLiftMotor.setSelectedSensorPosition(0);
     rearLiftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
     
@@ -107,7 +110,10 @@ public class RearLift extends Subsystem {
     
     rearLiftMotor.configNominalOutputForward(0, TIMEOUT);
     rearLiftMotor.configNominalOutputReverse(0, TIMEOUT);
-    
+
+    rearLiftMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    rearLiftMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+
     rearLiftMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
     
     rearLiftMotor.config_kP(0, .15, TIMEOUT);
@@ -121,7 +127,7 @@ public class RearLift extends Subsystem {
   private void initRearLiftDriveMotor(){
     rearLiftDriveMotor.configFactoryDefault();
     
-    rearLiftDriveMotor.setInverted(false);
+    rearLiftDriveMotor.setInverted(true);
     rearLiftDriveMotor.setNeutralMode(NeutralMode.Brake);
 
     rearLiftDriveMotor.configPeakOutputForward(1., TIMEOUT);

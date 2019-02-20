@@ -73,7 +73,7 @@ public class Drivetrain extends Subsystem {
 
   private boolean reverseEn = true;  //Enables reversing wheel drive motors
 
-  private boolean snakeMode = false; //Crab = false, Snake = True
+  public boolean snakeMode = false; //Crab = false, Snake = True
 
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel

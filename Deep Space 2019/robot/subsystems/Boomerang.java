@@ -23,7 +23,8 @@ public class Boomerang extends Subsystem {
   private final WPI_TalonSRX shootMotor = new WPI_TalonSRX(RobotMap.SHOOT_TalonSRX_CAN_ID);
   private final WPI_TalonSRX rotateMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_ROTATE_TalonSRX_CAN_ID);
   private final WPI_TalonSRX hatchMotor = new WPI_TalonSRX(RobotMap.HATCH_GRABBER_TalonSRX_CAN_ID);
-  
+  private final WPI_TalonSRX liftBoosterMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_LIFT_BOOSTER_TalonSRX_CAN_ID);
+
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
   private double desiredLiftLevel = RobotMap.LOW_TARGET_LIFT_LEVEL;
   private double positionTest;
@@ -38,6 +39,7 @@ public class Boomerang extends Subsystem {
     initShootMotor();
     initRotateMotor();
     initHatchMotor();
+    initLiftBoosterMotor();
   }
 
   public void reset(){
@@ -56,19 +58,23 @@ public class Boomerang extends Subsystem {
 
   public void setLiftLevel(double position){
     liftMotor.set(ControlMode.Position, position);
+    liftBoosterMotor.set(ControlMode.Follower, 15);
   }
 
   public void setLiftLevelMotionMagic(double position){
     liftMotor.set(ControlMode.MotionMagic, position);
+    liftBoosterMotor.set(ControlMode.Follower, 15);
   }
 
   public void setLiftVelocity(double velocity){
     liftMotor.set(ControlMode.Velocity, velocity);
+    liftBoosterMotor.set(ControlMode.Follower, 15);
   }
 
   //Used for testing
   public void setLiftSpeed(double speed){
     liftMotor.set(ControlMode.PercentOutput, speed);
+    liftBoosterMotor.set(ControlMode.Follower, 15);
   }
 
   //Used for testing
@@ -77,11 +83,11 @@ public class Boomerang extends Subsystem {
   }
 
   public void startBallIntake(){
-    intakeMotor.set(ControlMode.PercentOutput, 0.5);
+    intakeMotor.set(ControlMode.PercentOutput, 0.75);
   }
 
   public void startBallEject() {
-    shootMotor.set(ControlMode.PercentOutput, 0.75);
+    shootMotor.set(ControlMode.PercentOutput, 1.);
   }
 
   public void stopBallMotors(){
@@ -140,12 +146,12 @@ public class Boomerang extends Subsystem {
     liftMotor.setInverted(false);
     liftMotor.setNeutralMode(NeutralMode.Brake);
     
-    liftMotor.setSensorPhase(true);
+    liftMotor.setSensorPhase(false);
     liftMotor.setSelectedSensorPosition(0);
     liftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
 
-    liftMotor.configMotionAcceleration(120000, TIMEOUT);
-    liftMotor.configMotionCruiseVelocity(120000, TIMEOUT);
+    liftMotor.configMotionAcceleration(60000, TIMEOUT);
+    liftMotor.configMotionCruiseVelocity(60000, TIMEOUT);
     
     liftMotor.configPeakOutputForward(1., TIMEOUT);
     liftMotor.configPeakOutputReverse(-1., TIMEOUT);
@@ -162,6 +168,21 @@ public class Boomerang extends Subsystem {
     
     System.out.println("  --Boomerang Lift Motor Initialized");
   }
+  
+private void initLiftBoosterMotor(){
+  liftBoosterMotor.configFactoryDefault();
+
+  liftBoosterMotor.setInverted(true);
+  liftBoosterMotor.setNeutralMode(NeutralMode.Brake);
+
+  liftBoosterMotor.configPeakOutputForward(1., TIMEOUT);
+  liftBoosterMotor.configPeakOutputReverse(-1., TIMEOUT);
+  
+  liftBoosterMotor.configNominalOutputForward(0, TIMEOUT);
+  liftBoosterMotor.configNominalOutputReverse(0, TIMEOUT);
+  
+  System.out.println("  --Boomerang Lift Booster Motor Initialized");
+}
   
   private void initIntakeMotor(){
     intakeMotor.configFactoryDefault();
