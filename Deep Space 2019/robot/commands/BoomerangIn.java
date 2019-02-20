@@ -8,32 +8,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
-public class HatchTargetMode extends Command {
-
-  public static boolean hatchTarget;
-
-  public HatchTargetMode() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+public class BoomerangIn extends Command {
+  public BoomerangIn() {
+    requires(Robot.m_boomerang);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    hatchTarget = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_boomerang.retractBoomerang();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    hatchTarget = false;
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true

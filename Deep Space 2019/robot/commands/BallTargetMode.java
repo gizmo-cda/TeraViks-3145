@@ -10,6 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class BallTargetMode extends Command {
+
+  public static boolean ballTarget;
+  
   public BallTargetMode() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -18,6 +21,7 @@ public class BallTargetMode extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    ballTarget = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -28,6 +32,7 @@ public class BallTargetMode extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    ballTarget = false;
     return false;
   }
 

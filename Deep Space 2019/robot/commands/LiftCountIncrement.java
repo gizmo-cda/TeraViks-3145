@@ -28,7 +28,7 @@ public class LiftCountIncrement extends Command {
   protected void execute() {
     position = Robot.m_boomerang.getLiftPosition();
     System.out.println("-----Current Boomerang Lift Position ="+position);
-    position += 5000.;
+    position += 20000.;
     System.out.println("     New Boomerang set position will be = "+position);
     Robot.m_boomerang.setLiftLevelMotionMagic(position);
   }
