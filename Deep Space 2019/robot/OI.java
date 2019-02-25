@@ -72,7 +72,6 @@ public class OI {
     obtnbi.whenReleased(new BallStop());
     obtnbr.whenPressed(new BallShoot());
     obtnbr.whenReleased(new BallStop());
-    //Lift Buttons (Operator)
     obtnll.whenPressed(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
     obtnlm.whenPressed(new BoomerangLift(RobotMap.MID_TARGET_LIFT_LEVEL));
     obtnlh.whenPressed(new BoomerangLift(RobotMap.HIGH_TARGET_LIFT_LEVEL));
@@ -97,10 +96,6 @@ public class OI {
   
   public double getOperatorY(){
     return operatorJoy.getY();
-  }
-
-  public int getOperatorDpad(){
-    return operatorJoy.getPOV();
   }
 
   //// CREATING BUTTONS
