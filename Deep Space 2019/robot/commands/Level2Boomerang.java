@@ -25,7 +25,7 @@ public class Level2Boomerang extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_boomerang.setLiftLevelMotionMagic(RobotMap.LEVEL2_PLATFORM_LIFT_LEVEL);
+    Robot.m_boomerang.setLiftLevel(RobotMap.LEVEL2_PLATFORM_LIFT_LEVEL);
   }
 
   // Make this return true when this Command no longer needs to run execute()

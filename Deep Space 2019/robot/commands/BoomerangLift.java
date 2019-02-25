@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 
 public class BoomerangLift extends Command {
   // int boomLevels[] = new int[] {0,100,200,300,400,500,600,700}; // determine at a later point
@@ -31,7 +30,7 @@ public class BoomerangLift extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-      Robot.m_boomerang.setLiftLevelMotionMagic(position);
+      Robot.m_boomerang.setLiftLevel(position);
       Robot.m_boomerang.setDesiredLiftLevel(position);
   }
 
