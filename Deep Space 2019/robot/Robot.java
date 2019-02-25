@@ -57,8 +57,8 @@ public class Robot extends TimedRobot {
     
     m_gyro.reset();
     m_drivetrain.init();
-    m_boomerang.init();
-    m_rearLift.init();
+    //m_boomerang.init();
+    //m_rearLift.init();
     
     bootCycle = true;
     
@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // System.out.println("Lift Position = "+Robot.m_boomerang.getLiftPosition());
-    System.out.println("Gyro Position = "+Robot.m_gyro.getPitchDeg());
+    // System.out.println("Gyro Position = "+Robot.m_gyro.getPitchDeg());
   }
   
   /**
@@ -145,6 +145,7 @@ public class Robot extends TimedRobot {
       
       // Adding calDriveTrain to scheduler if booting (ie not enable/disable in DS)
       System.out.println("//////////////////// TeleopInit /////////////////");
+      
       if (bootCycle && RobotMap.ENABLE_DRIVETRAIN_CALIBRATION){
         Scheduler.getInstance().add(new CalibrateDriveTrain());
         Scheduler.getInstance().run();
@@ -152,17 +153,18 @@ public class Robot extends TimedRobot {
       else{
         Robot.m_drivetrain.reset(); //Move back to disabled init once cal is fixed?
       }
-      Scheduler.getInstance().add(new HatchGrabHold());
-      Scheduler.getInstance().run();
-      Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
+
+      // Scheduler.getInstance().add(new HatchGrabHold());
+      // Scheduler.getInstance().run();
+      // Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
+      // Scheduler.getInstance().run();
       // Scheduler.getInstance().add(new RearLiftHold());
-      Scheduler.getInstance().run();
+      // Scheduler.getInstance().run();
       bootCycle = false;
 
       System.out.println("//////////////////// Teleop /////////////////");
       Scheduler.getInstance().add(new Drive());
-
-      }
+    }
     
     /**
     * This function is called periodically during operator control.
@@ -183,7 +185,6 @@ public class Robot extends TimedRobot {
       SmartDashboard.putData("Collision Sensor", new CollisionSensor());
       SmartDashboard.putData("Rear Lift Drive", new RearLiftDrive());
       SmartDashboard.putData("Rear Lift Retract", new RearLiftRetract());
-
     }
     
     /**
