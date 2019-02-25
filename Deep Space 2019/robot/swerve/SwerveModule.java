@@ -238,8 +238,11 @@ public class SwerveModule {
         steerMotor.setSelectedSensorPosition(0);
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
         
-        steerMotor.configMotionAcceleration(54000, TIMEOUT);
-        steerMotor.configMotionCruiseVelocity(54000, TIMEOUT);
+        //steerMotor.configMotionAcceleration(54000, TIMEOUT);  //4096 Mag Encoder accel and velocity targets
+        //steerMotor.configMotionCruiseVelocity(54000, TIMEOUT);
+
+        steerMotor.configMotionAcceleration(4700, TIMEOUT);  //400 Optical Encoder accel and velocity targets
+        steerMotor.configMotionCruiseVelocity(4700, TIMEOUT);
 
         steerMotor.configPeakOutputForward(.3, TIMEOUT);
         steerMotor.configPeakOutputReverse(-.3, TIMEOUT);
@@ -247,9 +250,11 @@ public class SwerveModule {
         steerMotor.configNominalOutputForward(0, TIMEOUT);
         steerMotor.configNominalOutputReverse(0, TIMEOUT);
         
-        steerMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
+        // steerMotor.configAllowableClosedloopError(0, 100, TIMEOUT); //Error for 4096 Mag Encoder
+        steerMotor.configAllowableClosedloopError(0, 8, TIMEOUT);  //Error for 400 Optical Encoder
         
-        steerMotor.config_kP(0, .15, TIMEOUT);
+        //steerMotor.config_kP(0, .15, TIMEOUT); //Gain for 4096 ppr Mag Encoder
+        steerMotor.config_kP(0, .5, TIMEOUT);  //Gain adjusted for 400 ppr Optical Encoder
         steerMotor.config_kI(0, 0, TIMEOUT);
         steerMotor.config_kD(0, 1, TIMEOUT);
         steerMotor.config_kF(0, 0, TIMEOUT);
