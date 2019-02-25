@@ -43,6 +43,10 @@ public class SwerveMath {
   // These are intitialized as constants to reduce the math cycles in the class' methods
   private static Double halfLength = RobotMap.WHEELBASE_LENGTH / 2; //length of chassis divided by 2
   private static Double halfWidth = RobotMap.WHEELBASE_TRACK_WIDTH / 2; //width of chassis divided by 2
+  private static Double radius = Math.sqrt((halfLength * halfLength) + (halfWidth * halfWidth));  //radius of rotational center to each wheel
+  private static Double halfLengthNorm = halfLength / radius;  //Length normalized by radius
+  private static Double halfWidthNorm = halfWidth / radius;  //Width normalized by radius
+
   private static Double pp100msec = RobotMap.DRIVE_WHEEL_PULSES_PER_100MS; //encoder pulses per 100 msec
 
   //private static Double toDeg = 180./Math.PI;  //convert Radians to Degrees
@@ -141,10 +145,10 @@ public class SwerveMath {
 
     // ********Fundamental Math Block for Wheel Speed and Position*******
     // Define the common elements in wheel vector math
-    Double A = str - rcw * halfLength; 
-    Double B = str + rcw * halfLength;
-    Double C = fwd - rcw * halfWidth;
-    Double D = fwd + rcw * halfWidth;
+    Double A = str - rcw * halfLengthNorm; 
+    Double B = str + rcw * halfLengthNorm;
+    Double C = fwd - rcw * halfWidthNorm;
+    Double D = fwd + rcw * halfWidthNorm;
 
     // Calculate the speed for each wheel, result will be proportional, no units
     Double ws1 = Math.sqrt(B*B + C*C);  // Wheel Speed 1 = front right
@@ -169,6 +173,8 @@ public class SwerveMath {
     ws2 *= pp100msec;
     ws3 *= pp100msec;
     ws4 *= pp100msec;
+
+    // modify wheel speeds to scale value <=1
     ws1 *= RobotMap.SPEED_SCALE; 
     ws2 *= RobotMap.SPEED_SCALE;
     ws3 *= RobotMap.SPEED_SCALE;
@@ -185,7 +191,8 @@ public class SwerveMath {
     // With the output of the math block above there is a discontinuity from 180 degrees to 181 degrees.
   
     // This code block tests each wheel to see if it needs to move > +/- 90 degrees.  If so, it will add/sub
-    // 180 degrees to provide the supplemental angle and reverse the drive wheel.  
+    // 180 degrees to provide the supplemental angle and reverse the drive wheel.  If the wheel needs to 
+    // traverse the discontinuity at +/- 180 it will also track the 360 degree rotation necessary.  
     // If the steering motion is greater than +/- 270 degrees then no reversing will make sense and the 
     // code will add/sub 360 degrees and track the 360 degree rotation through the discontinuity, again
     // for smooth wheel travel and shortest path steering.
@@ -219,56 +226,136 @@ public class SwerveMath {
     // Now look to see if the wheel needs to move more than 90 degrees or more than 270 degrees
     // Do this for each wheel position
     switch (pulseDiff(wp1, wp1Current, wp1Rotate)){
-      case "< -90 or > 90":  //If true then reverse the wheel
+      case "< -90":  //If true then reverse the wheel
         ws1 *= -1.;
         wp1IsReversed = !wp1IsReversed;
-        if (wp1 >= 0) wp1 -= oneEighty; else  wp1 += oneEighty;
+        if (wp1 >= 0) {
+          wp1 -= oneEighty;
+          wp1Rotate += threeSixty;  //Rotate throught the discontinuity at +/- 180
+        } 
+        else {
+          wp1 += oneEighty; 
+        }
       break;
+
+      case "> 90":  //If true then reverse the wheel
+        ws1 *= -1.;
+        wp1IsReversed = !wp1IsReversed;
+        if (wp1 >= 0) {
+          wp1 -= oneEighty;
+        } 
+        else {
+          wp1 += oneEighty; 
+          wp1Rotate -= threeSixty;  //Rotate throught the discontinuity at +/- 180
+        }
+      break;
+      
       case "< -270":  //If true rotate through the discontinuity at +/- 180
         wp1Rotate += threeSixty; 
       break;
+      
       case "> 270":  //If true rotate through the discontinuity at +/- 180
         wp1Rotate -= threeSixty;
       break;
     }
 
     switch (pulseDiff(wp2, wp2Current, wp2Rotate)){
-      case "< -90 or > 90":
+      case "< -90":  
         ws2 *= -1.;
         wp2IsReversed = !wp2IsReversed;
-        if (wp2 >= 0) wp2 -= oneEighty; else  wp2 += oneEighty;
+        if (wp2 >= 0) {
+          wp2 -= oneEighty;
+          wp2Rotate += threeSixty; 
+        } 
+        else {
+          wp2 += oneEighty; 
+        }
       break;
+
+      case "> 90": 
+        ws2 *= -1.;
+        wp2IsReversed = !wp2IsReversed;
+        if (wp2 >= 0) {
+          wp2 -= oneEighty;
+        } 
+        else {
+          wp2 += oneEighty; 
+          wp2Rotate -= threeSixty;  
+        }
+      break;
+
       case "< -270":
         wp2Rotate += threeSixty; 
       break;
+
       case "> 270":
         wp2Rotate -= threeSixty;
       break;
     }
 
     switch (pulseDiff(wp3, wp3Current, wp3Rotate)){
-      case "< -90 or > 90":
+      case "< -90": 
         ws3 *= -1.;
         wp3IsReversed = !wp3IsReversed;
-        if (wp3 >= 0) wp3 -= oneEighty; else  wp3 += oneEighty;
+        if (wp3 >= 0) {
+          wp3 -= oneEighty;
+          wp3Rotate += threeSixty;  
+        } 
+        else {
+          wp3 += oneEighty; 
+        }
       break;
+
+      case "> 90":  
+        ws3 *= -1.;
+        wp3IsReversed = !wp3IsReversed;
+        if (wp3 >= 0) {
+          wp3 -= oneEighty;
+        } 
+        else {
+          wp3 += oneEighty; 
+          wp3Rotate -= threeSixty;  
+        }
+      break;
+
       case "< -270":
         wp3Rotate += threeSixty; 
       break;
+
       case "> 270":
         wp3Rotate -= threeSixty;
       break;
     }
 
     switch (pulseDiff(wp4, wp4Current, wp4Rotate)){
-      case "< -90 or > 90":
+      case "< -90":  
         ws4 *= -1.;
         wp4IsReversed = !wp4IsReversed;
-        if (wp4 >= 0) wp4 -= oneEighty; else  wp4 += oneEighty;
+        if (wp4 >= 0) {
+          wp4 -= oneEighty;
+          wp4Rotate += threeSixty;  
+        } 
+        else {
+          wp4 += oneEighty; 
+        }
       break;
+
+      case "> 90":
+        ws4 *= -1.;
+        wp4IsReversed = !wp4IsReversed;
+        if (wp4 >= 0) {
+          wp4 -= oneEighty;
+        } 
+        else {
+          wp4 += oneEighty; 
+          wp4Rotate -= threeSixty;
+        }
+      break;
+
       case "< -270":
         wp4Rotate += threeSixty; 
       break;
+
       case "> 270":
         wp4Rotate -= threeSixty;
       break;
@@ -304,8 +391,8 @@ public class SwerveMath {
     Double diff = wp - (wpCurrent - wpRotate); //Find the rotation requested, backing out the rotate pulse accumulator
     String angle = "";
 
-    if (diff < -twoSeventy) angle = "< -270"; else if ((diff < -ninety) && reverseEn) angle = "< -90 or > 90";
-    if (diff > twoSeventy) angle = "> 270"; else if ((diff > ninety) && reverseEn) angle = "< -90 or > 90";
+    if (diff < -twoSeventy) angle = "< -270"; else if ((diff < -ninety) && reverseEn) angle = "< -90";
+    if (diff > twoSeventy) angle = "> 270"; else if ((diff > ninety) && reverseEn) angle = "> 90";
 
     return angle;
   }
