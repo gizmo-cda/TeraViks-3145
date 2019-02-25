@@ -108,10 +108,12 @@ public class Drivetrain extends Subsystem {
     centric = true;
     System.out.println("**Centric set to: "+centric);
   }
+
   public void turnOffCentric(){
     centric = false;
     System.out.println("**Centric set to: "+centric);
   }
+
   public boolean getCentric(){
     return centric;
   }
@@ -154,8 +156,8 @@ public class Drivetrain extends Subsystem {
   private void antiFlip(double pitch){
 
     while (pitch > 1. || pitch < -1.){
-      if (pitch > 1.) m_SwerveDrive.setMotors(1., 0., 0., centric, yaw, reverseEn, snakeMode);
-      if (pitch < -1.) m_SwerveDrive.setMotors(-1., 0., 0., centric, yaw, reverseEn, snakeMode);
+      if (pitch > 1.) m_SwerveDrive.setMotors(-1., 0., 0., centric, yaw, reverseEn, snakeMode);
+      if (pitch < -1.) m_SwerveDrive.setMotors(1., 0., 0., centric, yaw, reverseEn, snakeMode);
       pitch = Robot.m_gyro.getPitchDeg();
     }
   }

@@ -40,41 +40,45 @@ public class Boomerang extends Subsystem {
     initRotateMotor();
     initHatchMotor();
     initLiftBoosterMotor();
+    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   public void reset(){
-    setLiftLevelMotionMagic(RobotMap.LOW_TARGET_LIFT_LEVEL);
-  }
-
-  //For testing
-  public void setTestLiftPosition(double position){
-    positionTest = position;
-  }
-
-  //For testing
-  public double getTestLiftPosition(){
-    return positionTest;
+    setLiftLevel(RobotMap.LOW_TARGET_LIFT_LEVEL);
   }
 
   public void setLiftLevel(double position){
-    liftMotor.set(ControlMode.Position, position);
-    liftBoosterMotor.set(ControlMode.Follower, 15);
-  }
-
-  public void setLiftLevelMotionMagic(double position){
     liftMotor.set(ControlMode.MotionMagic, position);
-    liftBoosterMotor.set(ControlMode.Follower, 15);
+    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   public void setLiftVelocity(double velocity){
     liftMotor.set(ControlMode.Velocity, velocity);
-    liftBoosterMotor.set(ControlMode.Follower, 15);
+    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
+  }
+
+  public void setDesiredLiftLevel(double desiredLiftLevel) {
+    this.desiredLiftLevel = desiredLiftLevel;
+  }
+
+  public double getDesiredLiftLevel(){
+    return desiredLiftLevel;
+  }
+
+  //Used For testing
+  public void setTestLiftPosition(double position){
+    positionTest = position;
+  }
+
+  //Used For testing
+  public double getTestLiftPosition(){
+    return positionTest;
   }
 
   //Used for testing
   public void setLiftSpeed(double speed){
     liftMotor.set(ControlMode.PercentOutput, speed);
-    liftBoosterMotor.set(ControlMode.Follower, 15);
+    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   //Used for testing
@@ -105,10 +109,6 @@ public class Boomerang extends Subsystem {
     rotateMotor.set(ControlMode.PercentOutput, 0.);
   }
 
-  public void retractBoomerang() {
-    rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_RETRACTED_POSITION);
-  }
-
   public void extendHatchMotors() {
     hatchMotor.set(ControlMode.PercentOutput, 1.);
   }
@@ -128,14 +128,6 @@ public class Boomerang extends Subsystem {
   public void stopHatchMotors() {
     hatchMotor.set(ControlMode.PercentOutput, 0.);
   }
-
-  public void setDesiredLiftLevel(double desiredLiftLevel) {
-    this.desiredLiftLevel = desiredLiftLevel;
-  }
-
-  public double getDesiredLiftLevel(){
-    return desiredLiftLevel;
-  }
   
   private void initLiftMotor(){
     liftMotor.configFactoryDefault();
@@ -150,18 +142,23 @@ public class Boomerang extends Subsystem {
     liftMotor.setSelectedSensorPosition(0);
     liftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
 
-    liftMotor.configMotionAcceleration(60000, TIMEOUT);
-    liftMotor.configMotionCruiseVelocity(60000, TIMEOUT);
+    // liftMotor.configMotionAcceleration(60000, TIMEOUT);  //4096 Mag Encoder accel and velocity targets
+    // liftMotor.configMotionCruiseVelocity(60000, TIMEOUT);
     
+    liftMotor.configMotionAcceleration(12000, TIMEOUT);  //400 Optical Encoder accel and velocity targets, max speed
+    liftMotor.configMotionCruiseVelocity(12000, TIMEOUT);
+
     liftMotor.configPeakOutputForward(1., TIMEOUT);
     liftMotor.configPeakOutputReverse(-1., TIMEOUT);
     
     liftMotor.configNominalOutputForward(0, TIMEOUT);
     liftMotor.configNominalOutputReverse(0, TIMEOUT);
     
-    liftMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
-    
-    liftMotor.config_kP(0, .15, TIMEOUT);
+    // liftMotor.configAllowableClosedloopError(0, 100, TIMEOUT); //4096 Mag Encoder error
+    liftMotor.configAllowableClosedloopError(0, 8, TIMEOUT); //400 Optical Encoder error
+
+    // liftMotor.config_kP(0, .15, TIMEOUT);  //4096 Mag Encoder gain
+    liftMotor.config_kP(0, .5, TIMEOUT);  //400 Optical Encoder gain
     liftMotor.config_kI(0, 0, TIMEOUT);
     liftMotor.config_kD(0, 1, TIMEOUT);
     liftMotor.config_kF(0, 0, TIMEOUT);
@@ -169,20 +166,20 @@ public class Boomerang extends Subsystem {
     System.out.println("  --Boomerang Lift Motor Initialized");
   }
   
-private void initLiftBoosterMotor(){
-  liftBoosterMotor.configFactoryDefault();
+  private void initLiftBoosterMotor(){
+    liftBoosterMotor.configFactoryDefault();
 
-  liftBoosterMotor.setInverted(true);
-  liftBoosterMotor.setNeutralMode(NeutralMode.Brake);
+    liftBoosterMotor.setInverted(true);
+    liftBoosterMotor.setNeutralMode(NeutralMode.Brake);
 
-  liftBoosterMotor.configPeakOutputForward(1., TIMEOUT);
-  liftBoosterMotor.configPeakOutputReverse(-1., TIMEOUT);
-  
-  liftBoosterMotor.configNominalOutputForward(0, TIMEOUT);
-  liftBoosterMotor.configNominalOutputReverse(0, TIMEOUT);
-  
-  System.out.println("  --Boomerang Lift Booster Motor Initialized");
-}
+    liftBoosterMotor.configPeakOutputForward(1., TIMEOUT);
+    liftBoosterMotor.configPeakOutputReverse(-1., TIMEOUT);
+    
+    liftBoosterMotor.configNominalOutputForward(0, TIMEOUT);
+    liftBoosterMotor.configNominalOutputReverse(0, TIMEOUT);
+    
+    System.out.println("  --Boomerang Lift Booster Motor Initialized");
+  }
   
   private void initIntakeMotor(){
     intakeMotor.configFactoryDefault();
@@ -227,8 +224,10 @@ private void initLiftBoosterMotor(){
     rotateMotor.setSelectedSensorPosition(0);
     rotateMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
     
-    rotateMotor.configMotionAcceleration(7500, TIMEOUT);
-    rotateMotor.configMotionCruiseVelocity(7500, TIMEOUT);
+    // rotateMotor.configMotionAcceleration(7500, TIMEOUT);  //4096 Mag Encoder accel and cruise targets
+    // rotateMotor.configMotionCruiseVelocity(7500, TIMEOUT);
+    rotateMotor.configMotionAcceleration(2400, TIMEOUT);  //400 Mag Encoder accel and cruise targets, adding 3.25:1 GB so triple speed from before
+    rotateMotor.configMotionCruiseVelocity(2400, TIMEOUT);
 
     rotateMotor.configPeakOutputForward(1., TIMEOUT);
     rotateMotor.configPeakOutputReverse(-1., TIMEOUT);
@@ -236,9 +235,10 @@ private void initLiftBoosterMotor(){
     rotateMotor.configNominalOutputForward(0, TIMEOUT);
     rotateMotor.configNominalOutputReverse(0, TIMEOUT);
     
-    rotateMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
+    // rotateMotor.configAllowableClosedloopError(0, 100, TIMEOUT);  //4096 Mag Encoder error
+    rotateMotor.configAllowableClosedloopError(0, 8, TIMEOUT); //400 Optical Encoder error
     
-    rotateMotor.config_kP(0, 1., TIMEOUT);
+    rotateMotor.config_kP(0, 1., TIMEOUT);  //NEED TO TUNE.  Might be about right with new 400 Optical Encoder and additional 3.25:1 GB
     rotateMotor.config_kI(0, 0, TIMEOUT);
     rotateMotor.config_kD(0, 1, TIMEOUT);
     rotateMotor.config_kF(0, 0, TIMEOUT);

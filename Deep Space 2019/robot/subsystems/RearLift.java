@@ -21,7 +21,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.*;
 
 public class RearLift extends Subsystem {
   // Create the rear lift and drive motor Objects
@@ -114,10 +113,12 @@ public class RearLift extends Subsystem {
     rearLiftMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
     rearLiftMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
 
-    rearLiftMotor.configAllowableClosedloopError(0, 100, TIMEOUT);
-    
-    rearLiftMotor.config_kP(0, .15, TIMEOUT);
-    rearLiftMotor.config_kI(0, 0, TIMEOUT);
+    // rearLiftMotor.configAllowableClosedloopError(0, 100, TIMEOUT);  //4096 Mag Encoder Error
+    rearLiftMotor.configAllowableClosedloopError(0, 8, TIMEOUT);  //400 Optical Encoder Error
+
+    // rearLiftMotor.config_kP(0, .15, TIMEOUT);  //4096 Mag Encoder Gain
+    rearLiftMotor.config_kP(0, .5, TIMEOUT); //400 Optical Encoder Gain
+    rearLiftMotor.config_kI(0, 0, TIMEOUT);  
     rearLiftMotor.config_kD(0, 1, TIMEOUT);
     rearLiftMotor.config_kF(0, 0, TIMEOUT);
     
