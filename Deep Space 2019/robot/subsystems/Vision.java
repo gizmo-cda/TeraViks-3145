@@ -25,49 +25,53 @@ public class Vision extends Subsystem {
   private NetworkTableEntry ty= table.getEntry("ty");  //Vertical (relative to cam) offset from target: below 0<y<20.5, above -20.5<y<0
   private NetworkTableEntry ta= table.getEntry("ta");  //Area of target: 0-100% of image
   private NetworkTableEntry tv= table.getEntry("tv");  //Valid target = 1
-
+  
   private HashMap<String, Double> visionValues = new HashMap<String, Double>();
-
+  
   private Target m_target = new Target();
-
+  
   public Vision() {
   }
-
+  
   public void setCamMode(int visionMode) {
     table.getEntry("camMode").setNumber(visionMode);
   }
-
+  
   public int getCamMode(){
     return (int) table.getEntry("camMode").getDouble(0.);
   }
-
+  
+  public void setPipeline(int newPipeline){
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(newPipeline);   
+  }
+  
   public boolean acquireTarget() {
     double lock = getVisionValues().get("tv");
-
+    
     if ((int) lock == 1) {
       m_target.moveToTarget();
       return true; 
     } 
     else return false;
-}
+  }
   // Network Table is quite verbose and contains more than needed, so clean it up and make it simple for just what is needed
   public HashMap<String, Double> getVisionValues() {
     // tx = table.getEntry("tx");
     // ty = table.getEntry("ty");
     // ta = table.getEntry("ta");
     // tv = table.getEntry("tv");
-
+    
     visionValues.put("tx", tx.getDouble(0.));  
     visionValues.put("ty", ty.getDouble(0.));  
     visionValues.put("ta", ta.getDouble(0.));  
     visionValues.put("tv", tv.getDouble(0.));  
-
+    
     // test with print statement
     System.out.println("\nTx: "+visionValues.get("tx")
-                        +"\nTy: "+visionValues.get("ty")
-                        +"\nTa: "+visionValues.get("ta")
-                        +"\nTv: "+visionValues.get("tv"));
-
+    +"\nTy: "+visionValues.get("ty")
+    +"\nTa: "+visionValues.get("ta")
+    +"\nTv: "+visionValues.get("tv"));
+    
     return visionValues;
   }
   
@@ -77,7 +81,7 @@ public class Vision extends Subsystem {
     // SmartDashboard.putNumber("LimelightY", y);
     // SmartDashboard.putNumber("LimelightArea", area); 
   }
-
+  
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

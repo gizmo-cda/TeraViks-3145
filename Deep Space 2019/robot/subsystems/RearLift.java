@@ -22,6 +22,9 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class RearLift extends Subsystem {
   // Create the rear lift and drive motor Objects
   private final WPI_TalonSRX rearLiftMotor = new WPI_TalonSRX(RobotMap.REAR_ROBOT_LIFT_TalonSRX_CAN_ID);
@@ -66,28 +69,41 @@ public class RearLift extends Subsystem {
     int frontPosition = Robot.m_boomerang.getLiftPosition();
     int rearPosition = getLiftPosition();
     double pitch = Robot.m_gyro.getPitchDeg();
-    double frontVel = -30000.;
-    double rearVel = 60000.;
+    double frontVel = -6000.;
+    double gainFactor = 1.2; // TODO: test this value
+    Queue<Double> pitchQueue = new LinkedList();
+    double queueSum = 0;
+    double pitchAverage = 0;
+    
+    setLiftPosition(level);
 
-    Robot.m_boomerang.setLiftVelocity(frontVel);
-
-    while (rearPosition < level){
-      setLocalLiftVelocity(rearVel);
-      if (frontPosition <= 5000.){
+    while (getLiftPosition() < level){
+      Robot.m_boomerang.setLiftVelocity(frontVel);
+      if (frontPosition <= 500.){
         Robot.m_boomerang.setLiftLevel(0.);
       }
-      if (pitch < -5){
-        rearVel -= 1300;
-      }
-      else if (pitch > 5){
-        rearVel += 1300;
-      }
+
+      frontVel += pitchAverage * gainFactor; // TODO: make sure that this really should be added, not substracted
       frontPosition = Robot.m_boomerang.getLiftPosition();
       rearPosition = getLiftPosition();
       pitch = Robot.m_gyro.getPitchDeg();
-      // Timer.delay(.02);
+
+      // take in 50 pitch readings and average them out
+      if (pitchQueue.size() < 50){
+        pitchQueue.add(pitch);
+        queueSum += pitch;
+      } else { 
+        queueSum-=pitchQueue.remove();
+        pitchQueue.add(pitch);
+        queueSum += pitch;
+      }
+
+      pitchAverage = queueSum / pitchQueue.size();
+
+      Timer.delay(.01); // TODO: test this value 
     }
-      setLiftPosition(rearPosition);
+      setLiftPosition(level);
+      Robot.m_boomerang.setLiftLevel(0.);
   }
   
   //Talon configuration for the lift motor
