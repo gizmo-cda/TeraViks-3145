@@ -128,7 +128,7 @@ public class SwerveModule {
         
         //Set current position to a known value and start the motor open-loop, but slow
         steerMotor.setSelectedSensorPosition(currentPos);
-        steerMotor.set(ControlMode.PercentOutput, .1);
+        steerMotor.set(ControlMode.PercentOutput, .3);
         
         //
         delay(40);
@@ -158,21 +158,21 @@ public class SwerveModule {
         
         switch (name){
             case "FrontRightWheel":
-            offset = RobotMap.FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES;
+            offset = RobotMap.FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FR;
             break;
             case "FrontLeftWheel":
-            offset = RobotMap.FRONT_LEFT_STEER_INDEX_OFFSET_PULSES;
+            offset = RobotMap.FRONT_LEFT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FL;
             break;
             case "RearLeftWheel":
-            offset = RobotMap.REAR_LEFT_STEER_INDEX_OFFSET_PULSES;
+            offset = RobotMap.REAR_LEFT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RL;
             break;
             case "RearRightWheel":
-            offset = RobotMap.REAR_RIGHT_STEER_INDEX_OFFSET_PULSES;
+            offset = RobotMap.REAR_RIGHT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RR;
             break;
         }
         
         //Add small increment to offset to account for closed loop error
-        offset += RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL;
+        //offset += RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL;
 
         System.out.println("    -Offset            = "+(int) offset);
 
@@ -195,6 +195,9 @@ public class SwerveModule {
         
         //Delay to make sure it had time to set the reference to 0 before the next command is called
         delay(40);
+
+        //Now set the wheel to position 0 to hold the new calibrated position
+        steerMotor.set(ControlMode.Position, 0.);
         
         System.out.println("    -Calibration Error = "+(int) error);
         System.out.println("    -Calibration Completed");
@@ -237,25 +240,20 @@ public class SwerveModule {
 
         steerMotor.setSelectedSensorPosition(0);
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-        
-        //steerMotor.configMotionAcceleration(54000, TIMEOUT);  //4096 Mag Encoder accel and velocity targets
-        //steerMotor.configMotionCruiseVelocity(54000, TIMEOUT);
 
-        steerMotor.configMotionAcceleration(4700, TIMEOUT);  //400 Optical Encoder accel and velocity targets
-        steerMotor.configMotionCruiseVelocity(4700, TIMEOUT);
+        steerMotor.configMotionAcceleration(24000, TIMEOUT);  //400 Optical Encoder accel and velocity targets
+        steerMotor.configMotionCruiseVelocity(12000, TIMEOUT);
 
-        steerMotor.configPeakOutputForward(.3, TIMEOUT);
-        steerMotor.configPeakOutputReverse(-.3, TIMEOUT);
+        steerMotor.configPeakOutputForward(1., TIMEOUT);
+        steerMotor.configPeakOutputReverse(-1., TIMEOUT);
         
         steerMotor.configNominalOutputForward(0, TIMEOUT);
         steerMotor.configNominalOutputReverse(0, TIMEOUT);
         
-        // steerMotor.configAllowableClosedloopError(0, 100, TIMEOUT); //Error for 4096 Mag Encoder
         steerMotor.configAllowableClosedloopError(0, 8, TIMEOUT);  //Error for 400 Optical Encoder
         
-        //steerMotor.config_kP(0, .15, TIMEOUT); //Gain for 4096 ppr Mag Encoder
-        steerMotor.config_kP(0, .5, TIMEOUT);  //Gain adjusted for 400 ppr Optical Encoder
-        steerMotor.config_kI(0, 0, TIMEOUT);
+        steerMotor.config_kP(0, .5, TIMEOUT);  
+        steerMotor.config_kI(0, .0, TIMEOUT);
         steerMotor.config_kD(0, 1, TIMEOUT);
         steerMotor.config_kF(0, 0, TIMEOUT);
         
