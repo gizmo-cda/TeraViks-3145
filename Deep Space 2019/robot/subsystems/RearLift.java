@@ -27,7 +27,7 @@ import java.util.Queue;
 
 public class RearLift extends Subsystem {
   // Create the rear lift and drive motor Objects
-  private final WPI_TalonSRX rearLiftMotor = new WPI_TalonSRX(RobotMap.REAR_ROBOT_LIFT_TalonSRX_CAN_ID);
+  public final WPI_TalonSRX rearLiftMotor = new WPI_TalonSRX(RobotMap.REAR_ROBOT_LIFT_TalonSRX_CAN_ID);
   private final WPI_TalonSRX rearLiftDriveMotor = new WPI_TalonSRX(RobotMap.REAR_ROBOT_LIFT_DRIVE_TalonSRX_CAN_ID);
 
   // Talon controllers' timeout
@@ -53,7 +53,7 @@ public class RearLift extends Subsystem {
     rearLiftMotor.set(ControlMode.Position, position);
   }
 
-  private void setLiftSpeed(double speed){
+  public void setLiftSpeed(double speed){
     rearLiftMotor.set(ControlMode.PercentOutput, speed);
   }
 
