@@ -58,8 +58,8 @@ public class Robot extends TimedRobot {
     m_gyro.reset();
     m_drivetrain.init();
     //m_boomerang.init();
-    //m_rearLift.init();
-    
+    m_rearLift.init();
+
     bootCycle = true;
     
     // chooser.addOption("My Auto", new MyAutoCommand());
@@ -88,13 +88,13 @@ public class Robot extends TimedRobot {
   
   @Override
   public void disabledInit() {
-    //Reset Drivetrain Modes and Swerve Math Variables to clear rotation tracking and reverse
     System.out.println("//////////////////// DISABLED Init /////////////////");    
+    //Reset Drivetrain Modes and Swerve Math Variables to clear rotation tracking and reverse
+    // Robot.m_drivetrain.reset(); //DON'T USE THIS.  ONLY FOR TESTING BEFORE CAL WORKED
   }
   
   @Override
   public void disabledPeriodic() {
-    // Scheduler.getInstance().run();
   }
   
   /**
@@ -130,7 +130,6 @@ public class Robot extends TimedRobot {
     */
     @Override
     public void autonomousPeriodic() {
-      // Scheduler.getInstance().run();
     }
     
     @Override
@@ -150,9 +149,8 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().add(new CalibrateDriveTrain());
         Scheduler.getInstance().run();
       }
-      else{
-        Robot.m_drivetrain.reset(); //Move back to disabled init once cal is fixed?
-      }
+      
+      bootCycle = false;
 
       // Scheduler.getInstance().add(new HatchGrabHold());
       // Scheduler.getInstance().run();
@@ -160,8 +158,7 @@ public class Robot extends TimedRobot {
       // Scheduler.getInstance().run();
       // Scheduler.getInstance().add(new RearLiftHold());
       // Scheduler.getInstance().run();
-      bootCycle = false;
-
+  
       System.out.println("//////////////////// Teleop /////////////////");
       Scheduler.getInstance().add(new Drive());
     }

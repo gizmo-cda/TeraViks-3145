@@ -60,6 +60,7 @@ public class OI {
     btnsm.whenPressed(new SnakeMode());
     btntm.whenPressed(new TargetingMode());
     btnbk.whenPressed(new Brake());
+    btn5.whenPressed(new TargetingMode());
 
     // Operator Buttons
     obtnbt.whenPressed(new BallTargetMode());
@@ -78,7 +79,8 @@ public class OI {
     obtnl3.whenPressed(new Level3Lift());
 
     // test
-    obtn10.whenPressed(new BoomerangOut());
+    // obtn10.whenPressed(new BoomerangOut());
+    obtn10.whenPressed(new RearLiftRetract());
     obtn3.whenPressed(new LiftCountIncrement());
   }
   

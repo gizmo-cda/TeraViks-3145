@@ -62,10 +62,9 @@ public class RobotMap {
  
   // Drivetrain Encoder Constants
   public static final double DRIVE_WHEEL_PULSES_PER_100MS = 600.;       // Used for closed loop velocity
-  //public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 4096.; // Used for closed loop position 4096 Mag encoder
-  public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 400.; // Used for closed loop position 400 Optical encoder
-  //public static final double STEER_PPR = 226831.; //4096 Mag Encoder
-  public static final double STEER_PPR = 22152.;  //400 Optical Encoder
+  public static final double DRIVE_WHEEL_PULSES_PER_INCH = 49.13;       // PPI with 400 Optical Encoder
+  public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 400.;  // Used for closed loop position 400 Optical encoder
+  public static final double STEER_PPR = 22125.;                        // Pulses per wheel revolution with 400 Optical Encoder
 
   // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
   public static final boolean ENABLE_DRIVETRAIN_CALIBRATION = true;
@@ -73,8 +72,10 @@ public class RobotMap {
   public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125;
   public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .375;
   public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125; //Drive Motor needs to be inverted
-  //public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL = 500.; //Small adjustment to cal for error in driving to final cal position & delay in index detection - Mag
-  public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL = 50.; //Small adjustment to cal for error in driving to final cal position & delay in index detection - Optical
+  public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FR = -281.; //Small adjustment to cal for error
+  public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FL = -238.; //Small adjustment to cal for error
+  public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RL = -287.; //Small adjustment to cal for error
+  public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RR = -323.; //Small adjustment to cal for error
 
   // Drive Motor Inversion, Flips the polarity of the motor in the Talon Controller
   public static final boolean FRONT_RIGHT_DRIVE_TalonSRX_Invert = true;
@@ -88,8 +89,8 @@ public class RobotMap {
   public static final double Z_AXIS_THREASHOLD = 0.1;
   
   // Pitch & Roll Constants
-  public static final double PITCH_THRESHOLD = 15.; //Roll in degrees
-  public static final double ROLL_THRESHOLD = 15.; //Pitch in degrees
+  public static final double PITCH_THRESHOLD = 10.; //Roll in degrees
+  public static final double ROLL_THRESHOLD = 10.; //Pitch in degrees
   
   // Vision System Constants
   public static final double CAMERA_MOUNTING_ANGLE = 30.;  //Units are in degrees and referenced to X axis, with CCW being positive
@@ -103,9 +104,9 @@ public class RobotMap {
   // public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.; //4096 Mag Encoder with 100:1 GB + 3.25:1
   // public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 76000.; //4096 Mag Encoder with 100:1 GB + 3.25:1
 
-  public static final double LOW_TARGET_LIFT_LEVEL = 11904.; //400 Optical Encoder with 64:1 GB + 3.25:1
-  public static final double MID_TARGET_LIFT_LEVEL = 156549.; //400 Optical Encoder with 64:1 GB + 3.25:1
-  public static final double HIGH_TARGET_LIFT_LEVEL = 332375.; //400 Optical Encoder with 64:1 GB + 3.25:1
+  public static final double LOW_TARGET_LIFT_LEVEL = 11904.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
+  public static final double MID_TARGET_LIFT_LEVEL = 156549.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
+  public static final double HIGH_TARGET_LIFT_LEVEL = 332375.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
   public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
   public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 70000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
 
@@ -116,7 +117,8 @@ public class RobotMap {
   // Rear Lift Level Positions
   public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 1; // NEED TO TUNE
   // public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 3263420; //4096 MAG Encoder with 100:1 GB
-  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 318693; //400 MAG Encoder with 100:1 GB
+  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 2000000; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
+  //public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 318693; //400 MAG Encoder with 100:1 GB
 
   // Collision Detection for NavX
   public static final double COLLISION_THRESHOLD_Y = .5; // in Gs
