@@ -70,6 +70,7 @@ public class Drivetrain extends Subsystem {
   private double pitch = 0.; //NavX Gyro Pitch angle
   private double maxRoll = RobotMap.PITCH_THRESHOLD;
   private double maxPitch = RobotMap.ROLL_THRESHOLD;
+  private double power = 0;
 
   private boolean reverseEn = true;  //Enables reversing wheel drive motors
 
@@ -147,8 +148,10 @@ public class Drivetrain extends Subsystem {
     setCrabMode();
 
     while (roll > 1. || roll < -1.){
-      if (roll > 1.) m_SwerveDrive.setMotors(0, 1., 0., centric, yaw, reverseEn, snakeMode);
-      if (roll < -1.) m_SwerveDrive.setMotors(0, -1., 0., centric, yaw, reverseEn, snakeMode);
+      power = -roll/maxRoll;
+      if (power > 1.) power = 1; else if (power < -1.) power = -1.;
+      if (roll > 1.) m_SwerveDrive.setMotors(0, power, 0., centric, yaw, reverseEn, snakeMode);
+      if (roll < -1.) m_SwerveDrive.setMotors(0, power, 0., centric, yaw, reverseEn, snakeMode);
       roll = Robot.m_gyro.getRollDeg();
     }
   }
@@ -156,8 +159,10 @@ public class Drivetrain extends Subsystem {
   private void antiFlip(double pitch){
 
     while (pitch > 1. || pitch < -1.){
-      if (pitch > 1.) m_SwerveDrive.setMotors(-1., 0., 0., centric, yaw, reverseEn, snakeMode);
-      if (pitch < -1.) m_SwerveDrive.setMotors(1., 0., 0., centric, yaw, reverseEn, snakeMode);
+      power = -pitch/maxPitch;
+      if (power > 1.) power = 1; else if (power < -1.) power = -1.;
+      if (pitch > 1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode);
+      if (pitch < -1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode);
       pitch = Robot.m_gyro.getPitchDeg();
     }
   }
