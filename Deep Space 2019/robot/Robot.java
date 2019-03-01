@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.*;
 
 import frc.robot.subsystems.*;
@@ -149,6 +150,10 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().add(new CalibrateDriveTrain());
         Scheduler.getInstance().run();
       }
+      if (bootCycle)
+        m_rearLift.setLiftSpeed(-1000);
+        Timer.delay(.5);
+        m_rearLift.rearLiftMotor.setSelectedSensorPosition(0);
       
       bootCycle = false;
 

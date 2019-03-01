@@ -22,14 +22,14 @@ public class OI {
   private Joystick swerveJoy = new Joystick(0);
 
   //Instantiate the buttons 0-11
-  private Button btnrc = new JoystickButton(swerveJoy, 1); //Square Button - Robot Centric - Default Robot
-  private Button btnfc = new JoystickButton(swerveJoy, 2); //X Button - Field Centric - Default Robot
+  private Button btn1 = new JoystickButton(swerveJoy, 1); //Square Button
+  private Button btn2 = new JoystickButton(swerveJoy, 2); //X Button
   private Button btncm = new JoystickButton(swerveJoy, 3); //O Button - Crab Mode - Default Crab
   private Button btnsm = new JoystickButton(swerveJoy, 4); //Triange Button - Snake Mode - Default Crab
-  private Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button - Targeting On While Pressed / Normal Drive Camera While !Pressed
-  private Button btntm = new JoystickButton(swerveJoy, 6); //R1 Button - No Key Binding
-  private Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button - No Key Binding
-  private Button btnbk = new JoystickButton(swerveJoy, 8); //R2 Button - Stop While Pressed
+  private Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button - No Key Binding
+  private Button btnfc = new JoystickButton(swerveJoy, 6); //R1 Button - Field Centric
+  private Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button - Targeting On While Pressed / Normal Drive Camera While !Pressed
+  private Button btnrc = new JoystickButton(swerveJoy, 8); //R2 Button - Robot Centric
   private Button btn9 = new JoystickButton(swerveJoy, 9); //Select Button - No Key Binding
   private Button btn10 = new JoystickButton(swerveJoy, 10); //Start Button - No Key Binding
   private Button btn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button - No Key Binding
@@ -58,9 +58,9 @@ public class OI {
     btnfc.whenPressed(new FieldCentric());
     btncm.whenPressed(new CrabMode());
     btnsm.whenPressed(new SnakeMode());
-    btntm.whenPressed(new TargetingMode());
-    btnbk.whenPressed(new Brake());
-    btn5.whenPressed(new TargetingMode());
+    // btntm.whenPressed(new TargetingMode());
+    // btnbk.whenPressed(new Brake());
+    btn7.whenPressed(new TargetingMode());
 
     // Operator Buttons
     obtnbt.whenPressed(new BallTargetMode());
@@ -80,7 +80,7 @@ public class OI {
 
     // test
     // obtn10.whenPressed(new BoomerangOut());
-    obtn10.whenPressed(new RearLiftRetract());
+    obtn10.whenPressed(new Level2Lift());
     obtn3.whenPressed(new LiftCountIncrement());
   }
   

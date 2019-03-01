@@ -94,8 +94,8 @@ public class RobotMap {
   
   // Vision System Constants
   public static final double CAMERA_MOUNTING_ANGLE = 30.;  //Units are in degrees and referenced to X axis, with CCW being positive
-  public static final double CAMERA_MOUNTING_HEIGHT = 36.;  //Units are in inches
-  public static final double DOUBLE_STRIPE_REFLECTIVE_TAPE_TARGET_HEIGHT = 25.;  //Units are in inches
+  public static final double CAMERA_MOUNTING_HEIGHT = 62.;  //Units are in inches
+  public static final double DOUBLE_STRIPE_REFLECTIVE_TAPE_TARGET_HEIGHT = 28.5;  //Units are in inches
 
   // Boomerang Lift Level Positions
   // public static final double LOW_TARGET_LIFT_LEVEL = 190467.; //4096 Mag Encoder with 100:1 GB + 3.25:1
@@ -115,9 +115,9 @@ public class RobotMap {
   public static final double BOOMERANG_DEPLOYED_POSITION = -59316.; //400 Opctical Encoder with 100:1 GB + 3.25:1
 
   // Rear Lift Level Positions
-  public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 1; // NEED TO TUNE
+  public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 108151; // NEED TO TUNE
   // public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 3263420; //4096 MAG Encoder with 100:1 GB
-  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 2000000; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
+  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 292886; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
   //public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 318693; //400 MAG Encoder with 100:1 GB
 
   // Collision Detection for NavX
