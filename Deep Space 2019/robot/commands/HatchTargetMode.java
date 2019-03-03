@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
 public class HatchTargetMode extends Command {
 
@@ -15,7 +16,7 @@ public class HatchTargetMode extends Command {
 
   public HatchTargetMode() {
     // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Robot.m_vision);
   }
 
   // Called just before this Command runs the first time
@@ -27,6 +28,7 @@ public class HatchTargetMode extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_vision.setPipeline(0);
   }
 
   // Make this return true when this Command no longer needs to run execute()

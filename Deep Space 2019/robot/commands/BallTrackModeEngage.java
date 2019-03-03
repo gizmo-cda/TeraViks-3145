@@ -10,39 +10,37 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BallTargetMode extends Command {
-
-  public static boolean ballTarget;
-  
-  public BallTargetMode() {
+public class BallTrackModeEngage extends Command {
+  public BallTrackModeEngage() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_vision);
+    // eg. requires(chassis);
+    // requires(Robot.m_drivetrain);
   }
-
+  
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    ballTarget = true;
   }
-
+  
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_drivetrain.setBallTrackMode(true);
+    // Robot.m_drivetrain.ballTrackMode = true;
     Robot.m_vision.setPipeline(1);
   }
-
+  
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    ballTarget = false;
-    return false;
+    return true;
   }
-
+  
   // Called once after isFinished returns true
   @Override
   protected void end() {
   }
-
+  
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
