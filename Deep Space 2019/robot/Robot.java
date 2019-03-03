@@ -79,6 +79,19 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     // System.out.println("Lift Position = "+Robot.m_boomerang.getLiftPosition());
     // System.out.println("Gyro Position = "+Robot.m_gyro.getPitchDeg());
+    SmartDashboard.putData(Scheduler.getInstance());
+    SmartDashboard.putBoolean("Centric Set", m_drivetrain.getCentric());
+    SmartDashboard.putBoolean("Snake Mode", m_drivetrain.snakeMode);
+    SmartDashboard.putBoolean("Ball Target Mode", BallTargetMode.ballTarget);
+    SmartDashboard.putBoolean("Hatch Target Mode", HatchTargetMode.hatchTarget);
+    SmartDashboard.putNumber("Gyro Yaw", m_gyro.getYawDeg());
+    SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitchDeg());
+    SmartDashboard.putNumber("Gyro Roll", m_gyro.getRollDeg());
+    SmartDashboard.putData("Lvl 3 boomerang", new Level3Boomerang());
+    SmartDashboard.putData("Collision Sensor", new CollisionSensor());
+    SmartDashboard.putData("Rear Lift Drive", new RearLiftDrive());
+    SmartDashboard.putData("Rear Lift Retract", new RearLiftRetract());
+    SmartDashboard.putData("Calibrate Drivetrain", new CalibrateDriveTrain());
   }
   
   /**
@@ -175,19 +188,10 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
       //Add Drive to the command stack, it is always running from here on until DS Disable
       Scheduler.getInstance().run();
-      SmartDashboard.putData(Scheduler.getInstance());
-      SmartDashboard.getBoolean("Centric Set", m_drivetrain.getCentric());
-      SmartDashboard.getBoolean("Snake Mode", m_drivetrain.snakeMode);
-      SmartDashboard.getBoolean("Ball Target Mode", BallTargetMode.ballTarget);
-      SmartDashboard.getBoolean("Hatch Target Mode", HatchTargetMode.hatchTarget);
-      SmartDashboard.getNumber("Gyro Yaw", m_gyro.getYawDeg());
-      SmartDashboard.getNumber("Gyro Pitch", m_gyro.getPitchDeg());
-      SmartDashboard.getNumber("Gyro Roll", m_gyro.getRollDeg());
-      SmartDashboard.putData("Lvl 3 boomerang", new Level3Boomerang());
-      SmartDashboard.putData("Collision Sensor", new CollisionSensor());
-      SmartDashboard.putData("Rear Lift Drive", new RearLiftDrive());
-      SmartDashboard.putData("Rear Lift Retract", new RearLiftRetract());
-    }
+      if (Robot.m_oi.getOperatorDpad() == 0){
+        new RearLiftRetract();
+        }
+      }
     
     /**
     * This function is called periodically during test mode.
