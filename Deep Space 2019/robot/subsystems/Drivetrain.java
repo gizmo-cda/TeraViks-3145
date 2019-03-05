@@ -77,6 +77,7 @@ public class Drivetrain extends Subsystem {
   public boolean snakeMode = false; //Crab = false, Snake = True
   
   private boolean ballTrackMode = false;
+  private boolean hatchTrackMode = false;
   
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
@@ -134,6 +135,10 @@ public class Drivetrain extends Subsystem {
   public void setBallTrackMode(boolean mode){
     this.ballTrackMode = mode;
   }
+
+  public void setHatchTrackMode(boolean mode){
+    this.hatchTrackMode = mode;
+  }
   
   public void move(double fwd, double str, double rcw){
     System.out.println(ballTrackMode);
@@ -151,6 +156,13 @@ public class Drivetrain extends Subsystem {
     if (ballTrackMode && Robot.m_vision.getTv()==1.){
       str = 0;
       rcw = .03*Robot.m_vision.getTx();
+    }
+
+    if (hatchTrackMode && Robot.m_vision.getTv()==1.){
+      // if (!(Robot.m_vision.getTx() <= 1 && Robot.m_vision.getTx() >= -1)) {
+      //   str -= .3*Robot.m_vision.getTx();
+      // }
+      rcw = .02*Robot.m_vision.getTx();
     }
     
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode);
