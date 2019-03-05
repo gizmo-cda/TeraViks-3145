@@ -10,23 +10,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BallTrackModeDisengage extends Command {
-  public BallTrackModeDisengage() {
-    
+public class HatchTrackModeEngage extends Command {
+  public HatchTrackModeEngage() {
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_drivetrain.setBallTrackMode(false);
-    // Robot.m_drivetrain.ballTrackMode = false;
-    Robot.m_vision.setPipeline(0); // pipeline 0 is what it initially was, that is for hatch tracking (is that what we want to default to?)
+    Robot.m_drivetrain.setHatchTrackMode(true);
+    Robot.m_vision.setPipeline(0); // track only right target
   }
 
   // Make this return true when this Command no longer needs to run execute()

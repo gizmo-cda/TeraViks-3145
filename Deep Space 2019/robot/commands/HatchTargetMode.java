@@ -28,7 +28,7 @@ public class HatchTargetMode extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_vision.setPipeline(0);
+    Robot.m_vision.setPipeline(0); //right target, both is 0
   }
 
   // Make this return true when this Command no longer needs to run execute()
