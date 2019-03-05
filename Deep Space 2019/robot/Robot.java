@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
     m_rearLift.init();
 
     bootCycle = true;
+
     
     // chooser.addOption("My Auto", new MyAutoCommand());
     // m_chooser.setDefaultOption("Default Swerve", new Drive());
@@ -169,6 +170,8 @@ public class Robot extends TimedRobot {
         m_rearLift.rearLiftMotor.setSelectedSensorPosition(0);
       
       bootCycle = false;
+      m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
+
 
       // Scheduler.getInstance().add(new HatchGrabHold());
       // Scheduler.getInstance().run();

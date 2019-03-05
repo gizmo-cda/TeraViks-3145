@@ -61,6 +61,12 @@ public class OI {
     btnfc.whenPressed(new FieldCentric());
     // these disrupt the drive train, use crab mode inherently instead
     // btncm.whenPressed(new CrabMode());
+
+    // testing purposes /////////////////////////////////
+    btncm.whenPressed(new HatchTrackModeEngage());
+    btncm.whenReleased(new HatchTrackModeDisengage());
+    /////////////////////////////////////////////////////
+
     // btnsm.whenPressed(new SnakeMode());
     btn5.whenPressed(new BallTrackModeEngage());
     btn5.whenReleased(new BallTrackModeDisengage());
