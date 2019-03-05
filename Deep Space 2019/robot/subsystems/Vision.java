@@ -44,6 +44,10 @@ public class Vision extends Subsystem {
   public void setPipeline(int newPipeline){
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(newPipeline);   
   }
+
+  public void setLedMode(int ledMode){
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(ledMode);
+  }
   
   public boolean acquireTarget() {
     double lock = getVisionValues().get("tv");
