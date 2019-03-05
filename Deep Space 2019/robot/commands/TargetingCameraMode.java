@@ -25,6 +25,7 @@ public class TargetingCameraMode extends Command {
   @Override
   protected void execute() {
     Robot.m_vision.setCamMode(0);
+    Robot.m_vision.setLedMode(0);
   }
 
   // Make this return true when this Command no longer needs to run execute()
