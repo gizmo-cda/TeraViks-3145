@@ -16,7 +16,7 @@ public class BallTargetMode extends Command {
   
   public BallTargetMode() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_vision);
+    // requires(Robot.m_vision);
   }
 
   // Called just before this Command runs the first time

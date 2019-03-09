@@ -27,6 +27,7 @@ public class BallTrackModeDisengage extends Command {
     Robot.m_drivetrain.setBallTrackMode(false);
     // Robot.m_drivetrain.ballTrackMode = false;
     Robot.m_vision.setPipeline(0); // pipeline 0 is what it initially was, that is for hatch tracking (is that what we want to default to?)
+    Robot.m_vision.setCamMode(1);
   }
 
   // Make this return true when this Command no longer needs to run execute()

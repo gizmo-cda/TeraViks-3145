@@ -13,7 +13,7 @@ import frc.robot.Robot;
 public class TargetPipeline extends Command {
   public TargetPipeline() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_vision);
+    // requires(Robot.m_vision);
   }
   
   // Called just before this Command runs the first time

@@ -141,7 +141,7 @@ public class Drivetrain extends Subsystem {
   }
   
   public void move(double fwd, double str, double rcw){
-    System.out.println(ballTrackMode);
+    // System.out.println(ballTrackMode);
     // This is Yaw angle +/- 180 in degrees
     if (centric) yaw = Robot.m_gyro.getYawDeg();
     
@@ -154,15 +154,15 @@ public class Drivetrain extends Subsystem {
     if (pitch > maxPitch || pitch < -maxPitch) antiFlip(pitch);
     
     if (ballTrackMode && Robot.m_vision.getTv()==1.){
-      str = 0;
-      rcw = .03*Robot.m_vision.getTx();
+      str = 0.;
+      rcw = .1*Robot.m_vision.getTx();
     }
 
     if (hatchTrackMode && Robot.m_vision.getTv()==1.){
       // if (!(Robot.m_vision.getTx() <= 1 && Robot.m_vision.getTx() >= -1)) {
       //   str -= .3*Robot.m_vision.getTx();
       // }
-      rcw = .02*Robot.m_vision.getTx();
+      // rcw = .02*Robot.m_vision.getTx();
     }
     
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode);

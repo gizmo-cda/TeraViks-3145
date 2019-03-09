@@ -18,7 +18,7 @@ import frc.robot.RobotMap;
 
 public class Boomerang extends Subsystem {
   // Create the Drive Motor and Steer Motor Objects
-  private final WPI_TalonSRX liftMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
+  public final WPI_TalonSRX liftMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(RobotMap.INTAKE__TalonSRX_CAN_ID);
   private final WPI_TalonSRX shootMotor = new WPI_TalonSRX(RobotMap.SHOOT_TalonSRX_CAN_ID);
   private final WPI_TalonSRX rotateMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_ROTATE_TalonSRX_CAN_ID);
@@ -49,12 +49,12 @@ public class Boomerang extends Subsystem {
 
   public void setLiftLevel(double position){
     liftMotor.set(ControlMode.MotionMagic, position);
-    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
+    // liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   public void setLiftVelocity(double velocity){
     liftMotor.set(ControlMode.Velocity, velocity);
-    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
+    // liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   public void setDesiredLiftLevel(double desiredLiftLevel) {
@@ -91,7 +91,7 @@ public class Boomerang extends Subsystem {
   }
 
   public void startBallEject() {
-    shootMotor.set(ControlMode.PercentOutput, 1.);
+    shootMotor.set(ControlMode.PercentOutput, -1.);
   }
 
   public void stopBallMotors(){
@@ -101,11 +101,11 @@ public class Boomerang extends Subsystem {
 
   public void deployBoomerang() {
     rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION/3.);
-    delay(1500);
+    delay(500);
     rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION/1.8);
-    delay(1500);
+    delay(500);
     rotateMotor.set(ControlMode.MotionMagic, RobotMap.BOOMERANG_DEPLOYED_POSITION/1.1);
-    delay(2000);
+    delay(500);
     rotateMotor.set(ControlMode.PercentOutput, 0.);
   }
 
@@ -145,7 +145,7 @@ public class Boomerang extends Subsystem {
     // liftMotor.configMotionAcceleration(60000, TIMEOUT);  //4096 Mag Encoder accel and velocity targets
     // liftMotor.configMotionCruiseVelocity(60000, TIMEOUT);
     
-    liftMotor.configMotionAcceleration(12000, TIMEOUT);  //400 Optical Encoder accel and velocity targets, max speed
+    liftMotor.configMotionAcceleration(5000, TIMEOUT);  //400 Optical Encoder accel and velocity targets, max speed
     liftMotor.configMotionCruiseVelocity(12000, TIMEOUT);
 
     liftMotor.configPeakOutputForward(1., TIMEOUT);

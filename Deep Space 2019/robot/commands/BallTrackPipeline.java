@@ -13,7 +13,7 @@ import frc.robot.Robot;
 public class BallTrackPipeline extends Command {
   public BallTrackPipeline() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_vision);
+    // requires(Robot.m_vision);
   }
   
   // Called just before this Command runs the first time

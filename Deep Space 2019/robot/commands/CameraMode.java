@@ -15,7 +15,7 @@ public class CameraMode extends Command {
 
   public CameraMode() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_vision);
+    // requires(Robot.m_vision);
   }
 
   // Called just before this Command runs the first time

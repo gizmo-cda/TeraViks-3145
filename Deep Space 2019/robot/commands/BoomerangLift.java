@@ -18,7 +18,7 @@ public class BoomerangLift extends Command {
   // potential to increment to a set pos or decrement to a set pos with two different button calls
 
   public BoomerangLift(double level) {
-    requires(Robot.m_boomerang);
+    // requires(Robot.m_boomerang);
     position = level;
   }
 

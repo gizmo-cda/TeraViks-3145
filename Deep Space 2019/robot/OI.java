@@ -71,10 +71,14 @@ public class OI {
     btn5.whenPressed(new BallTrackModeEngage());
     btn5.whenReleased(new BallTrackModeDisengage());
     // btntm.whenPressed(new TargetingMode());
-    btn7.whenPressed(new TargetingCameraMode());
-    btn7.whenReleased(new DriveCameraMode());
+    btn7.whenPressed(new HatchTrackModeEngage());
+    btn7.whenReleased(new HatchTrackModeDisengage());
     btnbt.whenPressed(new BallTargetMode());
     btnht.whenPressed(new HatchTargetMode());
+    // btn10.whenPressed(new BoomerangRotate()); //For testing purposes only
+
+    // btnsm.whenPressed(new GPSMode());
+    // btnsm.whenReleased(new GPSModeDisengage());
 
     // Operator Buttons
     obtnhg.whenPressed(new HatchGrab());

@@ -171,6 +171,7 @@ public class Robot extends TimedRobot {
       
       bootCycle = false;
       m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
+      m_boomerang.liftMotor.setSelectedSensorPosition(0); // Set boomerang lift motor sensor to zero on Enable
 
 
       // Scheduler.getInstance().add(new HatchGrabHold());

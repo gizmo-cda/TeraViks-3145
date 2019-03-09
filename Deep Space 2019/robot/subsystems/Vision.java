@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.gps.Target;
 
 import java.util.HashMap;
@@ -44,15 +45,16 @@ public class Vision extends Subsystem {
   public void setPipeline(int newPipeline){
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(newPipeline);   
   }
-
-  public void setLedMode(int ledMode){
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(ledMode);
-  }
   
   public boolean acquireTarget() {
-    double lock = getVisionValues().get("tv");
+    Timer.delay(0.5);
+    double lock = getTv();
+    System.out.println("tv:" + lock);
+    // double lock = 1.;
+    System.out.println("////Aquire Target////");
     
     if ((int) lock == 1) {
+      System.out.println("////Move to target////");
       m_target.moveToTarget();
       return true; 
     } 
@@ -78,10 +80,10 @@ public class Vision extends Subsystem {
     visionValues.put("tv", tv.getDouble(0.));  
     
     // test with print statement
-    System.out.println("\nTx: "+visionValues.get("tx")
-    +"\nTy: "+visionValues.get("ty")
-    +"\nTa: "+visionValues.get("ta")
-    +"\nTv: "+visionValues.get("tv"));
+    // System.out.println("\nTx: "+visionValues.get("tx")
+    // +"\nTy: "+visionValues.get("ty")
+    // +"\nTa: "+visionValues.get("ta")
+    // +"\nTv: "+visionValues.get("tv"));
     
     return visionValues;
   }

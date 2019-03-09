@@ -52,17 +52,22 @@ public class Target {
     }
 
     private String rotateToTarget(double fwd) {
-        tx = Robot.m_vision.getVisionValues().get("tx");
-        tv = Robot.m_vision.getVisionValues().get("tv");
+        // tx = Robot.m_vision.getVisionValues().get("tx");
+        // tv = Robot.m_vision.getVisionValues().get("tv");
+        tx = Robot.m_vision.getTx();
+        tv = Robot.m_vision.getTv();
         String statMsg =""; 
 
         // Adjust robot position until x = 0
         while ((tx > 1 || tx < -1) && (int) tv == 1) {
-            tx = Robot.m_vision.getVisionValues().get("tx");
-            tv = Robot.m_vision.getVisionValues().get("tv");
+            // tx = Robot.m_vision.getVisionValues().get("tx");
+            // tv = Robot.m_vision.getVisionValues().get("tv");
+            
+            tx = Robot.m_vision.getTx();
+            tv = Robot.m_vision.getTv();
 
             // Only rotation for movement
-            Robot.m_drivetrain.move(fwd, 0., 0.025*tx); // this acts as a gain, might become constant later
+            Robot.m_drivetrain.move(fwd, 0., 0.11*tx); // this acts as a gain, might become constant later
         }
         if ((int) tv == 0) statMsg = "Lost Target Lock"; else statMsg = "Rotated to Target";
         return statMsg;

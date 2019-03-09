@@ -15,7 +15,7 @@ public class RobotMap {
   // Constants for Robot Dimensions
   public static final double WHEELBASE_LENGTH = 23.38; // inches
   public static final double WHEELBASE_TRACK_WIDTH = 19.88; // inches
-  public static final double SPEED_SCALE = .5;
+  public static final double SPEED_SCALE = .3;
   
   // CAN Bus IDs for Drivetrain Talon SRX controllers
   public static final int FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID = 1;
@@ -104,15 +104,15 @@ public class RobotMap {
   // public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.; //4096 Mag Encoder with 100:1 GB + 3.25:1
   // public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 76000.; //4096 Mag Encoder with 100:1 GB + 3.25:1
 
-  public static final double LOW_TARGET_LIFT_LEVEL = 11904.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
-  public static final double MID_TARGET_LIFT_LEVEL = 156549.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
-  public static final double HIGH_TARGET_LIFT_LEVEL = 332375.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
+  public static final double LOW_TARGET_LIFT_LEVEL = 0.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
+  public static final double MID_TARGET_LIFT_LEVEL = 87000.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
+  public static final double HIGH_TARGET_LIFT_LEVEL = 186000.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
   public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
   public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 70000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
 
   // Boomerang Rotate Positions
-  // public static final double BOOMERANG_DEPLOYED_POSITION = -186890.; //4096 Mag Encoder with 100:1 GB
-  public static final double BOOMERANG_DEPLOYED_POSITION = -59316.; //400 Opctical Encoder with 100:1 GB + 3.25:1
+  // public static final double BOOMERANG_DEPLOYED_POSITION = -186890.; //4096 Mag Encoder with 100:1 
+  public static final double BOOMERANG_DEPLOYED_POSITION = 61192.; //400 Opctical Encoder with 100:1 GB + 3.25:1
 
   // Rear Lift Level Positions
   public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 108151; // NEED TO TUNE

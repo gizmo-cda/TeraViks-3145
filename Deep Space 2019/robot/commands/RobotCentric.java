@@ -12,7 +12,7 @@ import frc.robot.Robot;
 
 public class RobotCentric extends Command {
   public RobotCentric() {
-    requires(Robot.m_drivetrain);
+    // requires(Robot.m_drivetrain);
   }
 
   // Called just before this Command runs the first time

@@ -13,7 +13,7 @@ import frc.robot.*;
 public class DriveCameraMode extends Command {
   public DriveCameraMode() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_vision);
+    // requires(Robot.m_vision);
   }
 
   // Called just before this Command runs the first time
@@ -25,7 +25,6 @@ public class DriveCameraMode extends Command {
   @Override
   protected void execute() {
     Robot.m_vision.setCamMode(1);
-    Robot.m_vision.setLedMode(1);
   }
 
   // Make this return true when this Command no longer needs to run execute()
