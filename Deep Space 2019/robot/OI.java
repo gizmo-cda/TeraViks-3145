@@ -94,15 +94,16 @@ public class OI {
     obtnll.whenPressed(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
     obtnlm.whenPressed(new BoomerangLift(RobotMap.MID_TARGET_LIFT_LEVEL));
     obtnlh.whenPressed(new BoomerangLift(RobotMap.HIGH_TARGET_LIFT_LEVEL));
-    obtnl3.whenPressed(new Level3Lift());
-    obtnl2.whenPressed(new Level2Lift());
+    obtn3.whenPressed(new BoomerangLift(RobotMap.CARGO_SHIP_TARGET_LIFT_LEVEL));
+    obtnl3.whenPressed(new Level3Boomerang());
+    obtnl2.whenPressed(new Level3Group());
 
     if (getOperatorDpad() == 0){
       Robot.m_rearLift.setLiftPosition(0.);
     }
 
     // test
-    obtn3.whenPressed(new LiftCountIncrement());
+    // obtn3.whenPressed(new LiftCountIncrement());
   }
   
   public double getDriverX(){

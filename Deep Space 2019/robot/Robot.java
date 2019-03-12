@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
     
     m_gyro.reset();
     m_drivetrain.init();
-    //m_boomerang.init();
+    m_boomerang.init();
     m_rearLift.init();
 
     bootCycle = true;
@@ -164,22 +164,20 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().add(new CalibrateDriveTrain());
         Scheduler.getInstance().run();
       }
-      if (bootCycle)
-        m_rearLift.setLiftSpeed(-1000);
-        Timer.delay(.5);
-        m_rearLift.rearLiftMotor.setSelectedSensorPosition(0);
+      if (bootCycle) m_rearLift.reset();
       
       bootCycle = false;
       m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
-      m_boomerang.liftMotor.setSelectedSensorPosition(0); // Set boomerang lift motor sensor to zero on Enable
+      m_vision.ledOff();
+      //m_boomerang.liftMotor.setSelectedSensorPosition(0); // Set boomerang lift motor sensor to zero on Enable
 
 
-      // Scheduler.getInstance().add(new HatchGrabHold());
-      // Scheduler.getInstance().run();
-      // Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
-      // Scheduler.getInstance().run();
-      // Scheduler.getInstance().add(new RearLiftHold());
-      // Scheduler.getInstance().run();
+      Scheduler.getInstance().add(new HatchGrabHold());
+      Scheduler.getInstance().run();
+      Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
+      Scheduler.getInstance().run();
+      Scheduler.getInstance().add(new RearLiftHold());
+      Scheduler.getInstance().run();
   
       System.out.println("//////////////////// Teleop /////////////////");
       Scheduler.getInstance().add(new Drive());
@@ -190,13 +188,8 @@ public class Robot extends TimedRobot {
     */
     @Override
     public void teleopPeriodic() {
-      //Add Drive to the command stack, it is always running from here on until DS Disable
       Scheduler.getInstance().run();
-      if (Robot.m_oi.getOperatorDpad() == 0){
-        new RearLiftRetract();
-        }
-      }
-    
+    }
     /**
     * This function is called periodically during test mode.
     */

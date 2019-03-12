@@ -15,7 +15,7 @@ public class RobotMap {
   // Constants for Robot Dimensions
   public static final double WHEELBASE_LENGTH = 23.38; // inches
   public static final double WHEELBASE_TRACK_WIDTH = 19.88; // inches
-  public static final double SPEED_SCALE = .3;
+  public static final double SPEED_SCALE = .5;
   
   // CAN Bus IDs for Drivetrain Talon SRX controllers
   public static final int FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID = 1;
@@ -89,8 +89,8 @@ public class RobotMap {
   public static final double Z_AXIS_THREASHOLD = 0.1;
   
   // Pitch & Roll Constants
-  public static final double PITCH_THRESHOLD = 10.; //Roll in degrees
-  public static final double ROLL_THRESHOLD = 10.; //Pitch in degrees
+  public static final double PITCH_THRESHOLD = 15.; //Roll in degrees
+  public static final double ROLL_THRESHOLD = 15.; //Pitch in degrees
   
   // Vision System Constants
   public static final double CAMERA_MOUNTING_ANGLE = 30.;  //Units are in degrees and referenced to X axis, with CCW being positive
@@ -104,11 +104,13 @@ public class RobotMap {
   // public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.; //4096 Mag Encoder with 100:1 GB + 3.25:1
   // public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 76000.; //4096 Mag Encoder with 100:1 GB + 3.25:1
 
+  public static final double NEGATIVE_SLACK_LIFT_LEVEL = -4300.; //Slack in Boomerang lift that must be taken up to lift the robot onto the platform
   public static final double LOW_TARGET_LIFT_LEVEL = 0.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
+  public static final double CARGO_SHIP_TARGET_LIFT_LEVEL = 40000.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFEREN
+  public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 20000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
+  public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 60000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
   public static final double MID_TARGET_LIFT_LEVEL = 87000.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
   public static final double HIGH_TARGET_LIFT_LEVEL = 186000.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
-  public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
-  public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 70000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
 
   // Boomerang Rotate Positions
   // public static final double BOOMERANG_DEPLOYED_POSITION = -186890.; //4096 Mag Encoder with 100:1 
@@ -116,9 +118,7 @@ public class RobotMap {
 
   // Rear Lift Level Positions
   public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 108151; // NEED TO TUNE
-  // public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 3263420; //4096 MAG Encoder with 100:1 GB
-  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 292886; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
-  //public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 318693; //400 MAG Encoder with 100:1 GB
+  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 280000; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
 
   // Collision Detection for NavX
   public static final double COLLISION_THRESHOLD_Y = .5; // in Gs
