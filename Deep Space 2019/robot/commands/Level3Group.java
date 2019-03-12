@@ -16,8 +16,7 @@ public class Level3Group extends CommandGroup {
   public Level3Group() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
-    addSequential(new Level3Boomerang());
-    addSequential(new CollisionSensor());
+    // addSequential(new Level3Boomerang());
     addSequential(new Level3Lift());
     addSequential(new RearLiftDrive());
     addSequential(new RearLiftRetract());

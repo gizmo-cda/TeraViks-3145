@@ -25,6 +25,8 @@ public class HatchTrackModeEngage extends Command {
     Robot.m_drivetrain.setHatchTrackMode(true);
     Robot.m_vision.setPipeline(0); // track only right target
     Robot.m_vision.setCamMode(0);
+    Robot.m_drivetrain.turnOffCentric();
+    Robot.m_vision.ledOn();
   }
 
   // Make this return true when this Command no longer needs to run execute()

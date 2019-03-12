@@ -13,7 +13,7 @@ import frc.robot.Robot;
 public class BallIntakeReverse extends Command {
   public BallIntakeReverse() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_boomerang);
+   // requires(Robot.m_boomerang);
   }
 
   // Called just before this Command runs the first time

@@ -26,6 +26,7 @@ public class BallTrackModeEngage extends Command {
     // Robot.m_drivetrain.ballTrackMode = true;
     Robot.m_vision.setPipeline(1);
     Robot.m_vision.setCamMode(0);
+    Robot.m_drivetrain.turnOffCentric();
   }
   
   // Make this return true when this Command no longer needs to run execute()

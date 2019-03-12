@@ -17,7 +17,7 @@ public class CollisionSensor extends Command {
   
   public CollisionSensor() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_drivetrain);
+    //requires(Robot.m_drivetrain);
   }
   
   // Called just before this Command runs the first time
@@ -30,7 +30,7 @@ public class CollisionSensor extends Command {
   protected void execute() {
     boolean collisionDetected = false;
     
-    Robot.m_drivetrain.move(.5, 0., 0.);
+    Robot.m_drivetrain.move(1., 0., 0.);
 
     while (!collisionDetected) {
       double currentAccelY = Robot.m_gyro.getAccelY();

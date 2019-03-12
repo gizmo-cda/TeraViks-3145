@@ -13,13 +13,13 @@ import frc.robot.Robot;
 public class RearLiftHold extends Command {
   public RearLiftHold() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_rearLift);
+    //requires(Robot.m_rearLift);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.m_rearLift.setLiftPosition(100.);
+    Robot.m_rearLift.setLiftPosition(0.);
   }
 
   // Called repeatedly when this Command is scheduled to run

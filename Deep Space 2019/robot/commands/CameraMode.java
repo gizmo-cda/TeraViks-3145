@@ -21,13 +21,13 @@ public class CameraMode extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    visionMode = 0;
+    visionMode = 1;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    visionMode = (visionMode == 1) ? 0 : 1;
+    if (visionMode == 1) visionMode = 0; else visionMode = 1;
     Robot.m_vision.setCamMode(visionMode);
     // System.out.println(visionMode);
     // Robot.m_vision.getVisionTableValues();

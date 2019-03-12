@@ -14,7 +14,7 @@ import frc.robot.RobotMap;
 public class Level3Boomerang extends Command {
   public Level3Boomerang() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_boomerang);
+   // requires(Robot.m_boomerang);
   }
 
   // Called just before this Command runs the first time

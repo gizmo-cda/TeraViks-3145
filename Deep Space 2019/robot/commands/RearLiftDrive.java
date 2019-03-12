@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class RearLiftDrive extends Command {
   public RearLiftDrive() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_rearLift);
+    //requires(Robot.m_rearLift);
   }
 
   // Called just before this Command runs the first time
@@ -25,8 +25,10 @@ public class RearLiftDrive extends Command {
   @Override
   protected void execute() {
     Robot.m_rearLift.setDriveSpeed(1.);
-    Robot.m_drivetrain.move(.5, 0., 0.);
-    Timer.delay(3000.);
+    Robot.m_drivetrain.move(.20, 0., 0.);
+    Timer.delay(4.);
+    Robot.m_rearLift.setDriveSpeed(0.);
+    Robot.m_drivetrain.move(.0, 0., 0.);
   }
 
   // Make this return true when this Command no longer needs to run execute()

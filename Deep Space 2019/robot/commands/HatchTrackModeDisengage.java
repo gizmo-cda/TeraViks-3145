@@ -27,6 +27,7 @@ public class HatchTrackModeDisengage extends Command {
     Robot.m_drivetrain.setHatchTrackMode(false);
     Robot.m_vision.setPipeline(0); // this is just regular vision
     Robot.m_vision.setCamMode(1);
+    Robot.m_vision.ledOff();
   }
 
   // Make this return true when this Command no longer needs to run execute()
