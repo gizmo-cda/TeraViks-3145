@@ -118,7 +118,7 @@ public class RobotMap {
 
   // Rear Lift Level Positions
   public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 108151; // NEED TO TUNE
-  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 280000; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
+  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 298000; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
 
   // Collision Detection for NavX
   public static final double COLLISION_THRESHOLD_Y = .5; // in Gs
