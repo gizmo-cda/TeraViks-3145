@@ -92,8 +92,8 @@ public class Drivetrain extends Subsystem {
   }
   
   public void init(){
-    m_SwerveDrive.initMotors();
     System.out.println("**Initializing Drivetrain Motors");
+    m_SwerveDrive.initMotors();
   }
   
   public void reset(){
@@ -101,7 +101,7 @@ public class Drivetrain extends Subsystem {
     setCrabMode();
     coast();
     System.out.println("**Drivetrain reset to CrabMode, Centric Off, and Coast");
-    m_SwerveDrive.reset();
+    //m_SwerveDrive.reset(); DO NOT USE UNLESS TESTING WITH KNOWLEDGE OF IMPACT
   }
   
   public void calSteering(boolean checkPhase){
@@ -162,7 +162,7 @@ public class Drivetrain extends Subsystem {
       // if (!(Robot.m_vision.getTx() <= 1 && Robot.m_vision.getTx() >= -1)) {
       //   str -= .3*Robot.m_vision.getTx();
       // }
-      // rcw = .02*Robot.m_vision.getTx();
+      rcw = .1*Robot.m_vision.getTx();
     }
     
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode);

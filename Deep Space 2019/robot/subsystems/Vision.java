@@ -37,6 +37,14 @@ public class Vision extends Subsystem {
   public void setCamMode(int visionMode) {
     table.getEntry("camMode").setNumber(visionMode);
   }
+
+  public void ledOff() {
+    table.getEntry("ledMode").setNumber(1); // 1 is force off, 0 is default for pipeline, 3 is force on
+  }
+
+  public void ledOn() {
+    table.getEntry("ledMode").setNumber(3); // 1 is force off, 0 is default for pipeline, 3 is force on
+  }
   
   public int getCamMode(){
     return (int) table.getEntry("camMode").getDouble(0.);
@@ -60,7 +68,7 @@ public class Vision extends Subsystem {
     } 
     else return false;
   }
-
+  
   public double getTv(){
     return getVisionValues().get("tv");
   }

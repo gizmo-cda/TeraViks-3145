@@ -40,7 +40,6 @@ public class Boomerang extends Subsystem {
     initRotateMotor();
     initHatchMotor();
     initLiftBoosterMotor();
-    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   public void reset(){
@@ -49,12 +48,10 @@ public class Boomerang extends Subsystem {
 
   public void setLiftLevel(double position){
     liftMotor.set(ControlMode.MotionMagic, position);
-    // liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   public void setLiftVelocity(double velocity){
     liftMotor.set(ControlMode.Velocity, velocity);
-    // liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   public void setDesiredLiftLevel(double desiredLiftLevel) {
@@ -78,7 +75,6 @@ public class Boomerang extends Subsystem {
   //Used for testing
   public void setLiftSpeed(double speed){
     liftMotor.set(ControlMode.PercentOutput, speed);
-    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   }
 
   //Used for testing
@@ -87,7 +83,7 @@ public class Boomerang extends Subsystem {
   }
 
   public void startBallIntake(){
-    intakeMotor.set(ControlMode.PercentOutput, 0.75);
+    intakeMotor.set(ControlMode.PercentOutput, 1.);
   }
 
   public void startBallEject() {
@@ -141,9 +137,6 @@ public class Boomerang extends Subsystem {
     liftMotor.setSensorPhase(false);
     liftMotor.setSelectedSensorPosition(0);
     liftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-
-    // liftMotor.configMotionAcceleration(60000, TIMEOUT);  //4096 Mag Encoder accel and velocity targets
-    // liftMotor.configMotionCruiseVelocity(60000, TIMEOUT);
     
     liftMotor.configMotionAcceleration(5000, TIMEOUT);  //400 Optical Encoder accel and velocity targets, max speed
     liftMotor.configMotionCruiseVelocity(12000, TIMEOUT);
@@ -154,10 +147,8 @@ public class Boomerang extends Subsystem {
     liftMotor.configNominalOutputForward(0, TIMEOUT);
     liftMotor.configNominalOutputReverse(0, TIMEOUT);
     
-    // liftMotor.configAllowableClosedloopError(0, 100, TIMEOUT); //4096 Mag Encoder error
     liftMotor.configAllowableClosedloopError(0, 8, TIMEOUT); //400 Optical Encoder error
 
-    // liftMotor.config_kP(0, .15, TIMEOUT);  //4096 Mag Encoder gain
     liftMotor.config_kP(0, .5, TIMEOUT);  //400 Optical Encoder gain
     liftMotor.config_kI(0, 0, TIMEOUT);
     liftMotor.config_kD(0, 1, TIMEOUT);
@@ -178,6 +169,8 @@ public class Boomerang extends Subsystem {
     liftBoosterMotor.configNominalOutputForward(0, TIMEOUT);
     liftBoosterMotor.configNominalOutputReverse(0, TIMEOUT);
     
+    liftBoosterMotor.set(ControlMode.Follower, (double)RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
+
     System.out.println("  --Boomerang Lift Booster Motor Initialized");
   }
   

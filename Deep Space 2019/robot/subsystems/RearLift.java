@@ -41,6 +41,12 @@ public class RearLift extends Subsystem {
     initRearLiftDriveMotor();
   }
 
+  public void reset(){
+    setLiftSpeed(-1000);
+    Timer.delay(.5);
+    rearLiftMotor.setSelectedSensorPosition(0);
+  }
+
   public void setDriveSpeed(double speed){
     rearLiftDriveMotor.set(ControlMode.PercentOutput, speed);
   }
@@ -69,8 +75,8 @@ public class RearLift extends Subsystem {
     int frontPosition = Robot.m_boomerang.getLiftPosition();
     int rearPosition = getLiftPosition();
     double pitch = Robot.m_gyro.getPitchDeg();
-    double frontVel = -6000.;
-    double gainFactor = 1.2; // TODO: test this value
+    double frontVel = -4000.;
+    double gainFactor = 5.; // TODO: test this value
     Queue<Double> pitchQueue = new LinkedList();
     double queueSum = 0;
     double pitchAverage = 0;
@@ -79,8 +85,8 @@ public class RearLift extends Subsystem {
 
     while (getLiftPosition() < level){
       Robot.m_boomerang.setLiftVelocity(frontVel);
-      if (frontPosition <= 500.){
-        Robot.m_boomerang.setLiftLevel(0.);
+      if (frontPosition <= 100.){
+        Robot.m_boomerang.setLiftLevel(RobotMap.NEGATIVE_SLACK_LIFT_LEVEL);
       }
 
       frontVel += pitchAverage * gainFactor; // TODO: make sure that this really should be added, not substracted
@@ -99,11 +105,13 @@ public class RearLift extends Subsystem {
       }
 
       pitchAverage = queueSum / pitchQueue.size();
+      System.out.println(pitchAverage);
 
       Timer.delay(.01); // TODO: test this value 
     }
+    // System.out.println(pitchQueue);
       setLiftPosition(level);
-      Robot.m_boomerang.setLiftLevel(0.);
+      Robot.m_boomerang.setLiftLevel(RobotMap.NEGATIVE_SLACK_LIFT_LEVEL);
   }
   
   //Talon configuration for the lift motor
@@ -129,10 +137,8 @@ public class RearLift extends Subsystem {
     rearLiftMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
     rearLiftMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
 
-    // rearLiftMotor.configAllowableClosedloopError(0, 100, TIMEOUT);  //4096 Mag Encoder Error
     rearLiftMotor.configAllowableClosedloopError(0, 8, TIMEOUT);  //400 Optical Encoder Error
 
-    // rearLiftMotor.config_kP(0, .15, TIMEOUT);  //4096 Mag Encoder Gain
     rearLiftMotor.config_kP(0, .5, TIMEOUT); //400 Optical Encoder Gain
     rearLiftMotor.config_kI(0, 0, TIMEOUT);  
     rearLiftMotor.config_kD(0, 1, TIMEOUT);
