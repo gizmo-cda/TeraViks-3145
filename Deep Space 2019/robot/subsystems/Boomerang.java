@@ -83,7 +83,7 @@ public class Boomerang extends Subsystem {
   }
 
   public void startBallIntake(){
-    intakeMotor.set(ControlMode.PercentOutput, 1.);
+    intakeMotor.set(ControlMode.PercentOutput, -.75);
   }
 
   public void startBallEject() {

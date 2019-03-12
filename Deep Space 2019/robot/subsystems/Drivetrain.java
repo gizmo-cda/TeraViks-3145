@@ -155,14 +155,14 @@ public class Drivetrain extends Subsystem {
     
     if (ballTrackMode && Robot.m_vision.getTv()==1.){
       str = 0.;
-      rcw = .1*Robot.m_vision.getTx();
+      rcw = .05*Robot.m_vision.getTx();
     }
 
     if (hatchTrackMode && Robot.m_vision.getTv()==1.){
       // if (!(Robot.m_vision.getTx() <= 1 && Robot.m_vision.getTx() >= -1)) {
       //   str -= .3*Robot.m_vision.getTx();
       // }
-      rcw = .1*Robot.m_vision.getTx();
+      rcw = .05*Robot.m_vision.getTx();
     }
     
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode);
