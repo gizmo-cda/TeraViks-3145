@@ -105,6 +105,10 @@ public class Boomerang extends Subsystem {
     rotateMotor.set(ControlMode.PercentOutput, 0.);
   }
 
+  public double getRotateMotorPosition(){
+    return rotateMotor.getSelectedSensorPosition();
+  }
+  
   public void extendHatchMotors() {
     hatchMotor.set(ControlMode.PercentOutput, 1.);
   }
@@ -219,8 +223,8 @@ public class Boomerang extends Subsystem {
     
     // rotateMotor.configMotionAcceleration(7500, TIMEOUT);  //4096 Mag Encoder accel and cruise targets
     // rotateMotor.configMotionCruiseVelocity(7500, TIMEOUT);
-    rotateMotor.configMotionAcceleration(2400, TIMEOUT);  //400 Mag Encoder accel and cruise targets, adding 3.25:1 GB so triple speed from before
-    rotateMotor.configMotionCruiseVelocity(2400, TIMEOUT);
+    rotateMotor.configMotionAcceleration(6000, TIMEOUT);  //400 Mag Encoder accel and cruise targets, adding 3.25:1 GB so triple speed from before
+    rotateMotor.configMotionCruiseVelocity(6000, TIMEOUT);
 
     rotateMotor.configPeakOutputForward(1., TIMEOUT);
     rotateMotor.configPeakOutputReverse(-1., TIMEOUT);
