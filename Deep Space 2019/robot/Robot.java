@@ -166,7 +166,6 @@ public class Robot extends TimedRobot {
       }
       if (bootCycle) m_rearLift.reset();
       
-      bootCycle = false;
       m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
       m_vision.ledOff();
       //m_boomerang.liftMotor.setSelectedSensorPosition(0); // Set boomerang lift motor sensor to zero on Enable
@@ -174,11 +173,16 @@ public class Robot extends TimedRobot {
 
       Scheduler.getInstance().add(new HatchGrabHold());
       Scheduler.getInstance().run();
+
+      if ((!bootCycle && enableBoomDeploy) && m_boomerang.getRotateMotorPosition() < 1000) m_boomerang.deployBoomerang();
+
       Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
       Scheduler.getInstance().run();
       Scheduler.getInstance().add(new RearLiftHold());
       Scheduler.getInstance().run();
   
+      bootCycle = false;
+
       System.out.println("//////////////////// Teleop /////////////////");
       Scheduler.getInstance().add(new Drive());
     }
