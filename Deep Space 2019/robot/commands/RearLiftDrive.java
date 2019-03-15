@@ -25,7 +25,7 @@ public class RearLiftDrive extends Command {
   @Override
   protected void execute() {
     Robot.m_rearLift.setDriveSpeed(1.);
-    Robot.m_drivetrain.move(.20, 0., 0.);
+    Robot.m_drivetrain.move(.25, 0., 0.);
     Timer.delay(4.);
     Robot.m_rearLift.setDriveSpeed(0.);
     Robot.m_drivetrain.move(.0, 0., 0.);
