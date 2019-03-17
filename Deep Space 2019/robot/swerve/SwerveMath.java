@@ -73,6 +73,8 @@ public class SwerveMath {
 
   private static boolean snakeMode; //Crab = false, Snake = true
 
+  private static boolean hiLo; //Adjust wheel velocity scalar for high speed or low speed
+
   //Initialize variables to store previous SwerveMath iteration's wheel position values - used for Reversing
   private static Double wp1Current = 0.;  
   private static Double wp2Current = 0.;  
@@ -98,6 +100,7 @@ public class SwerveMath {
   public SwerveMath(){
   }
 
+  //Only for testing, don't use this method
   public void reset(){
     wp1Current = 0.;  
     wp2Current = 0.;  
@@ -117,10 +120,11 @@ public class SwerveMath {
   }  
 
   // First Method of SwerveMath that returns the vector (speed, position) for each wheel as a list
-  public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn, boolean centricIn, double gyroIn, boolean reverseEnIn, boolean snakeModeIn){
+  public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn, boolean centricIn, double gyroIn, boolean reverseEnIn, boolean snakeModeIn, boolean hiLoIn){
+    hiLo = hiLoIn;
     fwd = fwdIn;
     str = strIn;
-    rcw = rcwIn;
+    if(hiLo) rcw = rcwIn * RobotMap.ROTATE_SCALE; else rcw = rcwIn;
     centric = centricIn;
     gyro = gyroIn * toRad;
     reverseEn = reverseEnIn;
@@ -175,10 +179,18 @@ public class SwerveMath {
     ws4 *= pp100msec;
 
     // modify wheel speeds to scale value <=1
-    ws1 *= RobotMap.SPEED_SCALE; 
-    ws2 *= RobotMap.SPEED_SCALE;
-    ws3 *= RobotMap.SPEED_SCALE;
-    ws4 *= RobotMap.SPEED_SCALE;
+    if (hiLo) {
+      ws1 *= RobotMap.HIGH_SPEED_SCALE; 
+      ws2 *= RobotMap.HIGH_SPEED_SCALE;
+      ws3 *= RobotMap.HIGH_SPEED_SCALE;
+      ws4 *= RobotMap.HIGH_SPEED_SCALE;
+    }
+    else {
+      ws1 *= RobotMap.LOW_SPEED_SCALE; 
+      ws2 *= RobotMap.LOW_SPEED_SCALE;
+      ws3 *= RobotMap.LOW_SPEED_SCALE;
+      ws4 *= RobotMap.LOW_SPEED_SCALE; 
+    }
 
     // Calculate the wheel angle for each wheel in radians: +/-pi referenced to Y axis 
     // Then convert to wheel position, with toPos, to absolute pulses for encoder over +/-pi range

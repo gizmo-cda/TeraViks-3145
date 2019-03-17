@@ -51,13 +51,9 @@ public class SwerveModule {
     }
     
     //Closed-Loop Position Target Setting (+/- pulses per +/-180 degrees)
-    // public void setSteerPosition(double wheelPosition){
-    //     steerMotor.set(ControlMode.Position, wheelPosition);
-    // }
     public void setSteerPosition(double wheelPosition){
         steerMotor.set(ControlMode.MotionMagic, wheelPosition);
     }
-
 
     public void setWheelPosition(double position){
          driveMotor.set(ControlMode.Position, position);
@@ -290,6 +286,7 @@ public class SwerveModule {
         }
         
         driveMotor.setNeutralMode(NeutralMode.Coast);
+        driveMotor.configClosedloopRamp(.5, TIMEOUT);
         
         driveMotor.setSelectedSensorPosition(0);
         
