@@ -33,8 +33,9 @@ public class Robot extends TimedRobot {
   public static Boomerang m_boomerang;
   public static OI m_oi;
   
-  public static boolean bootCycle;
-  public static boolean enableBoomDeploy = false;
+  private static boolean bootCycle;
+  private static boolean enableDrivetrainCalibration = true;
+  private static boolean enableBoomDeploy = true;
   
   Command m_autonomousCommand;
   Command m_teleopCommand;
@@ -73,7 +74,7 @@ public class Robot extends TimedRobot {
   * this for items like diagnostics that you want ran during disabled,
   * autonomous, teleoperated and test.
   *
-  * <p>This runs after the mode specific periodic functions, but before
+  * This runs after the mode specific periodic functions, but before
   * LiveWindow and SmartDashboard integrated updating.
   */
   @Override
@@ -83,13 +84,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(Scheduler.getInstance());
     SmartDashboard.putBoolean("Centric Set", m_drivetrain.getCentric());
     SmartDashboard.putBoolean("Snake Mode", m_drivetrain.snakeMode);
-    SmartDashboard.putBoolean("Ball Target Mode", BallTargetMode.ballTarget);
-    SmartDashboard.putBoolean("Hatch Target Mode", HatchTargetMode.hatchTarget);
+    //SmartDashboard.putBoolean("Ball Target Mode", BallTargetMode.ballTarget);
+    //SmartDashboard.putBoolean("Hatch Target Mode", HatchTargetMode.hatchTarget);
     SmartDashboard.putNumber("Gyro Yaw", m_gyro.getYawDeg());
     SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitchDeg());
     SmartDashboard.putNumber("Gyro Roll", m_gyro.getRollDeg());
     SmartDashboard.putData("Lvl 3 boomerang", new Level3Boomerang());
-    SmartDashboard.putData("Collision Sensor", new CollisionSensor());
     SmartDashboard.putData("Rear Lift Drive", new RearLiftDrive());
     SmartDashboard.putData("Rear Lift Retract", new RearLiftRetract());
     SmartDashboard.putData("Calibrate Drivetrain", new CalibrateDriveTrain());
@@ -104,8 +104,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     System.out.println("//////////////////// DISABLED Init /////////////////");    
-    //Reset Drivetrain Modes and Swerve Math Variables to clear rotation tracking and reverse
-    // Robot.m_drivetrain.reset(); //DON'T USE THIS.  ONLY FOR TESTING BEFORE CAL WORKED
   }
   
   @Override
@@ -119,7 +117,7 @@ public class Robot extends TimedRobot {
   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
   * getString code to get the auto name from the text box below the Gyro
   *
-  * <p>You can add additional auto modes by adding additional commands to the
+  * You can add additional auto modes by adding additional commands to the
   * chooser code above (like the commented example) or additional comparisons
   * to the switch structure below with additional strings & commands.
   */
@@ -160,25 +158,34 @@ public class Robot extends TimedRobot {
       // Adding calDriveTrain to scheduler if booting (ie not enable/disable in DS)
       System.out.println("//////////////////// TeleopInit /////////////////");
       
-      if (bootCycle && RobotMap.ENABLE_DRIVETRAIN_CALIBRATION){
+      m_gyro.reset();
+      Timer.delay(.5);
+
+      if (bootCycle && enableDrivetrainCalibration){
         Scheduler.getInstance().add(new CalibrateDriveTrain());
         Scheduler.getInstance().run();
       }
+
       if (bootCycle) m_rearLift.reset();
       
       m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
       m_vision.ledOff();
-      //m_boomerang.liftMotor.setSelectedSensorPosition(0); // Set boomerang lift motor sensor to zero on Enable
-
 
       Scheduler.getInstance().add(new HatchGrabHold());
       Scheduler.getInstance().run();
 
-      if ((!bootCycle && enableBoomDeploy) && m_boomerang.getRotateMotorPosition() < 1000) m_boomerang.deployBoomerang();
+      if ((!bootCycle && enableBoomDeploy) && m_boomerang.getRotateMotorPosition() < 10000){
+        Scheduler.getInstance().add(new BoomerangRotate());
+        Scheduler.getInstance().run();
+      }
 
+      Scheduler.getInstance().add(new HighSpeedDrive());
+      Scheduler.getInstance().run();
       Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
       Scheduler.getInstance().run();
       Scheduler.getInstance().add(new RearLiftHold());
+      Scheduler.getInstance().run();
+      Scheduler.getInstance().add(new BoomerangNudge());
       Scheduler.getInstance().run();
   
       bootCycle = false;

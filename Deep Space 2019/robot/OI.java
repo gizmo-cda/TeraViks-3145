@@ -20,90 +20,69 @@ public class OI {
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
   private Joystick swerveJoy = new Joystick(0);
-  public int getOperatorDpad(){
-    return operatorJoy.getPOV();
-  }
 
   //Instantiate the buttons 0-11
-  private Button btnht = new JoystickButton(swerveJoy, 1); //Square Button
-  private Button btnbt = new JoystickButton(swerveJoy, 2); //X Button
-  private Button btncm = new JoystickButton(swerveJoy, 3); //O Button - Crab Mode - Default Crab
-  private Button btnsm = new JoystickButton(swerveJoy, 4); //Triange Button - Snake Mode - Default Crab
-  private Button btn5 = new JoystickButton(swerveJoy, 5); //L1 Button
-  private Button btnfc = new JoystickButton(swerveJoy, 6); //R1 Button - Field Centric
-  private Button btn7 = new JoystickButton(swerveJoy, 7); //L2 Button - Targeting On While Pressed / Normal Drive Camera While !Pressed
-  private Button btnrc = new JoystickButton(swerveJoy, 8); //R2 Button - Robot Centric
-  private Button btn9 = new JoystickButton(swerveJoy, 9); //Select Button
-  private Button btn10 = new JoystickButton(swerveJoy, 10); //Start Button
-  private Button btn11 = new JoystickButton(swerveJoy, 11); //Left Stick Button
-  private Button btn12 = new JoystickButton(swerveJoy, 12); //Right Stick Button
+  private Button btnSquare= new JoystickButton(swerveJoy, 1); //Square Button - High Speed Drivetrain
+  private Button btnX = new JoystickButton(swerveJoy, 2); //X Button - Low Speed Drivetrain
+  private Button btnO = new JoystickButton(swerveJoy, 3); //O Button - Level 2 climb
+  private Button btnTriangle = new JoystickButton(swerveJoy, 4); //Triange Button - Level 3 climb
+  private Button btnL1 = new JoystickButton(swerveJoy, 5); //L1 Button - Ball Targetting / Normal Drive Camera While !Pressed
+  private Button btnR1 = new JoystickButton(swerveJoy, 6); //R1 Button - Field Centric
+  private Button btnL2 = new JoystickButton(swerveJoy, 7); //L2 Button - Hatch Targetting / Normal Drive Camera While !Pressed
+  private Button btnR2 = new JoystickButton(swerveJoy, 8); //R2 Button - Robot Centric
+  private Button btnSelect = new JoystickButton(swerveJoy, 9); //Select Button
+  private Button btnStart = new JoystickButton(swerveJoy, 10); //Start Button - Climb Safety Disengage
+  private Button btnLeftStick = new JoystickButton(swerveJoy, 11); //Left Stick Button
+  private Button btnRightStick = new JoystickButton(swerveJoy, 12); //Right Stick Button
 
   //Instantiate the Object, operatorJoy, the joystick that controls the grabber/arm
   public Joystick operatorJoy = new Joystick(1);
 
   //Instantiate the buttons 0-11
-  private Button obtnlm = new JoystickButton(operatorJoy, 1); //X Button - Lift to Middle Goal
-  private Button obtnll = new JoystickButton(operatorJoy, 2); //A Button - Lift to Low Goal
-  private Button obtn3 = new JoystickButton(operatorJoy, 3); //B Button - Increment up DURING TESTING
-  private Button obtnlh = new JoystickButton(operatorJoy, 4); //Y Button - Lift to High Goal
-  private Button obtnhg = new JoystickButton(operatorJoy, 5); //LB Button - Hatch Grab
-  private Button obtnhr = new JoystickButton(operatorJoy, 6); //RB Button - Hatch Release
-  private Button obtnbi = new JoystickButton(operatorJoy, 7); //LT Button - Ball Intake
-  private Button obtnbs = new JoystickButton(operatorJoy, 8); //RT Button - Ball Shoot
-  private Button obtnl3 = new JoystickButton(operatorJoy, 9); //Back Button - Level 3 climb
-  private Button obtnl2 = new JoystickButton(operatorJoy, 10); //Start Button  - Level 2 climb
-  private Button obtnbr = new JoystickButton(operatorJoy, 11); //Left Stick Button - Reverse Ball Intake
-  private Button obtn12 = new JoystickButton(operatorJoy, 12); //Right Stick Button 
+  private Button obtnX = new JoystickButton(operatorJoy, 1); //X Button - Lift to Middle Goal
+  private Button obtnA = new JoystickButton(operatorJoy, 2); //A Button - Lift to Low Goal
+  private Button obtnB = new JoystickButton(operatorJoy, 3); //B Button - Lift to Cargo Ship
+  private Button obtnY = new JoystickButton(operatorJoy, 4); //Y Button - Lift to High Goal
+  private Button obtnLB = new JoystickButton(operatorJoy, 5); //LB Button - Hatch Grab
+  private Button obtnRB = new JoystickButton(operatorJoy, 6); //RB Button - Hatch Release
+  private Button obtnLT = new JoystickButton(operatorJoy, 7); //LT Button - Ball Intake
+  private Button obtnRT = new JoystickButton(operatorJoy, 8); //RT Button - Ball Shoot
+  private Button obtnBack = new JoystickButton(operatorJoy, 9); //Back Button - Level 2 climb
+  private Button obtnStart = new JoystickButton(operatorJoy, 10); //Start Button  - Level 3 climb
+  private Button obtnLeftStick = new JoystickButton(operatorJoy, 11); //Left Stick Button
+  private Button obtnRightStick = new JoystickButton(operatorJoy, 12); //Right Stick Button - Reverse Ball Intake
 
   public OI() {
     // Driver Buttons
-    btnrc.whenPressed(new RobotCentric()); 
-    btnfc.whenPressed(new FieldCentric());
-    // these disrupt the drive train, use crab mode inherently instead
-    // btncm.whenPressed(new CrabMode());
-
-    // testing purposes /////////////////////////////////
-    btncm.whenPressed(new HatchTrackModeEngage());
-    btncm.whenReleased(new HatchTrackModeDisengage());
-    /////////////////////////////////////////////////////
-
-    // btnsm.whenPressed(new SnakeMode());
-    btn5.whenPressed(new BallTrackModeEngage());
-    btn5.whenReleased(new BallTrackModeDisengage());
-    // btntm.whenPressed(new TargetingMode());
-    btn7.whenPressed(new HatchTrackModeEngage());
-    btn7.whenReleased(new HatchTrackModeDisengage());
-    btnbt.whenPressed(new BallTargetMode());
-    btnht.whenPressed(new HatchTargetMode());
-    // btn10.whenPressed(new BoomerangRotate()); //For testing purposes only
-
-    // btnsm.whenPressed(new GPSMode());
-    // btnsm.whenReleased(new GPSModeDisengage());
+    btnSquare.whenPressed(new HighSpeedDrive());
+    btnX.whenPressed(new LowSpeedDrive());
+    btnL1.whenPressed(new BallTrackModeEngage());
+    btnL1.whenReleased(new BallTrackModeDisengage());
+    btnL2.whenPressed(new HatchTrackModeEngage());
+    btnL2.whenReleased(new HatchTrackModeDisengage());
+    btnR1.whenPressed(new FieldCentric());
+    btnR2.whenPressed(new RobotCentric()); 
+    btnSelect.whenPressed(new Level2Group());
+    btnStart.whenPressed(new Level3Group());
 
     // Operator Buttons
-    obtnhg.whenPressed(new HatchGrab());
-    obtnhg.whenReleased(new HatchGrabHold());
-    obtnhr.whenPressed(new HatchRelease());
-    obtnhr.whenReleased(new HatchReleaseHold());
-    obtnbi.whenPressed(new BallIntake());
-    obtnbi.whenReleased(new BallStop());
-    obtnbs.whenPressed(new BallShoot());
-    obtnbs.whenReleased(new BallStop());
-    obtnbr.whenPressed(new BallIntakeReverse());
-    obtnbr.whenReleased(new BallStop());
-    obtnll.whenPressed(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
-    obtnlm.whenPressed(new BoomerangLift(RobotMap.MID_TARGET_LIFT_LEVEL));
-    obtnlh.whenPressed(new BoomerangLift(RobotMap.HIGH_TARGET_LIFT_LEVEL));
-    obtn3.whenPressed(new BoomerangLift(RobotMap.CARGO_SHIP_TARGET_LIFT_LEVEL));
-    obtnl3.whenPressed(new Level3Boomerang());
-    obtnl2.whenPressed(new Level3Group());
+    obtnLB.whenPressed(new HatchGrab());
+    obtnLB.whenReleased(new HatchGrabHold());
+    obtnRB.whenPressed(new HatchRelease());
+    obtnRB.whenReleased(new HatchReleaseHold());
+    obtnLT.whenPressed(new BallIntake());
+    obtnLT.whenReleased(new BallStop());
+    obtnRT.whenPressed(new BallShoot());
+    obtnRT.whenReleased(new BallStop());
+    obtnRightStick.whenPressed(new BallIntakeReverse());
+    obtnRightStick.whenReleased(new BallStop());
+    obtnA.whenPressed(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
+    obtnX.whenPressed(new BoomerangLift(RobotMap.MID_TARGET_LIFT_LEVEL));
+    obtnY.whenPressed(new BoomerangLift(RobotMap.HIGH_TARGET_LIFT_LEVEL));
+    obtnB.whenPressed(new BoomerangLift(RobotMap.CARGO_SHIP_TARGET_LIFT_LEVEL));
+    obtnBack.whenPressed(new Level2Boomerang());
+    obtnStart.whenPressed(new Level3Boomerang());
 
-    if (getOperatorDpad() == 0){
-      Robot.m_rearLift.setLiftPosition(0.);
-    }
-
-    // test
-    // obtn3.whenPressed(new LiftCountIncrement());
   }
   
   public double getDriverX(){

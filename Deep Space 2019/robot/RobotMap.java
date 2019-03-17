@@ -15,7 +15,11 @@ public class RobotMap {
   // Constants for Robot Dimensions
   public static final double WHEELBASE_LENGTH = 23.38; // inches
   public static final double WHEELBASE_TRACK_WIDTH = 19.88; // inches
-  public static final double SPEED_SCALE = .5;
+
+  // Speed Scale Constants for the Drivetrain
+  public static final double HIGH_SPEED_SCALE = .75;
+  public static final double LOW_SPEED_SCALE = .3;
+  public static final double ROTATE_SCALE = .67;
   
   // CAN Bus IDs for Drivetrain Talon SRX controllers
   public static final int FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID = 1;
@@ -63,11 +67,10 @@ public class RobotMap {
   // Drivetrain Encoder Constants
   public static final double DRIVE_WHEEL_PULSES_PER_100MS = 600.;       // Used for closed loop velocity
   public static final double DRIVE_WHEEL_PULSES_PER_INCH = 49.13;       // PPI with 400 Optical Encoder
-  public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 400.;  // Used for closed loop position 400 Optical encoder
-  public static final double STEER_PPR = 22125.;                        // Pulses per wheel revolution with 400 Optical Encoder
+  public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 400.;  // 400 Optical Encoder
+  public static final double STEER_PPR = 22125.;                        // Pulses per wheel revolution with 400 Optical Encoder + 12:1 + 4.6:1
 
   // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
-  public static final boolean ENABLE_DRIVETRAIN_CALIBRATION = true;
   public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .375; //Drive Motor needs to be inverted
   public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125;
   public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .375;
@@ -92,38 +95,25 @@ public class RobotMap {
   public static final double PITCH_THRESHOLD = 15.; //Roll in degrees
   public static final double ROLL_THRESHOLD = 15.; //Pitch in degrees
   
-  // Vision System Constants
+  // Vision System Constants - not used
   public static final double CAMERA_MOUNTING_ANGLE = 30.;  //Units are in degrees and referenced to X axis, with CCW being positive
   public static final double CAMERA_MOUNTING_HEIGHT = 62.;  //Units are in inches
   public static final double DOUBLE_STRIPE_REFLECTIVE_TAPE_TARGET_HEIGHT = 28.5;  //Units are in inches
 
-  // Boomerang Lift Level Positions
-  // public static final double LOW_TARGET_LIFT_LEVEL = 190467.; //4096 Mag Encoder with 100:1 GB + 3.25:1
-  // public static final double MID_TARGET_LIFT_LEVEL = 2504789.; //4096 Mag Encoder with 100:1 GB + 3.25:1
-  // public static final double HIGH_TARGET_LIFT_LEVEL = 5317995.; //4096 Mag Encoder with 100:1 GB + 3.25:1
-  // public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 50000.; //4096 Mag Encoder with 100:1 GB + 3.25:1
-  // public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 76000.; //4096 Mag Encoder with 100:1 GB + 3.25:1
+  // Boomerang Lift Level Positions - 400 Optical Encoder with 36:1 + 3.25:1
+  public static final double NEGATIVE_SLACK_LIFT_LEVEL = -3000.; //-4300 is calculated value. Slack in Boomerang lift that must be taken up to lift the robot onto the platform
+  public static final double LOW_TARGET_LIFT_LEVEL = 10000.; 
+  public static final double CARGO_SHIP_TARGET_LIFT_LEVEL = 50000.; 
+  public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 28000.; 
+  public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 65000.; 
+  public static final double MID_TARGET_LIFT_LEVEL = 92000.;
+  public static final double HIGH_TARGET_LIFT_LEVEL = 191000.; 
 
-  public static final double NEGATIVE_SLACK_LIFT_LEVEL = -4300.; //Slack in Boomerang lift that must be taken up to lift the robot onto the platform
-  public static final double LOW_TARGET_LIFT_LEVEL = 0.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
-  public static final double CARGO_SHIP_TARGET_LIFT_LEVEL = 40000.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFEREN
-  public static final double LEVEL2_PLATFORM_LIFT_LEVEL = 20000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
-  public static final double LEVEL3_PLATRORM_LIFT_LEVEL = 60000.; //400 Optical Encoder with 64:1 GB + 3.25:1 NEED TO TUNE
-  public static final double MID_TARGET_LIFT_LEVEL = 87000.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
-  public static final double HIGH_TARGET_LIFT_LEVEL = 186000.; //400 Optical Encoder with 64:1 GB + 3.25:1 GB RATIO MIGHT BE DIFFERENT
-
-  // Boomerang Rotate Positions
-  // public static final double BOOMERANG_DEPLOYED_POSITION = -186890.; //4096 Mag Encoder with 100:1 
+  // Boomerang Rotate Positions - 400 Optical Encoder with 100:1 + 3.25:1
   public static final double BOOMERANG_DEPLOYED_POSITION = 61192.; //400 Opctical Encoder with 100:1 GB + 3.25:1
 
-  // Rear Lift Level Positions
-  public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 108151; // NEED TO TUNE
-  // public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 298000; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
-  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 350000; //4096 MAG Encoder with 100:1 GB USED FOR TESTING, 2/3 deployment
+  // Rear Lift Level Positions - 400 Optical Encoder with 64:1
+  public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 135000;
+  public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 325000;
 
-  // Collision Detection for NavX
-  public static final double COLLISION_THRESHOLD_Y = .5; // in Gs
-
-  public static void init(){
-  }
 }
