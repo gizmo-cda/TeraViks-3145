@@ -22,16 +22,13 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class RearLift extends Subsystem {
   // Create the rear lift and drive motor Objects
-  public final WPI_TalonSRX rearLiftMotor = new WPI_TalonSRX(RobotMap.REAR_ROBOT_LIFT_TalonSRX_CAN_ID);
+  private final WPI_TalonSRX rearLiftMotor = new WPI_TalonSRX(RobotMap.REAR_ROBOT_LIFT_TalonSRX_CAN_ID);
   private final WPI_TalonSRX rearLiftDriveMotor = new WPI_TalonSRX(RobotMap.REAR_ROBOT_LIFT_DRIVE_TalonSRX_CAN_ID);
 
   // Talon controllers' timeout
-  public static final int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
+  private static final int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
 
   public RearLift(){
   }
@@ -67,51 +64,22 @@ public class RearLift extends Subsystem {
     return rearLiftMotor.getSelectedSensorPosition();
   }
 
-  private void setLocalLiftVelocity(double velocity){
-    rearLiftMotor.set(ControlMode.Velocity, velocity);
-  }
-
   public void liftToLevel(int level){
     int frontPosition = Robot.m_boomerang.getLiftPosition();
-    int rearPosition = getLiftPosition();
-    double pitch = Robot.m_gyro.getPitchDeg();
-    double frontVel = -4000.;
-    double gainFactor = 5.; // TODO: test this value
-    Queue<Double> pitchQueue = new LinkedList();
-    double queueSum = 0;
-    double pitchAverage = 0;
+    double frontVel = -3000.;
     
     setLiftPosition(level);
+    Robot.m_boomerang.setLiftVelocity(frontVel);
 
     while (getLiftPosition() < level){
-      Robot.m_boomerang.setLiftVelocity(frontVel);
+      frontPosition = Robot.m_boomerang.getLiftPosition();
       if (frontPosition <= 100.){
         Robot.m_boomerang.setLiftLevel(RobotMap.NEGATIVE_SLACK_LIFT_LEVEL);
       }
-
-      frontVel += pitchAverage * gainFactor; // TODO: make sure that this really should be added, not substracted
-      frontPosition = Robot.m_boomerang.getLiftPosition();
-      rearPosition = getLiftPosition();
-      pitch = Robot.m_gyro.getPitchDeg();
-
-      // take in 50 pitch readings and average them out
-      if (pitchQueue.size() < 50){
-        pitchQueue.add(pitch);
-        queueSum += pitch;
-      } else { 
-        queueSum-=pitchQueue.remove();
-        pitchQueue.add(pitch);
-        queueSum += pitch;
-      }
-
-      pitchAverage = queueSum / pitchQueue.size();
-      System.out.println(pitchAverage);
-
-      Timer.delay(.01); // TODO: test this value 
+      Timer.delay(.01);
     }
-    // System.out.println(pitchQueue);
-      setLiftPosition(level);
-      Robot.m_boomerang.setLiftLevel(RobotMap.NEGATIVE_SLACK_LIFT_LEVEL);
+    setLiftPosition(level);
+    Robot.m_boomerang.setLiftLevel(RobotMap.NEGATIVE_SLACK_LIFT_LEVEL);
   }
   
   //Talon configuration for the lift motor

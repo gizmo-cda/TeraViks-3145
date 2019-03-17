@@ -43,6 +43,8 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveDrive;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class Drivetrain extends Subsystem {
   // Create the Drive Motor and Steer Motor Objects
@@ -75,9 +77,16 @@ public class Drivetrain extends Subsystem {
   private boolean reverseEn = true;  //Enables reversing wheel drive motors
   
   public boolean snakeMode = false; //Crab = false, Snake = True
+
+  public boolean hiLo = false; //High or Low Speed Drivetrain Mode
   
   private boolean ballTrackMode = false;
   private boolean hatchTrackMode = false;
+
+  private Queue<Double> txQueue = new LinkedList<Double>();
+  private double queueSum = 0.;
+  private double txAverage = 0.;
+  private double tx = 0.;
   
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
@@ -87,7 +96,6 @@ public class Drivetrain extends Subsystem {
     rearRightWheel = new SwerveModule("RearRightWheel", rearRightDriveMotor, rearRightSteerMotor);
     
     //Now Build the complete Swerve Drive Object with all four Wheel Modules
-    // m_SwerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel);
     m_SwerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel);
   }
   
@@ -99,8 +107,8 @@ public class Drivetrain extends Subsystem {
   public void reset(){
     turnOffCentric();
     setCrabMode();
-    coast();
-    System.out.println("**Drivetrain reset to CrabMode, Centric Off, and Coast");
+    setLowSpeedDriveMode();
+    System.out.println("**Drivetrain reset to CrabMode, Centric Off, Coast, and Low Speed");
     //m_SwerveDrive.reset(); DO NOT USE UNLESS TESTING WITH KNOWLEDGE OF IMPACT
   }
   
@@ -132,40 +140,62 @@ public class Drivetrain extends Subsystem {
     System.out.println("**Drivetrain Set To Crab Mode");
   }
   
+  public void setHighSpeedDriveMode(){
+    hiLo = true;
+  }
+
+  public void setLowSpeedDriveMode(){
+    hiLo = false;
+  }
+  
   public void setBallTrackMode(boolean mode){
-    this.ballTrackMode = mode;
+    ballTrackMode = mode;
+    if (!ballTrackMode) {
+      txQueue.clear();
+      queueSum = 0.;
+    }
   }
 
   public void setHatchTrackMode(boolean mode){
-    this.hatchTrackMode = mode;
+    hatchTrackMode = mode;
+    if (!hatchTrackMode) {
+      txQueue.clear();
+      queueSum = 0.;
+    }
   }
   
   public void move(double fwd, double str, double rcw){
-    // System.out.println(ballTrackMode);
     // This is Yaw angle +/- 180 in degrees
-    if (centric) yaw = Robot.m_gyro.getYawDeg();
-    
-    // This is Yaw angle +/- 180 in degrees
+    yaw = Robot.m_gyro.getYawDeg();
     roll = Robot.m_gyro.getRollDeg();
     pitch = Robot.m_gyro.getPitchDeg();
     
-    // Detect too much roll angle and strafe into the roll or too much pitch and drive FWD/Reverse accordingly
+    // Detect too much roll angle and strafe into the roll or too much pitch and drive Fwd/Rev accordingly
     if (roll > maxRoll || roll < -maxRoll) antiRoll(roll);
     if (pitch > maxPitch || pitch < -maxPitch) antiFlip(pitch);
     
-    if (ballTrackMode && Robot.m_vision.getTv()==1.){
-      str = 0.;
-      rcw = .05*Robot.m_vision.getTx();
-    }
+    // Override Joystick Inputs for str and rcw when using Vision Tracking
+    if (ballTrackMode || hatchTrackMode){
+      tx = Robot.m_vision.getTx();
 
-    if (hatchTrackMode && Robot.m_vision.getTv()==1.){
-      // if (!(Robot.m_vision.getTx() <= 1 && Robot.m_vision.getTx() >= -1)) {
-      //   str -= .3*Robot.m_vision.getTx();
-      // }
-      rcw = .05*Robot.m_vision.getTx();
+      // take in 50 pitch readings and average them out
+      if (txQueue.size() < 50){
+        txQueue.add(tx);
+        queueSum += tx;
+      } else { 
+        queueSum-=txQueue.remove();
+        txQueue.add(tx);
+        queueSum += tx;
+      }
+  
+      txAverage = queueSum / txQueue.size();
+      // System.out.println(txAverage);
+
+      if (ballTrackMode) str = 0.;
+      rcw = .05*txAverage;
     }
     
-    m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode);
+    m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode, hiLo);
   }
   
   private void antiRoll(double roll){
@@ -174,8 +204,8 @@ public class Drivetrain extends Subsystem {
     while (roll > 1. || roll < -1.){
       power = -roll/maxRoll;
       if (power > 1.) power = 1; else if (power < -1.) power = -1.;
-      if (roll > 1.) m_SwerveDrive.setMotors(0, power, 0., centric, yaw, reverseEn, snakeMode);
-      if (roll < -1.) m_SwerveDrive.setMotors(0, power, 0., centric, yaw, reverseEn, snakeMode);
+      if (roll > 1.) m_SwerveDrive.setMotors(0, power, 0., centric, yaw, reverseEn, snakeMode, hiLo);
+      if (roll < -1.) m_SwerveDrive.setMotors(0, power, 0., centric, yaw, reverseEn, snakeMode, hiLo);
       roll = Robot.m_gyro.getRollDeg();
     }
   }
@@ -185,18 +215,10 @@ public class Drivetrain extends Subsystem {
     while (pitch > 1. || pitch < -1.){
       power = -pitch/maxPitch;
       if (power > 1.) power = 1; else if (power < -1.) power = -1.;
-      if (pitch > 1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode);
-      if (pitch < -1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode);
+      if (pitch > 1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode, hiLo);
+      if (pitch < -1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode, hiLo);
       pitch = Robot.m_gyro.getPitchDeg();
     }
-  }
-  
-  public void coast(){
-    m_SwerveDrive.setCoast();
-  }
-  
-  public void brake(){
-    m_SwerveDrive.setBrake();
   }
   
   public void quickStop(){
@@ -207,8 +229,8 @@ public class Drivetrain extends Subsystem {
     m_SwerveDrive.emergencyStopMotors();
   }
   
-  public void driveDistance(double gyro, double distance) {
-    m_SwerveDrive.setMotorsForDistance(0.5, centric, gyro, reverseEn, snakeMode, distance);
+  public void driveDistance(double gyro, boolean hiLo, double distance) {
+    m_SwerveDrive.setMotorsForDistance(0.5, centric, gyro, reverseEn, snakeMode, hiLo, distance);
   }
   
   @Override

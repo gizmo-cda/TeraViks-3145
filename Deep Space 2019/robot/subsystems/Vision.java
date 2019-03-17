@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.gps.Target;
 
 import java.util.HashMap;
 
@@ -28,9 +26,7 @@ public class Vision extends Subsystem {
   private NetworkTableEntry tv= table.getEntry("tv");  //Valid target = 1
   
   private HashMap<String, Double> visionValues = new HashMap<String, Double>();
-  
-  private Target m_target = new Target();
-  
+    
   public Vision() {
   }
   
@@ -54,21 +50,6 @@ public class Vision extends Subsystem {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(newPipeline);   
   }
   
-  public boolean acquireTarget() {
-    Timer.delay(0.5);
-    double lock = getTv();
-    System.out.println("tv:" + lock);
-    // double lock = 1.;
-    System.out.println("////Aquire Target////");
-    
-    if ((int) lock == 1) {
-      System.out.println("////Move to target////");
-      m_target.moveToTarget();
-      return true; 
-    } 
-    else return false;
-  }
-  
   public double getTv(){
     return getVisionValues().get("tv");
   }
@@ -77,11 +58,6 @@ public class Vision extends Subsystem {
   }
   // Network Table is quite verbose and contains more than needed, so clean it up and make it simple for just what is needed
   public HashMap<String, Double> getVisionValues() {
-    // tx = table.getEntry("tx");
-    // ty = table.getEntry("ty");
-    // ta = table.getEntry("ta");
-    // tv = table.getEntry("tv");
-    
     visionValues.put("tx", tx.getDouble(0.));  
     visionValues.put("ty", ty.getDouble(0.));  
     visionValues.put("ta", ta.getDouble(0.));  

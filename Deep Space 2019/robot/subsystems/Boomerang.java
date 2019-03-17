@@ -13,12 +13,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
 import frc.robot.RobotMap;
 
 public class Boomerang extends Subsystem {
   // Create the Drive Motor and Steer Motor Objects
-  public final WPI_TalonSRX liftMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
+  private final WPI_TalonSRX liftMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_LIFT_TalonSRX_CAN_ID);
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(RobotMap.INTAKE__TalonSRX_CAN_ID);
   private final WPI_TalonSRX shootMotor = new WPI_TalonSRX(RobotMap.SHOOT_TalonSRX_CAN_ID);
   private final WPI_TalonSRX rotateMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_ROTATE_TalonSRX_CAN_ID);
@@ -26,8 +28,6 @@ public class Boomerang extends Subsystem {
   private final WPI_TalonSRX liftBoosterMotor = new WPI_TalonSRX(RobotMap.BOOMERANG_LIFT_BOOSTER_TalonSRX_CAN_ID);
 
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
-  private double desiredLiftLevel = RobotMap.LOW_TARGET_LIFT_LEVEL;
-  private double positionTest;
   
   public Boomerang(){
   }
@@ -54,45 +54,25 @@ public class Boomerang extends Subsystem {
     liftMotor.set(ControlMode.Velocity, velocity);
   }
 
-  public void setDesiredLiftLevel(double desiredLiftLevel) {
-    this.desiredLiftLevel = desiredLiftLevel;
-  }
-
-  public double getDesiredLiftLevel(){
-    return desiredLiftLevel;
-  }
-
-  //Used For testing
-  public void setTestLiftPosition(double position){
-    positionTest = position;
-  }
-
-  //Used For testing
-  public double getTestLiftPosition(){
-    return positionTest;
-  }
-
-  //Used for testing
-  public void setLiftSpeed(double speed){
-    liftMotor.set(ControlMode.PercentOutput, speed);
-  }
-
-  //Used for testing
   public int getLiftPosition(){
     return liftMotor.getSelectedSensorPosition();
   }
 
   public void startBallIntake(){
-    intakeMotor.set(ControlMode.PercentOutput, -.75);
+    intakeMotor.set(ControlMode.PercentOutput, .75);
+  }
+
+  public void reverseBallIntake(){
+    intakeMotor.set(ControlMode.PercentOutput, -1.);
   }
 
   public void startBallEject() {
-    shootMotor.set(ControlMode.PercentOutput, -1.);
+    shootMotor.set(ControlMode.PercentOutput, 1.);
   }
 
   public void stopBallMotors(){
-    shootMotor.set(ControlMode.PercentOutput, 0.);
     intakeMotor.set(ControlMode.PercentOutput, 0.);
+    shootMotor.set(ControlMode.PercentOutput, 0.);
   }
 
   public void deployBoomerang() {
@@ -142,7 +122,7 @@ public class Boomerang extends Subsystem {
     liftMotor.setSelectedSensorPosition(0);
     liftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
     
-    liftMotor.configMotionAcceleration(5000, TIMEOUT);  //400 Optical Encoder accel and velocity targets, max speed
+    liftMotor.configMotionAcceleration(8000, TIMEOUT);  //400 Optical Encoder accel and velocity targets, max speed
     liftMotor.configMotionCruiseVelocity(12000, TIMEOUT);
 
     liftMotor.configPeakOutputForward(1., TIMEOUT);
@@ -181,7 +161,7 @@ public class Boomerang extends Subsystem {
   private void initIntakeMotor(){
     intakeMotor.configFactoryDefault();
     
-    intakeMotor.setInverted(true);
+    intakeMotor.setInverted(false);
     intakeMotor.setNeutralMode(NeutralMode.Brake);
     
     intakeMotor.configPeakOutputForward(1., TIMEOUT);
@@ -196,7 +176,7 @@ public class Boomerang extends Subsystem {
   private void initShootMotor(){
     shootMotor.configFactoryDefault();
  
-    shootMotor.setInverted(false);
+    shootMotor.setInverted(true);
     shootMotor.setNeutralMode(NeutralMode.Brake);
     
     shootMotor.configPeakOutputForward(1., TIMEOUT);
@@ -221,10 +201,10 @@ public class Boomerang extends Subsystem {
     rotateMotor.setSelectedSensorPosition(0);
     rotateMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
     
-    // rotateMotor.configMotionAcceleration(7500, TIMEOUT);  //4096 Mag Encoder accel and cruise targets
-    // rotateMotor.configMotionCruiseVelocity(7500, TIMEOUT);
     rotateMotor.configMotionAcceleration(6000, TIMEOUT);  //400 Mag Encoder accel and cruise targets, adding 3.25:1 GB so triple speed from before
     rotateMotor.configMotionCruiseVelocity(6000, TIMEOUT);
+
+    rotateMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
 
     rotateMotor.configPeakOutputForward(1., TIMEOUT);
     rotateMotor.configPeakOutputReverse(-1., TIMEOUT);
@@ -232,10 +212,9 @@ public class Boomerang extends Subsystem {
     rotateMotor.configNominalOutputForward(0, TIMEOUT);
     rotateMotor.configNominalOutputReverse(0, TIMEOUT);
     
-    // rotateMotor.configAllowableClosedloopError(0, 100, TIMEOUT);  //4096 Mag Encoder error
     rotateMotor.configAllowableClosedloopError(0, 8, TIMEOUT); //400 Optical Encoder error
     
-    rotateMotor.config_kP(0, 1., TIMEOUT);  //NEED TO TUNE.  Might be about right with new 400 Optical Encoder and additional 3.25:1 GB
+    rotateMotor.config_kP(0, 1., TIMEOUT);
     rotateMotor.config_kI(0, 0, TIMEOUT);
     rotateMotor.config_kD(0, 1, TIMEOUT);
     rotateMotor.config_kF(0, 0, TIMEOUT);
