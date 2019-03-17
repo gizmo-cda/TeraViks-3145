@@ -11,14 +11,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 public class BoomerangLift extends Command {
-  // int boomLevels[] = new int[] {0,100,200,300,400,500,600,700}; // determine at a later point
-  // int currentLevel;
   double position = 0.;
 
-  // potential to increment to a set pos or decrement to a set pos with two different button calls
-
   public BoomerangLift(double level) {
-    // requires(Robot.m_boomerang);
     position = level;
   }
 
@@ -31,11 +26,6 @@ public class BoomerangLift extends Command {
   @Override
   protected void execute() {
       Robot.m_boomerang.setLiftLevel(position);
-      Robot.m_boomerang.setDesiredLiftLevel(position);
-  }
-
-  public double setTestLiftPostion(){
-    return position;
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -12,7 +12,6 @@ import frc.robot.Robot;
 
 public class FieldCentric extends Command {
   public FieldCentric() {
-    // requires(Robot.m_drivetrain);
   }
 
   // Called just before this Command runs the first time

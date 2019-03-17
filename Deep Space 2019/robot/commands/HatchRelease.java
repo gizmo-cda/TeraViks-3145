@@ -12,7 +12,6 @@ import frc.robot.Robot;
 
 public class HatchRelease extends Command {
   public HatchRelease() {
-    requires(Robot.m_boomerang);
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +23,6 @@ public class HatchRelease extends Command {
   @Override
   protected void execute() {
     Robot.m_boomerang.extendHatchMotors();
-    //Robot.m_boomerang.holdExtendedHatchMotors();
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -13,8 +13,6 @@ import frc.robot.RobotMap;
 
 public class Level2Lift extends Command {
   public Level2Lift() {
-    // Use requires() here to declare subsystem dependencies
-     requires(Robot.m_rearLift);
   }
 
   // Called just before this Command runs the first time

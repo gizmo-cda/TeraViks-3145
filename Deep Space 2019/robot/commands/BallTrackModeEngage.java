@@ -23,7 +23,6 @@ public class BallTrackModeEngage extends Command {
   @Override
   protected void execute() {
     Robot.m_drivetrain.setBallTrackMode(true);
-    // Robot.m_drivetrain.ballTrackMode = true;
     Robot.m_vision.setPipeline(1);
     Robot.m_vision.setCamMode(0);
     Robot.m_drivetrain.turnOffCentric();

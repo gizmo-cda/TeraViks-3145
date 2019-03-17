@@ -9,17 +9,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class Level3Group extends CommandGroup {
-  
-  public Level3Group() {
+public class Level2Group extends CommandGroup {
+ 
+  public Level2Group() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
-    System.out.println("** Level 3 Climb Started");
+    System.out.println("** Level 2 Climb Started");
     addSequential(new HatchGrabHold());
-    addSequential(new Level3Lift());
+    addSequential(new Level2Lift());
     addSequential(new RearLiftDrive());
     addSequential(new RearLiftRetract());
-
+    
     // these will run in order.
 
     // To run multiple commands at the same time,

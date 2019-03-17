@@ -12,7 +12,6 @@ import frc.robot.Robot;
 
 public class HatchGrabHold extends Command {
   public HatchGrabHold() {
-   // requires(Robot.m_boomerang);
   }
 
   // Called just before this Command runs the first time

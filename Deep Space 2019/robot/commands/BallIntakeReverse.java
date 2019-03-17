@@ -12,8 +12,6 @@ import frc.robot.Robot;
 
 public class BallIntakeReverse extends Command {
   public BallIntakeReverse() {
-    // Use requires() here to declare subsystem dependencies
-   // requires(Robot.m_boomerang);
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +22,7 @@ public class BallIntakeReverse extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    // Robot.m_boomerang.reverseBallIntake();
+    Robot.m_boomerang.reverseBallIntake();
   }
 
   // Make this return true when this Command no longer needs to run execute()

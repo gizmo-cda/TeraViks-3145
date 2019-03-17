@@ -12,8 +12,6 @@ import frc.robot.Robot;
 
 public class BallStop extends Command {
   public BallStop() {
-    // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_boomerang);
   }
   
   // Called just before this Command runs the first time

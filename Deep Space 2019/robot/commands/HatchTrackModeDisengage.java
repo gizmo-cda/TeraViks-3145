@@ -12,8 +12,6 @@ import frc.robot.Robot;
 
 public class HatchTrackModeDisengage extends Command {
   public HatchTrackModeDisengage() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time

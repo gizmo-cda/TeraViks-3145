@@ -12,8 +12,6 @@ import frc.robot.Robot;
 
 public class RearLiftRetract extends Command {
   public RearLiftRetract() {
-    // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_rearLift);
   }
 
   // Called just before this Command runs the first time

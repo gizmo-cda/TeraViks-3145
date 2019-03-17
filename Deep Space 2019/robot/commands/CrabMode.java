@@ -12,18 +12,17 @@ import frc.robot.Robot;
 
 public class CrabMode extends Command {
   public CrabMode() {
-    requires(Robot.m_drivetrain);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.m_drivetrain.setCrabMode();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_drivetrain.setCrabMode();
   }
 
   // Make this return true when this Command no longer needs to run execute()

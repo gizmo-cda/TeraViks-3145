@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class RearLiftDrive extends Command {
   public RearLiftDrive() {
-    // Use requires() here to declare subsystem dependencies
-    //requires(Robot.m_rearLift);
   }
 
   // Called just before this Command runs the first time
@@ -24,9 +22,10 @@ public class RearLiftDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_drivetrain.setHighSpeedDriveMode();
     Robot.m_rearLift.setDriveSpeed(1.);
     Robot.m_drivetrain.move(.25, 0., 0.);
-    Timer.delay(4.);
+    Timer.delay(3.);
     Robot.m_rearLift.setDriveSpeed(0.);
     Robot.m_drivetrain.move(.0, 0., 0.);
   }
