@@ -87,6 +87,7 @@ public class Drivetrain extends Subsystem {
   private double queueSum = 0.;
   private double txAverage = 0.;
   private double tx = 0.;
+  private double squaredAverage;
   
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
@@ -178,8 +179,8 @@ public class Drivetrain extends Subsystem {
     if (ballTrackMode || hatchTrackMode){
       tx = Robot.m_vision.getTx();
 
-      // take in 50 pitch readings and average them out
-      if (txQueue.size() < 50){
+      // take in 10 pitch readings and average them out
+      if (txQueue.size() < 10){
         txQueue.add(tx);
         queueSum += tx;
       } else { 
@@ -192,6 +193,7 @@ public class Drivetrain extends Subsystem {
       // System.out.println(txAverage);
 
       if (ballTrackMode) str = 0.;
+
       rcw = .05*txAverage;
     }
     
