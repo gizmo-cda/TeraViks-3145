@@ -185,8 +185,8 @@ public class Robot extends TimedRobot {
       Scheduler.getInstance().run();
       Scheduler.getInstance().add(new RearLiftHold());
       Scheduler.getInstance().run();
-      Scheduler.getInstance().add(new BoomerangNudge());
-      Scheduler.getInstance().run();
+      // Scheduler.getInstance().add(new BoomerangNudge());
+      // Scheduler.getInstance().run();
   
       bootCycle = false;
 
