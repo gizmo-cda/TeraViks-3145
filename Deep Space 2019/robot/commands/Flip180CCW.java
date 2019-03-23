@@ -9,13 +9,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 
-public class BoomerangNudge extends Command {
-  private double upDown;
-  private double position;
-
-  public BoomerangNudge() {
+public class Flip180CCW extends Command {
+  public Flip180CCW() {
   }
 
   // Called just before this Command runs the first time
@@ -26,17 +22,7 @@ public class BoomerangNudge extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    // getting fwd values from raw input from the joystick's y axis
-    upDown = -Robot.m_oi.getOperatorY();
-
-    // Dead-band the joystick inputs to remove noise/errors when centered
-    if ((upDown > -RobotMap.Y_AXIS_THREASHOLD) && (upDown < RobotMap.Y_AXIS_THREASHOLD)) upDown = 0.;
-
-    position = (double) Robot.m_boomerang.getLiftPosition();
-    if (upDown > 0) position += 5000.; 
-    if (upDown < 0) position -= 5000.;
-
-    Robot.m_boomerang.setLiftLevel(position);
+    Robot.m_drivetrain.setFlip180(false);
   }
 
   // Make this return true when this Command no longer needs to run execute()
