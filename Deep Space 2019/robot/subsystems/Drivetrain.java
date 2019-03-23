@@ -45,6 +45,8 @@ import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveDrive;
 import java.util.Queue;
 import java.util.LinkedList;
+import edu.wpi.first.wpilibj.Timer;
+
 
 public class Drivetrain extends Subsystem {
   // Create the Drive Motor and Steer Motor Objects
@@ -76,9 +78,12 @@ public class Drivetrain extends Subsystem {
   
   private boolean reverseEn = true;  //Enables reversing wheel drive motors
   
-  public boolean snakeMode = false; //Crab = false, Snake = True
+  private boolean snakeMode = false; //Crab = false, Snake = True
 
-  public boolean hiLo = false; //High or Low Speed Drivetrain Mode
+  private boolean hiLo = false; //High or Low Speed Drivetrain Mode
+
+  private boolean flip180 = false; //Flip a 180, induces rotate until 180 degrees of rotation have been attained
+  private boolean flipCW = false; //Clock Wise = True
   
   private boolean ballTrackMode = false;
   private boolean hatchTrackMode = false;
@@ -87,7 +92,6 @@ public class Drivetrain extends Subsystem {
   private double queueSum = 0.;
   private double txAverage = 0.;
   private double tx = 0.;
-  private double squaredAverage;
   
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
@@ -164,7 +168,12 @@ public class Drivetrain extends Subsystem {
       queueSum = 0.;
     }
   }
-  
+
+  public void setFlip180(boolean directionCW){
+    flip180 = true;
+    flipCW = directionCW;
+  }
+
   public void move(double fwd, double str, double rcw){
     // This is Yaw angle +/- 180 in degrees
     yaw = Robot.m_gyro.getYawDeg();
@@ -174,6 +183,7 @@ public class Drivetrain extends Subsystem {
     // Detect too much roll angle and strafe into the roll or too much pitch and drive Fwd/Rev accordingly
     if (roll > maxRoll || roll < -maxRoll) antiRoll(roll);
     if (pitch > maxPitch || pitch < -maxPitch) antiFlip(pitch);
+    if (flip180) rotate180(fwd, str);
     
     // Override Joystick Inputs for str and rcw when using Vision Tracking
     if (ballTrackMode || hatchTrackMode){
@@ -221,6 +231,32 @@ public class Drivetrain extends Subsystem {
       if (pitch < -1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode, hiLo);
       pitch = Robot.m_gyro.getPitchDeg();
     }
+  }
+
+  private void rotate180(double fwdStart, double strStart){
+    //Get the current yaw and initialize local variables
+    double yawCurrent = Robot.m_gyro.getYawAccumDeg(); //Yaw with no discontinuity at +/- 180
+    double yawStart = yawCurrent;
+    double yawDiff = 0.;
+    double rcwMod = 0.;
+    double yawTarg = 0.;
+    double time = Timer.getFPGATimestamp();
+
+    //Check for clockwise or counter clockwise rotation
+    if (flipCW) rcwMod = 1.; else rcwMod = -1.;
+    if (hiLo) yawTarg = 130.; else yawTarg = 160.;
+    //Now rotate 180 degrees either CW or CCW maintaining fwd and str settings
+    while (yawDiff < yawTarg){
+      yawCurrent = Robot.m_gyro.getYawAccumDeg();
+      
+      if (Timer.getFPGATimestamp() - time > 3) break;
+      yawDiff = Math.abs(yawStart - yawCurrent);
+      
+      m_SwerveDrive.setMotors(fwdStart, strStart, rcwMod, centric,  Robot.m_gyro.getYawDeg(), reverseEn, snakeMode, hiLo);
+    }
+
+    //Disable flip so it only flips one time
+    flip180 = false;
   }
   
   public void quickStop(){

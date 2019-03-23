@@ -42,10 +42,6 @@ public class Boomerang extends Subsystem {
     initLiftBoosterMotor();
   }
 
-  public void reset(){
-    setLiftLevel(RobotMap.LOW_TARGET_LIFT_LEVEL);
-  }
-
   public void setLiftLevel(double position){
     liftMotor.set(ControlMode.MotionMagic, position);
   }
