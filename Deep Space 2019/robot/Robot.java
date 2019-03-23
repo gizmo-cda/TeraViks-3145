@@ -64,7 +64,6 @@ public class Robot extends TimedRobot {
 
     bootCycle = true;
 
-    
     // chooser.addOption("My Auto", new MyAutoCommand());
     // m_chooser.setDefaultOption("Default Swerve", new Drive());
   }
@@ -79,20 +78,11 @@ public class Robot extends TimedRobot {
   */
   @Override
   public void robotPeriodic() {
-    // System.out.println("Lift Position = "+Robot.m_boomerang.getLiftPosition());
-    // System.out.println("Gyro Position = "+Robot.m_gyro.getPitchDeg());
     SmartDashboard.putData(Scheduler.getInstance());
     SmartDashboard.putBoolean("Centric Set", m_drivetrain.getCentric());
-    SmartDashboard.putBoolean("Snake Mode", m_drivetrain.snakeMode);
-    //SmartDashboard.putBoolean("Ball Target Mode", BallTargetMode.ballTarget);
-    //SmartDashboard.putBoolean("Hatch Target Mode", HatchTargetMode.hatchTarget);
     SmartDashboard.putNumber("Gyro Yaw", m_gyro.getYawDeg());
     SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitchDeg());
     SmartDashboard.putNumber("Gyro Roll", m_gyro.getRollDeg());
-    SmartDashboard.putData("Lvl 3 boomerang", new Level3Boomerang());
-    SmartDashboard.putData("Rear Lift Drive", new RearLiftDrive());
-    SmartDashboard.putData("Rear Lift Retract", new RearLiftRetract());
-    SmartDashboard.putData("Calibrate Drivetrain", new CalibrateDriveTrain());
   }
   
   /**
@@ -171,22 +161,21 @@ public class Robot extends TimedRobot {
       m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
       m_vision.ledOff();
 
+      Scheduler.getInstance().add(new BoomerangLift(0.));
+      Scheduler.getInstance().run();
+      Scheduler.getInstance().add(new HighSpeedDrive());
+      Scheduler.getInstance().run();
       Scheduler.getInstance().add(new HatchGrabHold());
+      Scheduler.getInstance().run();
+      Scheduler.getInstance().add(new RearLiftHold());
+      Scheduler.getInstance().run();
+      Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
       Scheduler.getInstance().run();
 
       if ((!bootCycle && enableBoomDeploy) && m_boomerang.getRotateMotorPosition() < 10000){
         Scheduler.getInstance().add(new BoomerangRotate());
         Scheduler.getInstance().run();
       }
-
-      Scheduler.getInstance().add(new HighSpeedDrive());
-      Scheduler.getInstance().run();
-      Scheduler.getInstance().add(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));
-      Scheduler.getInstance().run();
-      Scheduler.getInstance().add(new RearLiftHold());
-      Scheduler.getInstance().run();
-      // Scheduler.getInstance().add(new BoomerangNudge());
-      // Scheduler.getInstance().run();
   
       bootCycle = false;
 
@@ -206,6 +195,9 @@ public class Robot extends TimedRobot {
     */
     @Override
     public void testPeriodic() {
+      // System.out.println("X: "+m_oi.getDriverX());
+      // System.out.println("Y: "+m_oi.getDriverY());
+      // System.out.println("Z: "+m_oi.getDriverZ());
     }
   }
   

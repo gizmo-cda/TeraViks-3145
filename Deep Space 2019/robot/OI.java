@@ -22,16 +22,16 @@ public class OI {
   private Joystick swerveJoy = new Joystick(0);
 
   //Instantiate the buttons 0-11
-  private Button btnSquare= new JoystickButton(swerveJoy, 1); //Square Button - High Speed Drivetrain
-  private Button btnX = new JoystickButton(swerveJoy, 2); //X Button - Low Speed Drivetrain
-  private Button btnO = new JoystickButton(swerveJoy, 3); //O Button - Level 2 climb
-  private Button btnTriangle = new JoystickButton(swerveJoy, 4); //Triange Button - Level 3 climb
+  private Button btnSquare = new JoystickButton(swerveJoy, 1); //Square Button - Rotate 180 CCW
+  private Button btnX = new JoystickButton(swerveJoy, 2); //X Button
+  private Button btnO = new JoystickButton(swerveJoy, 3); //O Button - Rotate 180 CW
+  private Button btnTriangle = new JoystickButton(swerveJoy, 4); //Triange Button
   private Button btnL1 = new JoystickButton(swerveJoy, 5); //L1 Button - Ball Targetting / Normal Drive Camera While !Pressed
   private Button btnR1 = new JoystickButton(swerveJoy, 6); //R1 Button - Field Centric
   private Button btnL2 = new JoystickButton(swerveJoy, 7); //L2 Button - Hatch Targetting / Normal Drive Camera While !Pressed
   private Button btnR2 = new JoystickButton(swerveJoy, 8); //R2 Button - Robot Centric
-  private Button btnSelect = new JoystickButton(swerveJoy, 9); //Select Button
-  private Button btnStart = new JoystickButton(swerveJoy, 10); //Start Button - Climb Safety Disengage
+  private Button btnSelect = new JoystickButton(swerveJoy, 9); //Select Button - Level 2 Climb
+  private Button btnStart = new JoystickButton(swerveJoy, 10); //Start Button - Level 3 Climb
   private Button btnLeftStick = new JoystickButton(swerveJoy, 11); //Left Stick Button
   private Button btnRightStick = new JoystickButton(swerveJoy, 12); //Right Stick Button
 
@@ -47,21 +47,22 @@ public class OI {
   private Button obtnRB = new JoystickButton(operatorJoy, 6); //RB Button - Hatch Release
   private Button obtnLT = new JoystickButton(operatorJoy, 7); //LT Button - Ball Intake
   private Button obtnRT = new JoystickButton(operatorJoy, 8); //RT Button - Ball Shoot
-  private Button obtnBack = new JoystickButton(operatorJoy, 9); //Back Button - Level 2 climb
-  private Button obtnStart = new JoystickButton(operatorJoy, 10); //Start Button  - Level 3 climb
+  private Button obtnBack = new JoystickButton(operatorJoy, 9); //Back Button - Level 2 climb boomerang level
+  private Button obtnStart = new JoystickButton(operatorJoy, 10); //Start Button  - Level 3 climb boomerang level
   private Button obtnLeftStick = new JoystickButton(operatorJoy, 11); //Left Stick Button
   private Button obtnRightStick = new JoystickButton(operatorJoy, 12); //Right Stick Button - Reverse Ball Intake
 
   public OI() {
     // Driver Buttons
-    btnSquare.whenPressed(new HighSpeedDrive());
-    btnX.whenPressed(new LowSpeedDrive());
+    btnSquare.whenPressed(new Flip180CCW());
+    btnO.whenPressed(new Flip180CW());
     btnL1.whenPressed(new BallTrackModeEngage());
     btnL1.whenReleased(new BallTrackModeDisengage());
     btnL2.whenPressed(new HatchTrackModeEngage());
     btnL2.whenReleased(new HatchTrackModeDisengage());
     btnR1.whenPressed(new FieldCentric());
-    btnR2.whenPressed(new RobotCentric()); 
+    btnR2.whenPressed(new LowSpeedDrive()); 
+    btnR2.whenReleased(new HighSpeedDrive());
     btnSelect.whenPressed(new Level2Group());
     btnStart.whenPressed(new Level3Group());
 
@@ -74,6 +75,7 @@ public class OI {
     obtnLT.whenReleased(new BallStop());
     obtnRT.whenPressed(new BallShoot());
     obtnRT.whenReleased(new BallStop());
+    obtnLeftStick.whenPressed(new BoomerangNudge());
     obtnRightStick.whenPressed(new BallIntakeReverse());
     obtnRightStick.whenReleased(new BallStop());
     obtnA.whenPressed(new BoomerangLift(RobotMap.LOW_TARGET_LIFT_LEVEL));

@@ -87,9 +87,9 @@ public class RobotMap {
   public static final boolean REAR_RIGHT_DRIVE_TalonSRX_Invert = true;
 
   // Deadband Joystick Constants
-  public static final double X_AXIS_THREASHOLD = 0.1;
-  public static final double Y_AXIS_THREASHOLD = 0.1;
-  public static final double Z_AXIS_THREASHOLD = 0.1;
+  public static final double X_AXIS_THREASHOLD = 0.05;
+  public static final double Y_AXIS_THREASHOLD = 0.05;
+  public static final double Z_AXIS_THREASHOLD = 0.05;
   
   // Pitch & Roll Constants
   public static final double PITCH_THRESHOLD = 15.; //Roll in degrees
