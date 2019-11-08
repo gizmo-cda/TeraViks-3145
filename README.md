@@ -6,6 +6,9 @@
 - Joe 
 - Killian
 
+# Code Prerequisites
+This code requires the CTRE Phoenix Library (can be found at http://www.ctr-electronics.com/hro.html#product_tabs_technical_resources) and the NavX Rio Library (can be found at https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/).
+
 # [FIRST Robotics standards](https://www.firstinspires.org/about/vision-and-mission)
 
 ## Mission
