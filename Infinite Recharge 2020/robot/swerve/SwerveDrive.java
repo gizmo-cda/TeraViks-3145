@@ -57,23 +57,23 @@ public class SwerveDrive {
     }
     
     public void initMotors(){
-        frontRight.initSteerMotor();
-        frontLeft.initSteerMotor();
-        rearLeft.initSteerMotor();
-        rearRight.initSteerMotor();
+       frontRight.initSteerMotor();
+       // frontLeft.initSteerMotor();
+       // rearLeft.initSteerMotor();
+       // rearRight.initSteerMotor();
         
         frontRight.initDriveMotor();
-        frontLeft.initDriveMotor();
-        rearLeft.initDriveMotor();
-        rearRight.initDriveMotor();
+      //  frontLeft.initDriveMotor();
+      //  rearLeft.initDriveMotor();
+      //  rearRight.initDriveMotor();
     }
     
     //Only used for testing, DON'T USE THIS METHOD
     public void reset(){
         frontRight.resetSteerEncoder();
-        frontLeft.resetSteerEncoder();
-        rearLeft.resetSteerEncoder();
-        rearRight.resetSteerEncoder();
+        // frontLeft.resetSteerEncoder();
+        // rearLeft.resetSteerEncoder();
+        // rearRight.resetSteerEncoder();
         m_swerveMath.reset();
     }
 
@@ -106,28 +106,28 @@ public class SwerveDrive {
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro, reverseEn, snakeMode, hiLo);
         
         frontRight.setVelocity(swerveVectors.get(0));
-        frontLeft.setVelocity(swerveVectors.get(2));
-        rearLeft.setVelocity(swerveVectors.get(4));
-        rearRight.setVelocity(swerveVectors.get(6));
+        // frontLeft.setVelocity(swerveVectors.get(2));
+        // rearLeft.setVelocity(swerveVectors.get(4));
+        // rearRight.setVelocity(swerveVectors.get(6));
          
-        frontRight.setSteerPosition(swerveVectors.get(1));
-        frontLeft.setSteerPosition(swerveVectors.get(3));
-        rearLeft.setSteerPosition(swerveVectors.get(5));
-        rearRight.setSteerPosition(swerveVectors.get(7));
+       frontRight.setSteerPosition(swerveVectors.get(1));
+       // frontLeft.setSteerPosition(swerveVectors.get(3));
+       // rearLeft.setSteerPosition(swerveVectors.get(5));
+       // rearRight.setSteerPosition(swerveVectors.get(7));
     }
     
     public void stopDriveMotors(){
         frontRight.setVelocity(0.);
-        frontLeft.setVelocity(0.);
-        rearLeft.setVelocity(0.);
-        rearRight.setVelocity(0.);
+        // frontLeft.setVelocity(0.);
+        // rearLeft.setVelocity(0.);
+        // rearRight.setVelocity(0.);
     }
     
     public void emergencyStopMotors(){
         frontRight.stop();
-        frontLeft.stop();
-        rearLeft.stop();
-        rearRight.stop();
+        // frontLeft.stop();
+        // rearLeft.stop();
+        // rearRight.stop();
     }
     
     //Calls calibration method in SwerveDrive, enable CheckPhase boolean in RobotMap, if a mechanical module is swapped
@@ -137,18 +137,18 @@ public class SwerveDrive {
             
             System.out.println("**Calibrating Steering");
             frontRight.rotateSteerForCal();
-            frontLeft.rotateSteerForCal();
-            rearLeft.rotateSteerForCal();
-            rearRight.rotateSteerForCal();
+            // frontLeft.rotateSteerForCal();
+            // rearLeft.rotateSteerForCal();
+            // rearRight.rotateSteerForCal();
             
             detectDriveEncoderPhase();
         }
         else{
             System.out.println("**Calibrating Steering");
             frontRight.rotateSteerForCal();
-            frontLeft.rotateSteerForCal();
-            rearLeft.rotateSteerForCal();
-            rearRight.rotateSteerForCal();
+            // frontLeft.rotateSteerForCal();
+            // rearLeft.rotateSteerForCal();
+            // rearRight.rotateSteerForCal();
         }
     }
     
@@ -157,58 +157,58 @@ public class SwerveDrive {
     //Drive the bot forward, detect phase, 
     private void detectSteerEncoderPhase(){
         frontRight.setSteerSpeed(.1);
-        frontLeft.setSteerSpeed(.1);
-        rearLeft.setSteerSpeed(.1);
-        rearRight.setSteerSpeed(.1);
+        // frontLeft.setSteerSpeed(.1);
+        // rearLeft.setSteerSpeed(.1);
+        // rearRight.setSteerSpeed(.1);
         delay(400);
         boolean frPhase = frontRight.detectSteerMotorPhase();
-        boolean flPhase = frontLeft.detectSteerMotorPhase();
-        boolean rlPhase = rearLeft.detectSteerMotorPhase();
-        boolean rrPhase = rearRight.detectSteerMotorPhase();
+        // boolean flPhase = frontLeft.detectSteerMotorPhase();
+        // boolean rlPhase = rearLeft.detectSteerMotorPhase();
+        // boolean rrPhase = rearRight.detectSteerMotorPhase();
         delay(100);
         frontRight.setSteerSpeed(-.1);
-        frontLeft.setSteerSpeed(-.1);
-        rearLeft.setSteerSpeed(-.1);
-        rearRight.setSteerSpeed(-.1);
+        // frontLeft.setSteerSpeed(-.1);
+        // rearLeft.setSteerSpeed(-.1);
+        // rearRight.setSteerSpeed(-.1);
         delay(500);
         frontRight.setSteerSpeed(0);
-        frontLeft.setSteerSpeed(0);
-        rearLeft.setSteerSpeed(0);
-        rearRight.setSteerSpeed(0);
+        // frontLeft.setSteerSpeed(0);
+        // rearLeft.setSteerSpeed(0);
+        // rearRight.setSteerSpeed(0);
         System.out.println("**Steer Motor Encoder Phase Checking"+
-        "\n  --Front Right Steer Encoder Out-of-phase = "+frPhase+
-        "\n  --Front Left  Steer Encoder Out-of-phase = "+flPhase+
-        "\n  --Rear Left   Steer Encoder Out-of-phase = "+rlPhase+
-        "\n  --Rear Right  Steer Encoder Out-of-phase = "+rrPhase);
+        "\n  --Front Right Steer Encoder Out-of-phase = "+frPhase);
+        // "\n  --Front Left  Steer Encoder Out-of-phase = "+flPhase+
+        // "\n  --Rear Left   Steer Encoder Out-of-phase = "+rlPhase+
+        // "\n  --Rear Right  Steer Encoder Out-of-phase = "+rrPhase);
         // System.out.println("**Steer Motor Encoder Phase Checking"+
         //                  "\n  --Rear Right  Steer Encoder Out-of-phase = "+frPhase);
     }
     
     private void detectDriveEncoderPhase(){
         frontRight.setDriveSpeed(1.);
-        frontLeft.setDriveSpeed(1.);
-        rearLeft.setDriveSpeed(1.);
-        rearRight.setDriveSpeed(1.);
+        // frontLeft.setDriveSpeed(1.);
+        // rearLeft.setDriveSpeed(1.);
+        // rearRight.setDriveSpeed(1.);
         delay(400);
         boolean frPhase = frontRight.detectDriveMotorPhase();
-        boolean flPhase = frontLeft.detectDriveMotorPhase();
-        boolean rlPhase = rearLeft.detectDriveMotorPhase();
-        boolean rrPhase = rearRight.detectDriveMotorPhase();
+        // boolean flPhase = frontLeft.detectDriveMotorPhase();
+        // boolean rlPhase = rearLeft.detectDriveMotorPhase();
+        // boolean rrPhase = rearRight.detectDriveMotorPhase();
         delay(100);
         frontRight.setDriveSpeed(-1.);
-        frontLeft.setDriveSpeed(-1.);
-        rearLeft.setDriveSpeed(-1.);
-        rearRight.setDriveSpeed(-1.);
+        // frontLeft.setDriveSpeed(-1.);
+        // rearLeft.setDriveSpeed(-1.);
+        // rearRight.setDriveSpeed(-1.);
         delay(500);
         frontRight.setDriveSpeed(0);
-        frontLeft.setDriveSpeed(0);
-        rearLeft.setDriveSpeed(0);
-        rearRight.setDriveSpeed(0);
+        // frontLeft.setDriveSpeed(0);
+        // rearLeft.setDriveSpeed(0);
+        // rearRight.setDriveSpeed(0);
         System.out.println("**Drive Motor Encoder Phase Checking"+
-        "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase+
-        "\n  --Front Left  Drive Encoder Out-of-phase = "+flPhase+
-        "\n  --Rear Left   Drive Encoder Out-of-phase = "+rlPhase+
-        "\n  --Rear Right  Drive Encoder Out-of-phase = "+rrPhase);
+        "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase);
+        // "\n  --Front Left  Drive Encoder Out-of-phase = "+flPhase+
+        // "\n  --Rear Left   Drive Encoder Out-of-phase = "+rlPhase+
+        // "\n  --Rear Right  Drive Encoder Out-of-phase = "+rrPhase);
         // System.out.println("**Drive Motor Encoder Phase Checking"+
         //                 "\n  --Front Right Drive Encoder Out-of-phase = "+frPhase);
     }

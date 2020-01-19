@@ -35,11 +35,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveDrive;
@@ -48,7 +48,7 @@ import java.util.LinkedList;
 import edu.wpi.first.wpilibj.Timer;
 
 
-public class Drivetrain extends Subsystem {
+public class Drivetrain extends SubsystemBase {
   // Create the Drive Motor and Steer Motor Objects
   private final WPI_TalonSRX frontRightDriveMotor = new WPI_TalonSRX(RobotMap.FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID);
   private final WPI_TalonSRX frontLeftDriveMotor = new WPI_TalonSRX(RobotMap.FRONT_LEFT_DRIVE_TalonSRX_CAN_ID);
@@ -96,12 +96,14 @@ public class Drivetrain extends Subsystem {
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
     frontRightWheel = new SwerveModule("FrontRightWheel", frontRightDriveMotor, frontRightSteerMotor);
-    frontLeftWheel = new SwerveModule("FrontLeftWheel", frontLeftDriveMotor, frontLeftSteerMotor);
-    rearLeftWheel = new SwerveModule("RearLeftWheel", rearLeftDriveMotor, rearLeftSteerMotor);
-    rearRightWheel = new SwerveModule("RearRightWheel", rearRightDriveMotor, rearRightSteerMotor);
+    // frontLeftWheel = new SwerveModule("FrontLeftWheel", frontLeftDriveMotor, frontLeftSteerMotor);
+    // rearLeftWheel = new SwerveModule("RearLeftWheel", rearLeftDriveMotor, rearLeftSteerMotor);
+    // rearRightWheel = new SwerveModule(s"RearRightWheel", rearRightDriveMotor, rearRightSteerMotor);
     
     //Now Build the complete Swerve Drive Object with all four Wheel Modules
-    m_SwerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel);
+    // m_SwerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel);
+    m_SwerveDrive = new SwerveDrive(frontRightWheel, frontRightWheel, frontRightWheel, frontRightWheel);
+
   }
   
   public void init(){
@@ -112,7 +114,7 @@ public class Drivetrain extends Subsystem {
   public void reset(){
     turnOffCentric();
     setCrabMode();
-    setLowSpeedDriveMode();
+    setHighSpeedDriveMode();
     System.out.println("**Drivetrain reset to CrabMode, Centric Off, Coast, and Low Speed");
     //m_SwerveDrive.reset(); DO NOT USE UNLESS TESTING WITH KNOWLEDGE OF IMPACT
   }
@@ -176,9 +178,9 @@ public class Drivetrain extends Subsystem {
 
   public void move(double fwd, double str, double rcw){
     // This is Yaw angle +/- 180 in degrees
-    yaw = Robot.m_gyro.getYawDeg();
-    roll = Robot.m_gyro.getRollDeg();
-    pitch = Robot.m_gyro.getPitchDeg();
+    yaw = RobotContainer.m_gyro.getYawDeg();
+    roll = RobotContainer.m_gyro.getRollDeg();
+    pitch = RobotContainer.m_gyro.getPitchDeg();
     
     // Detect too much roll angle and strafe into the roll or too much pitch and drive Fwd/Rev accordingly
     if (roll > maxRoll || roll < -maxRoll) antiRoll(roll);
@@ -187,7 +189,7 @@ public class Drivetrain extends Subsystem {
     
     // Override Joystick Inputs for str and rcw when using Vision Tracking
     if (ballTrackMode || hatchTrackMode){
-      tx = Robot.m_vision.getTx();
+      tx = RobotContainer.m_vision.getTx();
 
       // take in 10 pitch readings and average them out
       if (txQueue.size() < 10){
@@ -218,7 +220,7 @@ public class Drivetrain extends Subsystem {
       if (power > 1.) power = 1; else if (power < -1.) power = -1.;
       if (roll > 1.) m_SwerveDrive.setMotors(0, power, 0., centric, yaw, reverseEn, snakeMode, hiLo);
       if (roll < -1.) m_SwerveDrive.setMotors(0, power, 0., centric, yaw, reverseEn, snakeMode, hiLo);
-      roll = Robot.m_gyro.getRollDeg();
+      roll = RobotContainer.m_gyro.getRollDeg();
     }
   }
   
@@ -229,13 +231,13 @@ public class Drivetrain extends Subsystem {
       if (power > 1.) power = 1; else if (power < -1.) power = -1.;
       if (pitch > 1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode, hiLo);
       if (pitch < -1.) m_SwerveDrive.setMotors(power, 0., 0., centric, yaw, reverseEn, snakeMode, hiLo);
-      pitch = Robot.m_gyro.getPitchDeg();
+      pitch = RobotContainer.m_gyro.getPitchDeg();
     }
   }
 
   private void rotate180(double fwdStart, double strStart){
     //Get the current yaw and initialize local variables
-    double yawCurrent = Robot.m_gyro.getYawAccumDeg(); //Yaw with no discontinuity at +/- 180
+    double yawCurrent = RobotContainer.m_gyro.getYawAccumDeg(); //Yaw with no discontinuity at +/- 180
     double yawStart = yawCurrent;
     double yawDiff = 0.;
     double rcwMod = 0.;
@@ -247,12 +249,12 @@ public class Drivetrain extends Subsystem {
     if (hiLo) yawTarg = 130.; else yawTarg = 160.;
     //Now rotate 180 degrees either CW or CCW maintaining fwd and str settings
     while (yawDiff < yawTarg){
-      yawCurrent = Robot.m_gyro.getYawAccumDeg();
+      yawCurrent = RobotContainer.m_gyro.getYawAccumDeg();
       
       if (Timer.getFPGATimestamp() - time > 3) break;
       yawDiff = Math.abs(yawStart - yawCurrent);
       
-      m_SwerveDrive.setMotors(fwdStart, strStart, rcwMod, centric,  Robot.m_gyro.getYawDeg(), reverseEn, snakeMode, hiLo);
+      m_SwerveDrive.setMotors(fwdStart, strStart, rcwMod, centric,  RobotContainer.m_gyro.getYawDeg(), reverseEn, snakeMode, hiLo);
     }
 
     //Disable flip so it only flips one time
@@ -271,10 +273,10 @@ public class Drivetrain extends Subsystem {
     m_SwerveDrive.setMotorsForDistance(0.5, centric, gyro, reverseEn, snakeMode, hiLo, distance);
   }
   
-  @Override
+  /*@Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
     // setDefaultCommand(new Drive());
-  }
+  }*/
 }

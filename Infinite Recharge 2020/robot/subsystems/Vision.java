@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -16,7 +16,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import java.util.HashMap;
 
 
-public class Vision extends Subsystem {
+public class Vision extends SubsystemBase {
   
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   
@@ -79,9 +79,9 @@ public class Vision extends Subsystem {
     // SmartDashboard.putNumber("LimelightArea", area); 
   }
   
-  @Override
+  /*@Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-  }
+  }*/
 }

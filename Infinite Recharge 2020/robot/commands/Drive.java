@@ -1,51 +1,49 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-/*  This command gets joystick input, processes it for inaccuracies and precision
-*   enhacement, and then calls Drivetrain.Move to move in the desired direction
-*   and speed.                                        
-*/
-
 package frc.robot.commands;
 
-import frc.robot.Robot;
 import frc.robot.RobotMap;
-import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
+public class Drive extends CommandBase {
 
-public class Drive extends Command {
   private Double fwd; //Forward, Y axis, -1 to 1 from Joystick
   private Double str; //Strafe, X axis, 1 to -1 from Joystick
   private Double rcw; //Rotate CW, Z axis, 1 to -1 from Joystick, refernced 1=180 CW -1=-180 CW
 
+  /**
+   * Creates a new Drive.
+   */
   public Drive() {
-    requires(Robot.m_drivetrain);    
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called just before this Command runs the first time
+  // Called when the command is initially scheduled.
   @Override
-  protected void initialize() {
-   }
+  public void initialize() {
+  }
 
-  // Called repeatedly when this Command is scheduled to run
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  protected void execute() {
+  public void execute() {
     // Get joystick inputs, apply the negative value to change the polarity
     // of the Y axis so a positive is forward.  Swerve Math expects normal
     // cartesian coordinates to calculate the directional vectors per wheel.
 
     // getting fwd values from raw input from the joystick's y axis
-    fwd = -Robot.m_oi.getDriverY();
+    fwd = -RobotContainer.getDriverY();
 
     // getting str values from raw input from the joystick's x axis
-    str = Robot.m_oi.getDriverX();
+    str = RobotContainer.getDriverX();
 
     // getting rcw values from raw input from the joystick's z axis
-    rcw = Robot.m_oi.getDriverZ();
+    rcw = RobotContainer.getDriverZ();
 
     // System.out.println("X: "+fwd);
     // System.out.println("Y: "+str);
@@ -66,23 +64,17 @@ public class Drive extends Command {
     if (rcw < 0) rcw *= rcw * -1.; else rcw *= rcw;
 
     // Call Drivetrain Subsystem to move
-    Robot.m_drivetrain.move(fwd, str, rcw);
+    RobotContainer.m_drivetrain.move(fwd, str, rcw);
   }
 
-  // Make this return true when this Command no longer needs to run execute()
+  // Called once the command ends or is interrupted.
   @Override
-  protected boolean isFinished() {
+  public void end(boolean interrupted) {
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
     return false;
-  }
-
-  // Called once after isFinished returns true
-  @Override
-  protected void end() {
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
   }
 }

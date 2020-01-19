@@ -7,38 +7,32 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 
-public class Flip180CCW extends Command {
+public class Flip180CCW extends CommandBase {
   public Flip180CCW() {
   }
 
   // Called just before this Command runs the first time
   @Override
-  protected void initialize() {
+  public void initialize() {
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
-    Robot.m_drivetrain.setFlip180(false);
-  }
-
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() {
-    return true;
+  public void execute() {
+    RobotContainer.m_drivetrain.setFlip180(false);
   }
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
+  public void end(boolean interrupted) {
   }
 
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
+  // Make this return true when this Command no longer needs to run execute()
   @Override
-  protected void interrupted() {
+  public boolean isFinished() {
+    return true;
   }
 }

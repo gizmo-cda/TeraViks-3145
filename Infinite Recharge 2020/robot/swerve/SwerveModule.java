@@ -212,7 +212,7 @@ public class SwerveModule {
     public void initSteerMotor(){
         steerMotor.configFactoryDefault();
         
-        steerMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
+        steerMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT);
         steerMotor.selectProfileSlot(0, 0); //slot #, PID #
   
         //Set Encoder Phase
@@ -260,7 +260,7 @@ public class SwerveModule {
     public void initDriveMotor(){
         driveMotor.configFactoryDefault();
         
-        driveMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, TIMEOUT);
+        driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT);
         driveMotor.selectProfileSlot(0, 0); //slot #, PID #
 
         //Invert the drive motors on one side because the calibration routine will rotate 
@@ -298,10 +298,10 @@ public class SwerveModule {
         
         driveMotor.configAllowableClosedloopError(0, 4, TIMEOUT);
         
-        driveMotor.config_kP(0, .5, TIMEOUT);
-        driveMotor.config_kI(0, 0.0001, TIMEOUT);
-        driveMotor.config_kD(0, 1, TIMEOUT);
-        driveMotor.config_kF(0, 1.624, TIMEOUT);
+        driveMotor.config_kP(0, .1, TIMEOUT);
+        driveMotor.config_kI(0, 0., TIMEOUT);
+        driveMotor.config_kD(0, 1., TIMEOUT);
+        driveMotor.config_kF(0, .03, TIMEOUT);
         
         System.out.println("  --Drive Motor Initialized - "+name);
     }

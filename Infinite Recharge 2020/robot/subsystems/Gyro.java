@@ -11,11 +11,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
 import com.kauailabs.navx.frc.*;
 
-public class Gyro extends Subsystem {
+public class Gyro extends SubsystemBase {
 
     public static AHRS ahrs;
 
@@ -55,9 +55,9 @@ public class Gyro extends Subsystem {
         return (double)ahrs.getWorldLinearAccelY();
     }
 
-    @Override
+    /*@Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
-    }
+    }*/
 }
