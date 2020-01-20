@@ -1,13 +1,25 @@
 # TeraViks-3145
-2019 TeraViks FIRST Robotics Team
+2020 TeraViks FIRST Robotics Team
 
 # Members
-- Crista (captain)
-- Joe 
-- Killian
+- TBD
 
 # Code Prerequisites
-This code requires the CTRE Phoenix Library (can be found at http://www.ctr-electronics.com/hro.html#product_tabs_technical_resources) and the NavX Rio Library (can be found at https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/).
+To run the 2020 project you'll need the following libraries (not included):
+
+Navx: 
+https://www.kauailabs.com/dist/frc/2020/navx_frc.json
+
+CTRE Phoenix: 
+http://devsite.ctr-electronics.com/maven/release/com/ctre/phoenix/Phoenix-latest.json
+
+Rev Robotics Color Sensor V3: 
+http://revrobotics.com/content/sw/color-sensor-v3/sdk/REVColorSensorV3.json
+
+WPILIB New Commands: 
+https://raw.githubusercontent.com/wpilibsuite/allwpilib/master/wpilibNewCommands/WPILibNewCommands.json
+
+Use the urls above to add them as online libraries. Just copy paste each one, they're automatically the latest ones already.
 
 # [FIRST Robotics standards](https://www.firstinspires.org/about/vision-and-mission)
 
