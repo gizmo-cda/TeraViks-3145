@@ -301,7 +301,7 @@ public class SwerveModule {
         driveMotor.config_kP(0, .1, TIMEOUT);
         driveMotor.config_kI(0, 0., TIMEOUT);
         driveMotor.config_kD(0, 1., TIMEOUT);
-        driveMotor.config_kF(0, .03, TIMEOUT);
+        driveMotor.config_kF(0, .0496, TIMEOUT);
         
         System.out.println("  --Drive Motor Initialized - "+name);
     }
