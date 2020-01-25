@@ -47,6 +47,7 @@ public class RobotContainer {
   private final RobotCentric m_RobotCentric = new RobotCentric();
   private final SnakeMode m_SnakeMode = new SnakeMode();
   // private final Command m_autoCommand;
+  private final TestDigitalInput m_testdio = new TestDigitalInput();
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
   private static Joystick swerveJoy = new Joystick(0);
@@ -109,6 +110,7 @@ public class RobotContainer {
     btnR2.whenReleased(m_HighSpeedDrive, false);
 
     btnStart.whenPressed(m_Drive, false);
+    btnTriangle.whenPressed(m_testdio, false);
 }
     // Operator Buttons
   

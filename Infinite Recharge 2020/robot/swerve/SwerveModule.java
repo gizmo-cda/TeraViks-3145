@@ -248,10 +248,10 @@ public class SwerveModule {
         
         steerMotor.configAllowableClosedloopError(0, 8, TIMEOUT);  //Error for 400 Optical Encoder
         
-        steerMotor.config_kP(0, .5, TIMEOUT);  
+        steerMotor.config_kP(0, .1, TIMEOUT);  
         steerMotor.config_kI(0, .0, TIMEOUT);
-        steerMotor.config_kD(0, 1, TIMEOUT);
-        steerMotor.config_kF(0, 0, TIMEOUT);
+        steerMotor.config_kD(0, .8, TIMEOUT);
+        steerMotor.config_kF(0, .0487, TIMEOUT);
         
         System.out.println("  --Steer Motor Initialized - "+name);
     }
@@ -300,8 +300,8 @@ public class SwerveModule {
         
         driveMotor.config_kP(0, .1, TIMEOUT);
         driveMotor.config_kI(0, 0., TIMEOUT);
-        driveMotor.config_kD(0, 1., TIMEOUT);
-        driveMotor.config_kF(0, .0496, TIMEOUT);
+        driveMotor.config_kD(0, .8, TIMEOUT);
+        driveMotor.config_kF(0, .0487, TIMEOUT);
         
         System.out.println("  --Drive Motor Initialized - "+name);
     }
