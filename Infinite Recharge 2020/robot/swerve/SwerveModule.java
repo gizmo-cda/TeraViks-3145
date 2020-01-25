@@ -19,6 +19,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import org.opencv.calib3d.StereoBM;
+
 public class SwerveModule {
     
     private String name;
@@ -237,8 +239,8 @@ public class SwerveModule {
         steerMotor.setSelectedSensorPosition(0);
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
 
-        steerMotor.configMotionAcceleration(24000, TIMEOUT);  //400 Optical Encoder accel and velocity targets
-        steerMotor.configMotionCruiseVelocity(12000, TIMEOUT);
+        steerMotor.configMotionAcceleration(40960, TIMEOUT);  //400 Optical Encoder accel and velocity targets
+        steerMotor.configMotionCruiseVelocity(20480, TIMEOUT);
 
         steerMotor.configPeakOutputForward(1., TIMEOUT);
         steerMotor.configPeakOutputReverse(-1., TIMEOUT);
@@ -246,12 +248,14 @@ public class SwerveModule {
         steerMotor.configNominalOutputForward(0, TIMEOUT);
         steerMotor.configNominalOutputReverse(0, TIMEOUT);
         
-        steerMotor.configAllowableClosedloopError(0, 8, TIMEOUT);  //Error for 400 Optical Encoder
+        steerMotor.configAllowableClosedloopError(0, 10, TIMEOUT);  //Error for 2048 CTRE Encoder
+
+        steerMotor.config_IntegralZone(0, 50, TIMEOUT); //I-zone limits
         
-        steerMotor.config_kP(0, .1, TIMEOUT);  
-        steerMotor.config_kI(0, .0, TIMEOUT);
-        steerMotor.config_kD(0, .8, TIMEOUT);
-        steerMotor.config_kF(0, .0487, TIMEOUT);
+        steerMotor.config_kP(0, .75, TIMEOUT);  
+        steerMotor.config_kI(0, .001, TIMEOUT);
+        steerMotor.config_kD(0, 1., TIMEOUT);
+        steerMotor.config_kF(0, 0., TIMEOUT);
         
         System.out.println("  --Steer Motor Initialized - "+name);
     }
@@ -296,12 +300,14 @@ public class SwerveModule {
         driveMotor.configNominalOutputForward(0, TIMEOUT);
         driveMotor.configNominalOutputReverse(0, TIMEOUT);
         
-        driveMotor.configAllowableClosedloopError(0, 4, TIMEOUT);
+        driveMotor.configAllowableClosedloopError(0, 20, TIMEOUT);
+
+        driveMotor.config_IntegralZone(0, 50, TIMEOUT);
         
-        driveMotor.config_kP(0, .1, TIMEOUT);
-        driveMotor.config_kI(0, 0., TIMEOUT);
-        driveMotor.config_kD(0, .8, TIMEOUT);
-        driveMotor.config_kF(0, .0487, TIMEOUT);
+        driveMotor.config_kP(0, .05, TIMEOUT);
+        driveMotor.config_kI(0, 0.0001, TIMEOUT);
+        driveMotor.config_kD(0, 2., TIMEOUT);
+        driveMotor.config_kF(0, .05, TIMEOUT);
         
         System.out.println("  --Drive Motor Initialized - "+name);
     }

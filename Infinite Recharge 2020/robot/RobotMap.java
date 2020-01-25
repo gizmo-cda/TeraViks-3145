@@ -72,7 +72,7 @@ public class RobotMap {
     public static final double DRIVE_WHEEL_PULSES_PER_100MS = 21480.;       // Used for closed loop velocity
     public static final double DRIVE_WHEEL_PULSES_PER_INCH = 49.13;       // PPI with 400 Optical Encoder
     public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 2048;  // 2048 CTRE Mag Encoder
-    public static final double STEER_PPR = 9000.;                        // Pulses per wheel revolution with 2048 CTRE Mag Encoder + 4.4:1
+    public static final double STEER_PPR = 15275.;                        // Pulses per wheel revolution with 2048 CTRE Mag Encoder + 7.46:1
   
     // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
     public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .375; //Drive Motor needs to be inverted
