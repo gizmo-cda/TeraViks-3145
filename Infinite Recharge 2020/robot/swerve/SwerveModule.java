@@ -248,9 +248,9 @@ public class SwerveModule {
         steerMotor.configNominalOutputForward(0, TIMEOUT);
         steerMotor.configNominalOutputReverse(0, TIMEOUT);
         
-        steerMotor.configAllowableClosedloopError(0, 10, TIMEOUT);  //Error for 2048 CTRE Encoder
+        steerMotor.configAllowableClosedloopError(0, 5, TIMEOUT);  //Error for 2048 CTRE Encoder
 
-        steerMotor.config_IntegralZone(0, 50, TIMEOUT); //I-zone limits
+        steerMotor.config_IntegralZone(0, 100, TIMEOUT); //I-zone limits
         
         steerMotor.config_kP(0, .75, TIMEOUT);  
         steerMotor.config_kI(0, .001, TIMEOUT);
