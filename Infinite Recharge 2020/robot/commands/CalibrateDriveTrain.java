@@ -12,7 +12,6 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 
 public class CalibrateDriveTrain extends CommandBase {
-  boolean checkPhase = RobotMap.CHECK_PHASE_DURING_DRIVETRAIN_CALIBRATION;
 
   public CalibrateDriveTrain() {
     // requires(Robot.m_drivetrain);
@@ -26,7 +25,7 @@ public class CalibrateDriveTrain extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    RobotContainer.m_drivetrain.calSteering(checkPhase);
+    RobotContainer.m_drivetrain.calSteering();
   }
 
   // Called once after isFinished returns true

@@ -17,21 +17,19 @@ import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
-import org.opencv.calib3d.StereoBM;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class SwerveModule {
     
     private String name;
-    private WPI_TalonSRX driveMotor;
-    private WPI_TalonSRX steerMotor;
+    private WPI_TalonFX driveMotor;
+    private WPI_TalonFX steerMotor;
     private Faults driveFaults = new Faults();
     private Faults steerFaults = new Faults();
 
-    private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
+    private int TIMEOUT = RobotMap.TalonFX_TIMEOUT;
     
-    public SwerveModule(String wheelName, WPI_TalonSRX wheelDriveMotor, WPI_TalonSRX wheelSteerMotor){
+    public SwerveModule(String wheelName, WPI_TalonFX wheelDriveMotor, WPI_TalonFX wheelSteerMotor){
         name = wheelName;
         driveMotor = wheelDriveMotor;
         steerMotor = wheelSteerMotor;
@@ -86,11 +84,11 @@ public class SwerveModule {
         steerMotor.stopMotor();
 	}
     
-    public WPI_TalonSRX getDriveMotor(){
+    public WPI_TalonFX getDriveMotor(){
 		return driveMotor;
 	}
 	
-	public WPI_TalonSRX getSteerMotor(){
+	public WPI_TalonFX getSteerMotor(){
 		return steerMotor;
     }
     
@@ -216,22 +214,6 @@ public class SwerveModule {
         
         steerMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT);
         steerMotor.selectProfileSlot(0, 0); //slot #, PID #
-  
-        //Set Encoder Phase
-        switch (name){
-            case "FrontRightWheel":
-            steerMotor.setSensorPhase(RobotMap.FRONT_RIGHT_STEER_TalonSRX_ENCODER_PHASE);
-            break;
-            case "FrontLeftWheel":
-            steerMotor.setSensorPhase(RobotMap.FRONT_LEFT_STEER_TalonSRX_ENCODER_PHASE);
-            break;
-            case "RearLeftWheel":
-            steerMotor.setSensorPhase(RobotMap.REAR_LEFT_STEER_TalonSRX_ENCODER_PHASE);
-            break;
-            case "RearRightWheel":
-            steerMotor.setSensorPhase(RobotMap.REAR_RIGHT_STEER_TalonSRX_ENCODER_PHASE);
-            break;
-        }
 
         steerMotor.setInverted(false);
         steerMotor.setNeutralMode(NeutralMode.Brake);
@@ -272,20 +254,16 @@ public class SwerveModule {
         //Also set Encoder Phase
         switch (name){
             case "FrontRightWheel":
-            driveMotor.setInverted(RobotMap.FRONT_RIGHT_DRIVE_TalonSRX_Invert);
-            driveMotor.setSensorPhase(RobotMap.FRONT_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE);
+            driveMotor.setInverted(RobotMap.FRONT_RIGHT_DRIVE_TalonFX_Invert);
             break;
             case "FrontLeftWheel":
-            driveMotor.setInverted(RobotMap.FRONT_LEFT_DRIVE_TalonSRX_Invert);
-            driveMotor.setSensorPhase(RobotMap.FRONT_LEFT_DRIVE_TalonSRX_ENCODER_PHASE);
+            driveMotor.setInverted(RobotMap.FRONT_LEFT_DRIVE_TalonFX_Invert);
             break;
             case "RearLeftWheel":
-            driveMotor.setInverted(RobotMap.REAR_LEFT_DRIVE_TalonSRX_Invert);
-            driveMotor.setSensorPhase(RobotMap.REAR_LEFT_DRIVE_TalonSRX_ENCODER_PHASE);
+            driveMotor.setInverted(RobotMap.REAR_LEFT_DRIVE_TalonFX_Invert);
             break;
             case "RearRightWheel":
-            driveMotor.setInverted(RobotMap.REAR_RIGHT_DRIVE_TalonSRX_Invert);
-            driveMotor.setSensorPhase(RobotMap.REAR_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE);
+            driveMotor.setInverted(RobotMap.REAR_RIGHT_DRIVE_TalonFX_Invert);
             break;
         }
         

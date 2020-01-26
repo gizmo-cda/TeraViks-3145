@@ -22,11 +22,11 @@ import frc.robot.commands.*;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
-  private static boolean bootCycle;
-
   public RobotContainer m_robotContainer;
+  private static boolean bootCycle;
   private static boolean enableDrivetrainCalibration = true;
+
+  private Command m_autonomousCommand;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -128,8 +128,8 @@ public class Robot extends TimedRobot {
     // m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
     // m_vision.ledOff();
 
-    // Scheduler.getInstance().add(new HighSpeedDrive());
-    // Scheduler.getInstance().run();
+    CommandScheduler.getInstance().schedule(new HighSpeedDrive());
+    CommandScheduler.getInstance().run();
 
     bootCycle = false;
 

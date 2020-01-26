@@ -22,19 +22,19 @@ public class RobotMap {
   
     // Speed Scale Constants for the Drivetrain
     public static final double HIGH_SPEED_SCALE = 1.0;
-    public static final double LOW_SPEED_SCALE = 1.; //shoud be .3
+    public static final double LOW_SPEED_SCALE = .3;
     public static final double ROTATE_SCALE = .67;
     
     // CAN Bus IDs for Drivetrain Talon SRX controllers
-    public static final int FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID = 1;
-    public static final int FRONT_LEFT_DRIVE_TalonSRX_CAN_ID  = 2;
-    public static final int REAR_LEFT_DRIVE_TalonSRX_CAN_ID   = 3;
-    public static final int REAR_RIGHT_DRIVE_TalonSRX_CAN_ID  = 4;
+    public static final int FRONT_RIGHT_DRIVE_TalonFX_CAN_ID = 1;
+    public static final int FRONT_LEFT_DRIVE_TalonFX_CAN_ID  = 2;
+    public static final int REAR_LEFT_DRIVE_TalonFX_CAN_ID   = 3;
+    public static final int REAR_RIGHT_DRIVE_TalonFX_CAN_ID  = 4;
     
-    public static final int FRONT_RIGHT_STEER_TalonSRX_CAN_ID = 11;
-    public static final int FRONT_LEFT_STEER_TalonSRX_CAN_ID  = 12;
-    public static final int REAR_LEFT_STEER_TalonSRX_CAN_ID   = 13;
-    public static final int REAR_RIGHT_STEER_TalonSRX_CAN_ID  = 14;
+    public static final int FRONT_RIGHT_STEER_TalonFX_CAN_ID = 11;
+    public static final int FRONT_LEFT_STEER_TalonFX_CAN_ID  = 12;
+    public static final int REAR_LEFT_STEER_TalonFX_CAN_ID   = 13;
+    public static final int REAR_RIGHT_STEER_TalonFX_CAN_ID  = 14;
   
     // CAN Bus IDs for All other Subsystem Talon SRX controllers
     public static final int BOOMERANG_LIFT_TalonSRX_CAN_ID = 15;
@@ -47,21 +47,9 @@ public class RobotMap {
     public static final int BOOMERANG_LIFT_BOOSTER_TalonSRX_CAN_ID = 22;
   
     // Talon controllers' timeout
+    public static final int TalonFX_TIMEOUT = 1000; //units in msec
     public static final int TalonSRX_TIMEOUT = 1000; //units in msec
-  
-    // Talon Encoder Phase Checking Constants
-    public static final boolean CHECK_PHASE_DURING_DRIVETRAIN_CALIBRATION = false;
-  
-    public static final boolean FRONT_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE = true;
-    public static final boolean FRONT_LEFT_DRIVE_TalonSRX_ENCODER_PHASE = true;
-    public static final boolean REAR_LEFT_DRIVE_TalonSRX_ENCODER_PHASE = true;
-    public static final boolean REAR_RIGHT_DRIVE_TalonSRX_ENCODER_PHASE = true;
-  
-    public static final boolean FRONT_RIGHT_STEER_TalonSRX_ENCODER_PHASE = false;
-    public static final boolean FRONT_LEFT_STEER_TalonSRX_ENCODER_PHASE = false;
-    public static final boolean REAR_LEFT_STEER_TalonSRX_ENCODER_PHASE = false;
-    public static final boolean REAR_RIGHT_STEER_TalonSRX_ENCODER_PHASE = false;
-  
+
     // Drivetrain Gear Ratio Constants
     public static final double FINAL_DRIVE_WHEEL_GEAR_RATIO = 10.;        // Motor drives the wheel directly, ratio is based on pully sizes
     public static final double STEER_MOTOR_GEAR_REDUCTION_RATIO = 12.;    // Motor drives gear reduction unit
@@ -85,10 +73,10 @@ public class RobotMap {
     public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RR = -323.; //Small adjustment to cal for error
   
     // Drive Motor Inversion, Flips the polarity of the motor in the Talon Controller
-    public static final boolean FRONT_RIGHT_DRIVE_TalonSRX_Invert = true;
-    public static final boolean FRONT_LEFT_DRIVE_TalonSRX_Invert = false;
-    public static final boolean REAR_LEFT_DRIVE_TalonSRX_Invert = false;
-    public static final boolean REAR_RIGHT_DRIVE_TalonSRX_Invert = true;
+    public static final boolean FRONT_RIGHT_DRIVE_TalonFX_Invert = true;
+    public static final boolean FRONT_LEFT_DRIVE_TalonFX_Invert = false;
+    public static final boolean REAR_LEFT_DRIVE_TalonFX_Invert = false;
+    public static final boolean REAR_RIGHT_DRIVE_TalonFX_Invert = true;
   
     // Deadband Joystick Constants
     public static final double X_AXIS_THREASHOLD = 0.05;

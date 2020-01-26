@@ -37,7 +37,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
@@ -50,15 +50,15 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class Drivetrain extends SubsystemBase {
   // Create the Drive Motor and Steer Motor Objects
-  private final WPI_TalonSRX frontRightDriveMotor = new WPI_TalonSRX(RobotMap.FRONT_RIGHT_DRIVE_TalonSRX_CAN_ID);
-  private final WPI_TalonSRX frontLeftDriveMotor = new WPI_TalonSRX(RobotMap.FRONT_LEFT_DRIVE_TalonSRX_CAN_ID);
-  private final WPI_TalonSRX rearLeftDriveMotor = new WPI_TalonSRX(RobotMap.REAR_LEFT_DRIVE_TalonSRX_CAN_ID);
-  private final WPI_TalonSRX rearRightDriveMotor = new WPI_TalonSRX(RobotMap.REAR_RIGHT_DRIVE_TalonSRX_CAN_ID);
+  private final WPI_TalonFX frontRightDriveMotor = new WPI_TalonFX(RobotMap.FRONT_RIGHT_DRIVE_TalonFX_CAN_ID);
+  private final WPI_TalonFX frontLeftDriveMotor = new WPI_TalonFX(RobotMap.FRONT_LEFT_DRIVE_TalonFX_CAN_ID);
+  private final WPI_TalonFX rearLeftDriveMotor = new WPI_TalonFX(RobotMap.REAR_LEFT_DRIVE_TalonFX_CAN_ID);
+  private final WPI_TalonFX rearRightDriveMotor = new WPI_TalonFX(RobotMap.REAR_RIGHT_DRIVE_TalonFX_CAN_ID);
   
-  private final WPI_TalonSRX frontRightSteerMotor = new WPI_TalonSRX(RobotMap.FRONT_RIGHT_STEER_TalonSRX_CAN_ID);
-  private final WPI_TalonSRX frontLeftSteerMotor = new WPI_TalonSRX(RobotMap.FRONT_LEFT_STEER_TalonSRX_CAN_ID);
-  private final WPI_TalonSRX rearLeftSteerMotor = new WPI_TalonSRX(RobotMap.REAR_LEFT_STEER_TalonSRX_CAN_ID);
-  private final WPI_TalonSRX rearRightSteerMotor = new WPI_TalonSRX(RobotMap.REAR_RIGHT_STEER_TalonSRX_CAN_ID);
+  private final WPI_TalonFX frontRightSteerMotor = new WPI_TalonFX(RobotMap.FRONT_RIGHT_STEER_TalonFX_CAN_ID);
+  private final WPI_TalonFX frontLeftSteerMotor = new WPI_TalonFX(RobotMap.FRONT_LEFT_STEER_TalonFX_CAN_ID);
+  private final WPI_TalonFX rearLeftSteerMotor = new WPI_TalonFX(RobotMap.REAR_LEFT_STEER_TalonFX_CAN_ID);
+  private final WPI_TalonFX rearRightSteerMotor = new WPI_TalonFX(RobotMap.REAR_RIGHT_STEER_TalonFX_CAN_ID);
   
   private SwerveModule frontRightWheel;
   private SwerveModule frontLeftWheel;
@@ -119,8 +119,8 @@ public class Drivetrain extends SubsystemBase {
     //m_SwerveDrive.reset(); DO NOT USE UNLESS TESTING WITH KNOWLEDGE OF IMPACT
   }
   
-  public void calSteering(boolean checkPhase){
-    m_SwerveDrive.calSteerMotors(checkPhase);
+  public void calSteering(){
+    m_SwerveDrive.calSteerMotors();
   }
   
   public void turnOnCentric(){
