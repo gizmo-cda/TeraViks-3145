@@ -48,6 +48,8 @@ public class RobotContainer {
   private final SnakeMode m_SnakeMode = new SnakeMode();
   // private final Command m_autoCommand;
   private final TestDigitalInput m_testdio = new TestDigitalInput();
+  private final SpinWheelToColor m_spinWheelToColor = new SpinWheelToColor();
+  private final SpinWheel3Rev m_spinWheel3Rev = new SpinWheel3Rev();
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
   private static Joystick swerveJoy = new Joystick(0);
@@ -88,11 +90,7 @@ public class RobotContainer {
   
   public RobotContainer() {
     // Configure the button bindings
-    configureButtonBindings();
-    
-
-  
-    
+    configureButtonBindings(); 
   }
 
   /**
@@ -112,8 +110,11 @@ public class RobotContainer {
 
     btnStart.whenPressed(m_Drive, false);
     btnTriangle.whenPressed(m_testdio, false);
-}
+
     // Operator Buttons
+    obtnX.whenPressed(m_spinWheelToColor, false);
+    obtnB.whenPressed(m_spinWheel3Rev, false);
+  }
   
   public static double getDriverX(){
   return swerveJoy.getX();
