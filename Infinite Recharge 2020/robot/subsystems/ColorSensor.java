@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -52,12 +53,14 @@ public class ColorSensor extends SubsystemBase {
    * Note: Any example colors should be calibrated as the user needs, these
    * are here as a basic example.
    */
-  private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
-  private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-  private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
-  private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
-    
-  public void colorTest(){
+  private final Color kBlueTarget = ColorMatch.makeColor(0.195, 0.459, 0.345);
+  private final Color kGreenTarget = ColorMatch.makeColor(0.222, 0.512, 0.265);
+  private final Color kRedTarget = ColorMatch.makeColor(0.329, 0.442, 0.229);
+  private final Color kYellowTarget = ColorMatch.makeColor(0.28, 0.521, 0.198);
+  
+  private static String currentColor;
+
+  public String colorTest(){
       /**
      * The method GetColor() returns a normalized color value from the sensor and can be
      * useful if outputting the color to an RGB LED or similar. To
@@ -103,5 +106,23 @@ public class ColorSensor extends SubsystemBase {
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
     SmartDashboard.putString("Detected Color", colorString);
+
+  return colorString;
+  }
+
+  public void wheelRotate(){
+    final String targetColor = colorTest();
+    int colorCheck = 0;
+
+
+    while(colorCheck < 7) {
+      currentColor = colorTest();
+      System.out.println("spinning wheel");
+      if(currentColor == targetColor){
+        colorCheck += 1;
+        Timer.delay(1.);
+        System.out.println("target color found!");
+      }
+    }
   }
 }
