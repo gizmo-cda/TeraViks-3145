@@ -32,6 +32,8 @@ public class RobotContainer {
   public static Gyro m_gyro = new Gyro();
   public static Vision m_vision = new Vision();
   public static ColorSensor m_color = new ColorSensor();
+  public static DIO m_dio = new DIO();
+  public static LED m_led = new LED();
 
   // Instantiate Command Objects
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);

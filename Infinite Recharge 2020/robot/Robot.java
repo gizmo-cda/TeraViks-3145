@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.*;
+import frc.robot.subsystems.LED;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -69,6 +70,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Gyro Yaw", m_gyro.getYawDeg());
     // SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitchDeg());
     // SmartDashboard.putNumber("Gyro Roll", m_gyro.getRollDeg());
+
+    RobotContainer.m_led.rainbow();
   }
 
   /**
@@ -135,7 +138,7 @@ public class Robot extends TimedRobot {
 
     System.out.println("//////////////////// Teleop /////////////////");
     CommandScheduler.getInstance().schedule(new Drive());
-    CommandScheduler.getInstance().schedule(new GetColor());
+    // CommandScheduler.getInstance().schedule(new GetColor());
   }
 
   /**

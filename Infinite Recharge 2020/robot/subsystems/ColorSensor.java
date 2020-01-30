@@ -31,13 +31,13 @@ public class ColorSensor extends SubsystemBase {
   /**
    * Change the I2C port below to match the connection of your color sensor
    */
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
+  private final static I2C.Port i2cPort = I2C.Port.kOnboard;
 
   /**
    * A Rev Color Sensor V3 object is constructed with an I2C port as a parameter.
    * The device will be automatically initialized with default parameters.
    */
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+  private final static ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
   /**
    * A Rev Color Match object is used to register and detect known colors. This
@@ -46,21 +46,21 @@ public class ColorSensor extends SubsystemBase {
    * This object uses a simple euclidian distance to estimate the closest match
    * with given confidence range.
    */
-  private final ColorMatch m_colorMatcher = new ColorMatch();
+  private final static ColorMatch m_colorMatcher = new ColorMatch();
 
   /**
    * Note: Any example colors should be calibrated as the user needs, these are
    * here as a basic example.
    */
-  private final Color kBlueTarget = ColorMatch.makeColor(0.195, 0.459, 0.345);
-  private final Color kGreenTarget = ColorMatch.makeColor(0.222, 0.512, 0.265);
-  private final Color kRedTarget = ColorMatch.makeColor(0.329, 0.442, 0.229);
-  private final Color kYellowTarget = ColorMatch.makeColor(0.28, 0.521, 0.198);
+  private final static Color kBlueTarget = ColorMatch.makeColor(0.195, 0.459, 0.345);
+  private final static Color kGreenTarget = ColorMatch.makeColor(0.222, 0.512, 0.265);
+  private final static Color kRedTarget = ColorMatch.makeColor(0.329, 0.442, 0.229);
+  private final static Color kYellowTarget = ColorMatch.makeColor(0.28, 0.521, 0.198);
 
   private static String currentColor;
   private static String targetColor;
 
-  public String colorTest() {
+  public static String colorTest() {
     /**
      * The method GetColor() returns a normalized color value from the sensor and
      * can be useful if outputting the color to an RGB LED or similar. To read the
