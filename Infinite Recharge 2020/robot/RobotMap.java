@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -17,8 +19,8 @@ package frc.robot;
  */
 public class RobotMap {
     // Constants for Robot Dimensions
-    public static final double WHEELBASE_LENGTH = 23.38; // inches
-    public static final double WHEELBASE_TRACK_WIDTH = 19.88; // inches
+    public static final double WHEELBASE_LENGTH = 19.625; // inches
+    public static final double WHEELBASE_TRACK_WIDTH = 19.625; // inches
   
     // Speed Scale Constants for the Drivetrain
     public static final double HIGH_SPEED_SCALE = 1.0;
@@ -107,5 +109,13 @@ public class RobotMap {
     // Rear Lift Level Positions - 400 Optical Encoder with 64:1
     public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 135000;
     public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 325000;
-  
+
+    // DIO Ports
+    public static final int FRONT_RIGHT_STEER_CAL = 0;
+    public static final int FRONT_LEFT_STEER_CAL = 1;
+    public static final int REAR_LEFT_STEER_CAL = 2;
+    public static final int REAR_RIGHT_STEER_CAL = 3;
+    public static final int BALL_READY_TO_LOAD = 4;
+    public static final int BALL_IN_FIRST_POSITION = 5;
+    public static final int BALL_IN_FIFTH_POSITION = 6;
   }  

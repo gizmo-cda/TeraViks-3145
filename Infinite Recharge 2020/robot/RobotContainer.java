@@ -32,8 +32,8 @@ public class RobotContainer {
   public static Gyro m_gyro = new Gyro();
   public static Vision m_vision = new Vision();
   public static ColorSensor m_color = new ColorSensor();
-  public static DIO m_dio = new DIO();
   public static LED m_led = new LED();
+  public static Magazine m_magazine = new Magazine();
 
   // Instantiate Command Objects
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
@@ -49,7 +49,6 @@ public class RobotContainer {
   private final RobotCentric m_RobotCentric = new RobotCentric();
   private final SnakeMode m_SnakeMode = new SnakeMode();
   // private final Command m_autoCommand;
-  private final TestDigitalInput m_testdio = new TestDigitalInput();
   private final SpinWheelToColor m_spinWheelToColor = new SpinWheelToColor();
   private final SpinWheel3Rev m_spinWheel3Rev = new SpinWheel3Rev();
 
@@ -111,7 +110,6 @@ public class RobotContainer {
     btnR2.whenReleased(m_HighSpeedDrive, false);
 
     btnStart.whenPressed(m_Drive, false);
-    btnTriangle.whenPressed(m_testdio, false);
 
     // Operator Buttons
     obtnX.whenPressed(m_spinWheelToColor, false);

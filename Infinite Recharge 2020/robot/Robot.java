@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
 
     // m_gyro.reset();
     RobotContainer.m_drivetrain.init();
+    RobotContainer.m_magazine.init();
 
     bootCycle = true;
   }
@@ -137,6 +138,7 @@ public class Robot extends TimedRobot {
     bootCycle = false;
 
     System.out.println("//////////////////// Teleop /////////////////");
+    CommandScheduler.getInstance().schedule(new LoadMagazine());
     CommandScheduler.getInstance().schedule(new Drive());
     // CommandScheduler.getInstance().schedule(new GetColor());
   }
