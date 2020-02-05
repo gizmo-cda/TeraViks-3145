@@ -7,22 +7,29 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.commands.LoadMagazine;
+import frc.robot.commands.ShootBall;
 import edu.wpi.first.wpilibj.DigitalInput;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Magazine extends SubsystemBase {
-  private final WPI_TalonFX magazineMotor = new WPI_TalonFX(RobotMap.MAGAZINE_TalonFX_CAN_ID);
+  private final WPI_TalonSRX magazineMotor = new WPI_TalonSRX(RobotMap.MAGAZINE_TalonFX_CAN_ID);
 
   private final DigitalInput ballReadyToLoad = new DigitalInput(RobotMap.BALL_READY_TO_LOAD);
   private final DigitalInput ballInFirstPos = new DigitalInput(RobotMap.BALL_IN_FIRST_POSITION);
   private final DigitalInput ballInFifthPos = new DigitalInput(RobotMap.BALL_IN_FIFTH_POSITION);
 
+  private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
+
   private boolean magFull;
   private boolean ballReady;
   private boolean ballLoaded;
   private boolean isExistingBall;
+  private boolean canSeeBall;
+  private boolean hasSeenBall = false;
   private int ballCount = 0;
   private int ballReadyCount = 0;
 
@@ -79,34 +86,57 @@ public class Magazine extends SubsystemBase {
           ballReadyCount = 0;
         }
       }
-    } else if(ballReadyCount >= 5) {
-        stopMagazine();
-        ballReadyCount = 0;
+    } else if (ballReadyCount >= 5) {
+      stopMagazine();
+      ballReadyCount = 0;
     }
   }
 
-  public void shootBall() {
+  // This method uses the end sensor to count the balls as they exit the magazine
+  // and stop it when the ball count reaches 0. This method uses local variables
+  // to track the state of the balls exiting the magazine.
+  public void emptyMagazine() {
+    // This gets the sensor values every cycle of the scheduler
+    canSeeBall = ballInFifthPos.get();
 
+    // This removes the command that loads the magazine from the scheduler stack so
+    // that it does not interfere with the magazine being emptied.
+    CommandScheduler.getInstance().cancel(new LoadMagazine());
+
+    if (hasSeenBall) {
+      // This tests whether the ball that was being unloaded has finished unloading.
+      if (!canSeeBall) {
+        ballCount -= 1;
+        hasSeenBall = false;
+      }
+    } else {
+      // This tests if there is a ball currently being unloaded in front of the
+      // sensor.
+      if (canSeeBall) {
+        hasSeenBall = true;
+      }
+    }
+
+    if (ballCount > 0) {
+      advanceMagazine();
+    } else {
+      // This Reschedules the load magazine command and stops the shoot ball command
+      // after the mag has finished unloading.
+      CommandScheduler.getInstance().schedule(new LoadMagazine());
+      CommandScheduler.getInstance().cancel(new ShootBall());
+    }
   }
 
   public void init() {
-    /*
-     * magazineMotor.configFactoryDefault();
-     * 
-     * magazineMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,
-     * 0, TIMEOUT); magazineMotor.selectProfileSlot(0, 0); // slot #, PID #
-     * 
-     * magazineMotor.setInverted(false);
-     * 
-     * magazineMotor.setSelectedSensorPosition(0);
-     * magazineMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-     * 
-     * magazineMotor.configPeakOutputForward(1., TIMEOUT);
-     * magazineMotor.configPeakOutputReverse(-1., TIMEOUT);
-     * 
-     * magazineMotor.configNominalOutputForward(0, TIMEOUT);
-     * magazineMotor.configNominalOutputReverse(0, TIMEOUT);
-     */
+    magazineMotor.configFactoryDefault();
+
+    magazineMotor.setInverted(false);
+
+    magazineMotor.configPeakOutputForward(1., TIMEOUT);
+    magazineMotor.configPeakOutputReverse(-1., TIMEOUT);
+
+    magazineMotor.configNominalOutputForward(0, TIMEOUT);
+    magazineMotor.configNominalOutputReverse(0, TIMEOUT);
 
     System.out.println("  - Magazine Motor Initialized");
   }

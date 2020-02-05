@@ -41,9 +41,9 @@ public class RobotMap {
     // CAN Bus IDs for All other Subsystem Talon SRX controllers
     public static final int MAGAZINE_TalonFX_CAN_ID = 15;
     public static final int INTAKE_TalonSRX_CAN_ID = 16;
-    public static final int SHOOT_TalonSRX_CAN_ID = 17;
-    public static final int BOOMERANG_ROTATE_TalonSRX_CAN_ID = 18;
-    public static final int REAR_ROBOT_LIFT_TalonSRX_CAN_ID = 19;
+    public static final int SHOOT_TOP_TalonSRX_CAN_ID = 17;
+    public static final int SHOOT_BOTTOM_TalonSRX_CAN_ID = 18;
+    public static final int BEAVER_TAIL_TalonSRX_CAN_ID = 19;
     public static final int REAR_ROBOT_LIFT_DRIVE_TalonSRX_CAN_ID = 20;
     public static final int HATCH_GRABBER_TalonSRX_CAN_ID = 21;
     public static final int BOOMERANG_LIFT_BOOSTER_TalonSRX_CAN_ID = 22;
@@ -110,6 +110,10 @@ public class RobotMap {
     public static final int LEVEL2_PLATFORM_REAR_LIFT_LEVEL = 135000;
     public static final int LEVEL3_PLATFORM_REAR_LIFT_LEVEL = 325000;
 
+    // Intake Positons
+    public static final int INTAKE_UPPER_POSITION = 0;
+    public static final int INTAKE_LOWER_POSITION = 0;
+    
     // DIO Ports
     public static final int FRONT_RIGHT_STEER_CAL = 0;
     public static final int FRONT_LEFT_STEER_CAL = 1;

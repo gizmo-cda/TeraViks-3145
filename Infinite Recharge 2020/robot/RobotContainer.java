@@ -34,6 +34,7 @@ public class RobotContainer {
   public static ColorSensor m_color = new ColorSensor();
   public static LED m_led = new LED();
   public static Magazine m_magazine = new Magazine();
+  public static Shooter m_shooter = new Shooter();
 
   // Instantiate Command Objects
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
@@ -48,9 +49,10 @@ public class RobotContainer {
   private final LowSpeedDrive m_LowSpeedDrive = new LowSpeedDrive();
   private final RobotCentric m_RobotCentric = new RobotCentric();
   private final SnakeMode m_SnakeMode = new SnakeMode();
-  // private final Command m_autoCommand;
   private final SpinWheelToColor m_spinWheelToColor = new SpinWheelToColor();
   private final SpinWheel3Rev m_spinWheel3Rev = new SpinWheel3Rev();
+  private final ShootBall m_shootBall = new ShootBall();
+  // private final Command m_autoCommand;
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
   private static Joystick swerveJoy = new Joystick(0);
@@ -114,6 +116,7 @@ public class RobotContainer {
     // Operator Buttons
     obtnX.whenPressed(m_spinWheelToColor, false);
     obtnB.whenPressed(m_spinWheel3Rev, false);
+    obtnRB.whenPressed(m_shootBall, false);
   }
   
   public static double getDriverX(){
