@@ -42,7 +42,12 @@ public class Robot extends TimedRobot {
 
     // m_gyro.reset();
     RobotContainer.m_drivetrain.init();
-    RobotContainer.m_magazine.init();
+    // RobotContainer.m_magazine.initMagMotors();
+    // RobotContainer.m_intake.initBeaverTailMotor();
+    // RobotContainer.m_intake.initIntakeMotor();
+    // RobotContainer.m_shooter.initShootMotors();
+    RobotContainer.m_lift.initLiftMotor();
+    RobotContainer.m_tilt.initTiltMotor();
 
     bootCycle = true;
   }

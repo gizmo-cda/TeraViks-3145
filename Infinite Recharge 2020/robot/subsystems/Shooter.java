@@ -38,11 +38,11 @@ public class Shooter extends SubsystemBase {
     shootMotorBottom.set(ControlMode.Velocity, 0.);
   }
 
-  public void init() {
+  public void initShootMotors() {
     shootMotorTop.configFactoryDefault();
     
-    shootMotorTop.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,
-    0, TIMEOUT); shootMotorTop.selectProfileSlot(0, 0); // slot #, PID #
+    shootMotorTop.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT); 
+    shootMotorTop.selectProfileSlot(0, 0); // slot #, PID #
     
     shootMotorTop.setInverted(false);
     
@@ -72,8 +72,8 @@ public class Shooter extends SubsystemBase {
 
     shootMotorBottom.configFactoryDefault();
     
-    shootMotorBottom.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor,
-    0, TIMEOUT); shootMotorBottom.selectProfileSlot(0, 0); // slot #, PID #
+    shootMotorBottom.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT); 
+    shootMotorBottom.selectProfileSlot(0, 0); // slot #, PID #
     
     shootMotorBottom.setInverted(false);
     

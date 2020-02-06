@@ -7,8 +7,11 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
+import frc.robot.commands.LoadMagazine;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -20,6 +23,8 @@ public class Intake extends SubsystemBase {
   private final WPI_TalonSRX beaverTailMotor = new WPI_TalonSRX(RobotMap.BEAVER_TAIL_TalonSRX_CAN_ID);
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
 
+  private boolean magFull;
+
   /**
    * Creates a new Intake.
    */
@@ -27,7 +32,13 @@ public class Intake extends SubsystemBase {
   }
 
   public void intakeBall(){
-    intakeMotor.set(ControlMode.PercentOutput, 1.);
+    if (!magFull){
+      intakeMotor.set(ControlMode.PercentOutput, 1.);
+      
+      if (!CommandScheduler.getInstance().isScheduled(new LoadMagazine())){
+        CommandScheduler.getInstance().schedule(new LoadMagazine());
+      }
+    } else stopIntake();
   }
 
   public void reverseIntake(){
@@ -45,6 +56,7 @@ public class Intake extends SubsystemBase {
   public void raiseBeaverTail(){
     beaverTailMotor.set(ControlMode.Position, RobotMap.INTAKE_UPPER_POSITION);
   }
+
   
   public void initIntakeMotor(){
     intakeMotor.configFactoryDefault();

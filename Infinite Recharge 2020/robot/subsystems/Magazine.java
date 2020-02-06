@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.LoadMagazine;
 import frc.robot.commands.ShootBall;
@@ -20,7 +21,7 @@ public class Magazine extends SubsystemBase {
 
   private final DigitalInput ballReadyToLoad = new DigitalInput(RobotMap.BALL_READY_TO_LOAD);
   private final DigitalInput ballInFirstPos = new DigitalInput(RobotMap.BALL_IN_FIRST_POSITION);
-  private final DigitalInput ballInFifthPos = new DigitalInput(RobotMap.BALL_IN_FIFTH_POSITION);
+  public final DigitalInput ballInFifthPos = new DigitalInput(RobotMap.BALL_IN_FIFTH_POSITION);
 
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
 
@@ -32,6 +33,8 @@ public class Magazine extends SubsystemBase {
   private boolean hasSeenBall = false;
   private int ballCount = 0;
   private int ballReadyCount = 0;
+
+  private boolean isShootPressed;
 
   /**
    * Creates a new Magazine.
@@ -86,9 +89,12 @@ public class Magazine extends SubsystemBase {
           ballReadyCount = 0;
         }
       }
-    } else if (ballReadyCount >= 5) {
-      stopMagazine();
-      ballReadyCount = 0;
+    } else {
+      CommandScheduler.getInstance().cancel(new LoadMagazine());
+      if (ballReadyCount >= 5) {
+        stopMagazine();
+        ballReadyCount = 0;
+      }
     }
   }
 
@@ -98,10 +104,14 @@ public class Magazine extends SubsystemBase {
   public void emptyMagazine() {
     // This gets the sensor values every cycle of the scheduler
     canSeeBall = ballInFifthPos.get();
+    // This gets the state of the shoot button
+    isShootPressed = RobotContainer.getShootButtonState();
 
     // This removes the command that loads the magazine from the scheduler stack so
     // that it does not interfere with the magazine being emptied.
-    CommandScheduler.getInstance().cancel(new LoadMagazine());
+    if (CommandScheduler.getInstance().isScheduled(new LoadMagazine())) {
+      CommandScheduler.getInstance().cancel(new LoadMagazine());
+    }
 
     if (hasSeenBall) {
       // This tests whether the ball that was being unloaded has finished unloading.
@@ -117,17 +127,18 @@ public class Magazine extends SubsystemBase {
       }
     }
 
-    if (ballCount > 0) {
+    if (ballCount > 0 && isShootPressed) {
       advanceMagazine();
     } else {
       // This Reschedules the load magazine command and stops the shoot ball command
-      // after the mag has finished unloading.
+      // after the mag has finished unloading and the shoot button is no longer being
+      // pressed.
       CommandScheduler.getInstance().schedule(new LoadMagazine());
       CommandScheduler.getInstance().cancel(new ShootBall());
     }
   }
 
-  public void init() {
+  public void initMagMotors() {
     magazineMotor.configFactoryDefault();
 
     magazineMotor.setInverted(false);

@@ -44,8 +44,8 @@ public class RobotMap {
     public static final int SHOOT_TOP_TalonSRX_CAN_ID = 17;
     public static final int SHOOT_BOTTOM_TalonSRX_CAN_ID = 18;
     public static final int BEAVER_TAIL_TalonSRX_CAN_ID = 19;
-    public static final int REAR_ROBOT_LIFT_DRIVE_TalonSRX_CAN_ID = 20;
-    public static final int HATCH_GRABBER_TalonSRX_CAN_ID = 21;
+    public static final int LIFT_TalonSRX_CAN_ID = 20;
+    public static final int TILT_TalonFX_CAN_ID = 21;
     public static final int BOOMERANG_LIFT_BOOSTER_TalonSRX_CAN_ID = 22;
   
     // Talon controllers' timeout
@@ -122,4 +122,5 @@ public class RobotMap {
     public static final int BALL_READY_TO_LOAD = 4;
     public static final int BALL_IN_FIRST_POSITION = 5;
     public static final int BALL_IN_FIFTH_POSITION = 6;
+    public static final int TILT_HOME_SWITCH = 7;
   }  

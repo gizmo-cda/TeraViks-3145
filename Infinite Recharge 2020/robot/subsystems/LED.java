@@ -53,31 +53,6 @@ public class LED extends SubsystemBase {
     m_led.setData(m_ledBuffer);
   }
 
-  public void test(){
-   /*for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 0, 0, 0);
-    }
-    m_led.setData(m_ledBuffer);
-
-    Timer.delay(1); 
-
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 100, 100, 100);
-    }
-    m_led.setData(m_ledBuffer);
-
-    Timer.delay(1); 
-*/
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i,135, 65, 0);
-    }
-    m_led.setData(m_ledBuffer);
-    Timer.delay(1.);
-
-  }
-
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
