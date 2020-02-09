@@ -42,12 +42,11 @@ public class Robot extends TimedRobot {
 
     // m_gyro.reset();
     RobotContainer.m_drivetrain.init();
-    // RobotContainer.m_magazine.initMagMotors();
-    // RobotContainer.m_intake.initBeaverTailMotor();
-    // RobotContainer.m_intake.initIntakeMotor();
-    // RobotContainer.m_shooter.initShootMotors();
-    RobotContainer.m_lift.initLiftMotor();
-    RobotContainer.m_tilt.initTiltMotor();
+    // RobotContainer.m_magazine.init();
+    // RobotContainer.m_intake.init();
+    // RobotContainer.m_shooter.init();
+    // RobotContainer.m_lift.init();
+    // RobotContainer.m_tilt.init();
 
     bootCycle = true;
   }
@@ -76,8 +75,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Gyro Yaw", m_gyro.getYawDeg());
     // SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitchDeg());
     // SmartDashboard.putNumber("Gyro Roll", m_gyro.getRollDeg());
-
-    RobotContainer.m_led.rainbow();
+    SmartDashboard.putNumber("Ball Count" , RobotContainer.m_magazine.getBallCount());
   }
 
   /**
@@ -85,11 +83,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    RobotContainer.m_led.clearLED();
     System.out.println("//////////////////// DISABLED Init /////////////////");
   }
 
   @Override
   public void disabledPeriodic() {
+    RobotContainer.m_led.rainbowLED();
   }
 
   /**
@@ -146,6 +146,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().schedule(new LoadMagazine());
     CommandScheduler.getInstance().schedule(new Drive());
     // CommandScheduler.getInstance().schedule(new GetColor());
+    RobotContainer.m_led.clearLED();
   }
 
   /**
@@ -153,6 +154,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    RobotContainer.m_led.dispBallCountLED();
   }
 
   @Override

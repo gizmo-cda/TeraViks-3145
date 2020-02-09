@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Magazine extends SubsystemBase {
-  private final WPI_TalonSRX magazineMotor = new WPI_TalonSRX(RobotMap.MAGAZINE_TalonFX_CAN_ID);
+  private final WPI_TalonSRX magazineMotor = new WPI_TalonSRX(RobotMap.MAGAZINE_TalonSRX_CAN_ID);
 
   private final DigitalInput ballReadyToLoad = new DigitalInput(RobotMap.BALL_READY_TO_LOAD);
   private final DigitalInput ballInFirstPos = new DigitalInput(RobotMap.BALL_IN_FIRST_POSITION);
@@ -85,7 +85,11 @@ public class Magazine extends SubsystemBase {
         // This tests if the new ball has been loaded
         if (ballLoaded && !isExistingBall) {
           stopMagazine();
-          ballCount += 1;
+          
+          if (ballCount < 5) {
+            ballCount += 1;
+          }
+
           ballReadyCount = 0;
         }
       }
@@ -103,7 +107,7 @@ public class Magazine extends SubsystemBase {
   // to track the state of the balls exiting the magazine.
   public void emptyMagazine() {
     // This gets the sensor values every cycle of the scheduler
-    canSeeBall = ballInFifthPos.get();
+    canSeeBall = !ballInFifthPos.get();
     // This gets the state of the shoot button
     isShootPressed = RobotContainer.getShootButtonState();
 
@@ -138,7 +142,15 @@ public class Magazine extends SubsystemBase {
     }
   }
 
-  public void initMagMotors() {
+  public int getBallCount(){
+    return ballCount;
+  }
+
+  public boolean getMagFull() {
+    return !ballInFifthPos.get();
+  }
+
+  public void init() {
     magazineMotor.configFactoryDefault();
 
     magazineMotor.setInverted(false);

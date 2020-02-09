@@ -15,8 +15,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;;
 
 public class Shooter extends SubsystemBase {
-  private final TalonFX shootMotorTop = new TalonFX(RobotMap.SHOOT_TOP_TalonSRX_CAN_ID);
-  private final TalonFX shootMotorBottom = new TalonFX(RobotMap.SHOOT_BOTTOM_TalonSRX_CAN_ID);
+  private final TalonFX shootMotorTop = new TalonFX(RobotMap.SHOOT_TOP_TalonFX_CAN_ID);
+  private final TalonFX shootMotorBottom = new TalonFX(RobotMap.SHOOT_BOTTOM_TalonFX_CAN_ID);
   private int TIMEOUT = RobotMap.TalonFX_TIMEOUT;
 
   /**
@@ -24,6 +24,11 @@ public class Shooter extends SubsystemBase {
    */
   public Shooter() {
 
+  }
+
+  public void init(){
+    initTopShootMotor();
+    initBottomShootMotor();
   }
 
   // Sets the motor velocities for each shooter motor independently
@@ -38,7 +43,7 @@ public class Shooter extends SubsystemBase {
     shootMotorBottom.set(ControlMode.Velocity, 0.);
   }
 
-  public void initShootMotors() {
+  private void initTopShootMotor() {
     shootMotorTop.configFactoryDefault();
     
     shootMotorTop.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT); 
@@ -69,7 +74,9 @@ public class Shooter extends SubsystemBase {
     
 
     System.out.println("  - Top Shooter Motor Initialized");
+  }
 
+  private void initBottomShootMotor(){
     shootMotorBottom.configFactoryDefault();
     
     shootMotorBottom.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT); 

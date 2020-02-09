@@ -49,7 +49,7 @@ public class Tilt extends SubsystemBase {
 		tiltMotor.set(ControlMode.MotionMagic, 10);
   }
 
-  public void initTiltMotor() {
+  public void init() {
     tiltMotor.configFactoryDefault();
 
     tiltMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT);

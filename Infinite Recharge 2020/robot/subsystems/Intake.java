@@ -23,12 +23,17 @@ public class Intake extends SubsystemBase {
   private final WPI_TalonSRX beaverTailMotor = new WPI_TalonSRX(RobotMap.BEAVER_TAIL_TalonSRX_CAN_ID);
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
 
-  private boolean magFull;
+  private boolean magFull = false;
 
   /**
    * Creates a new Intake.
    */
   public Intake() {
+  }
+
+  public void init() {
+    initBeaverTailMotor();
+    initIntakeMotor();
   }
 
   public void intakeBall(){
@@ -58,7 +63,7 @@ public class Intake extends SubsystemBase {
   }
 
   
-  public void initIntakeMotor(){
+  private void initIntakeMotor(){
     intakeMotor.configFactoryDefault();
     
     intakeMotor.setInverted(false);
@@ -72,7 +77,7 @@ public class Intake extends SubsystemBase {
     System.out.println("  - Intake Motor Initialized");
   }
 
-  public void initBeaverTailMotor(){
+  private void initBeaverTailMotor(){
     beaverTailMotor.configFactoryDefault();
         
     beaverTailMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT);
