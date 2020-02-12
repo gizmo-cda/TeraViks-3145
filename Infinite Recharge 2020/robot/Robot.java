@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.*;
 import frc.robot.subsystems.LED;
 
+import frc.robot.swerve.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -126,13 +128,12 @@ public class Robot extends TimedRobot {
     // Adding calDriveTrain to scheduler if booting (ie not enable/disable in DS)
     System.out.println("//////////////////// TeleopInit /////////////////");
 
-    // m_gyro.reset();
+    // m_gyro.reset();  
     Timer.delay(.5);
 
-    // if (bootCycle && enableDrivetrainCalibration){
-    // Scheduler.getInstance().add(new CalibrateDriveTrain());
-    // Scheduler.getInstance().run();
-    // }
+    if (bootCycle && enableDrivetrainCalibration){
+      CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
+    }
 
     // m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
     // m_vision.ledOff();
@@ -155,6 +156,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     RobotContainer.m_led.dispBallCountLED();
+
   }
 
   @Override

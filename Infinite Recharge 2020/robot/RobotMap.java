@@ -102,12 +102,12 @@ public class RobotMap {
     public static final int LIFT_TOP_POSITION = 0;
     
     // DIO Ports
-    public static final int FRONT_RIGHT_STEER_CAL = 0;
-    public static final int FRONT_LEFT_STEER_CAL = 1;
-    public static final int REAR_LEFT_STEER_CAL = 2;
-    public static final int REAR_RIGHT_STEER_CAL = 3;
-    public static final int BALL_READY_TO_LOAD = 4;
-    public static final int BALL_IN_FIRST_POSITION = 5;
-    public static final int BALL_IN_FIFTH_POSITION = 6;
-    public static final int TILT_HOME_SWITCH = 7;
+    public static final int TILT_HOME_SWITCH = 2;
+    public static final int BALL_READY_TO_LOAD = 3;
+    public static final int BALL_IN_FIRST_POSITION = 4;
+    public static final int BALL_IN_FIFTH_POSITION = 5;
+    public static final int FRONT_RIGHT_STEER_CAL = 6;
+    public static final int FRONT_LEFT_STEER_CAL = 7;
+    public static final int REAR_LEFT_STEER_CAL = 8;
+    public static final int REAR_RIGHT_STEER_CAL = 9;
   }  

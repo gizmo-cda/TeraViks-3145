@@ -36,6 +36,8 @@ package frc.robot.swerve;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 public class SwerveDrive {
     private SwerveModule frontRight;
     private SwerveModule frontLeft;
@@ -133,6 +135,11 @@ public class SwerveDrive {
     //Calls calibration method in SwerveDrive, enable CheckPhase boolean in RobotMap, if a mechanical module is swapped
     public void calSteerMotors(){
         System.out.println("**Calibrating Steering");
+        frontRight.steerMotor.set(ControlMode.PercentOutput, .3);
+        // frontLeft.steerMotor.set(ControlMode.PercentOutput, .3);
+        // rearLeft.steerMotor.set(ControlMode.PercentOutput, .3);
+        // rearRight.steerMotor.set(ControlMode.PercentOutput, .3);
+        
         frontRight.rotateSteerForCal();
         // frontLeft.rotateSteerForCal();
         // rearLeft.rotateSteerForCal();

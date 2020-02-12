@@ -87,6 +87,7 @@ public class Drivetrain extends SubsystemBase {
   
   private boolean ballTrackMode = false;
   private boolean hatchTrackMode = false;
+  private boolean isDriveInverted = false;
 
   private Queue<Double> txQueue = new LinkedList<Double>();
   private double queueSum = 0.;
@@ -98,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
     frontRightWheel = new SwerveModule("FrontRightWheel", frontRightDriveMotor, frontRightSteerMotor);
     // frontLeftWheel = new SwerveModule("FrontLeftWheel", frontLeftDriveMotor, frontLeftSteerMotor);
     // rearLeftWheel = new SwerveModule("RearLeftWheel", rearLeftDriveMotor, rearLeftSteerMotor);
-    // rearRightWheel = new SwerveModule(s"RearRightWheel", rearRightDriveMotor, rearRightSteerMotor);
+    // rearRightWheel = new SwerveModule("RearRightWheel", rearRightDriveMotor, rearRightSteerMotor);
     
     //Now Build the complete Swerve Drive Object with all four Wheel Modules
     // m_SwerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel);
@@ -209,7 +210,9 @@ public class Drivetrain extends SubsystemBase {
       rcw = .05*txAverage;
     }
     
+    if(!isDriveInverted){
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode, hiLo);
+    } else m_SwerveDrive.setMotors(-fwd, -str, -rcw, centric, yaw, reverseEn, snakeMode, hiLo);
   }
   
   private void antiRoll(double roll){
@@ -271,6 +274,13 @@ public class Drivetrain extends SubsystemBase {
   
   public void driveDistance(double gyro, boolean hiLo, double distance) {
     m_SwerveDrive.setMotorsForDistance(0.5, centric, gyro, reverseEn, snakeMode, hiLo, distance);
+  }
+
+  // Sets a boolean to invert the control of the drive motors
+  public void invertDrive(){
+    if(isDriveInverted) {
+      isDriveInverted = false;
+    } else isDriveInverted = true;
   }
   
   /*@Override
