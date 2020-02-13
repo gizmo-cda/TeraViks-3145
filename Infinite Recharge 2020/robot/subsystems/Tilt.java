@@ -40,14 +40,64 @@ public class Tilt extends SubsystemBase {
   }
 
   public void calTilt(){
-    hasBeenHomed = false;
+    /*hasBeenHomed = false;
     for (double i = tiltMotor.getSelectedSensorPosition(0); homeSwitch.get() && !hasBeenHomed; i += 0.001) {
 			tiltMotor.set(ControlMode.MotionMagic, i);
     }
     hasBeenHomed = true;	
     tiltMotor.setSelectedSensorPosition(0, 0, TIMEOUT);
-		tiltMotor.set(ControlMode.MotionMagic, 10);
+    tiltMotor.set(ControlMode.MotionMagic, 10);
+    */
+    
+    //Init local variables
+    boolean clear = false;
+    int currentPos = 0;
+    int newPos = 0;
+    
+    System.out.println("  - Calibrating Tilt");
+    
+    //Enable encoder clearing so when the index sensor goes active the reset executes.
+    tiltMotor.configClearPositionOnQuadIdx(true, TIMEOUT);
+    
+    //Set current position to a known value and start the motor open-loop, but slow
+    tiltMotor.setSelectedSensorPosition(currentPos);
+    tiltMotor.set(ControlMode.PercentOutput, .3);
+    
+    //
+    delay(40);
+    
+    //While the motor is running check to see when the encoder has been reset
+    while (!clear) {
+        if (newPos < currentPos){
+            tiltMotor.set(ControlMode.PercentOutput, 0.);
+            clear = true;
+        }
+        else {
+            currentPos = newPos;
+        }
+        
+        delay(20);
+        newPos = tiltMotor.getSelectedSensorPosition();
+    }
+    
+    //Give the motor extra time to stop
+    delay(60);
+    
+    //Disabled index clearing and get the encoder position which will always be positive after stopping the open loop run
+    tiltMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
+
+    // Set tilt to upper position and hold that position
+    tiltMotor.set(ControlMode.MotionMagic, RobotMap.TILT_UPPER_POSITION);
   }
+
+  private void delay(int msec){
+    try{
+        Thread.sleep(msec);
+    }
+    catch (Exception e){
+        System.out.println("Error in Waitloop");
+    }
+}
 
   public void init() {
     tiltMotor.configFactoryDefault();

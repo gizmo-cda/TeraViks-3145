@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.5);
 
     if (bootCycle && enableDrivetrainCalibration){
-      CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
+      // CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
     }
 
     // m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
@@ -155,8 +155,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    RobotContainer.m_led.dispBallCountLED();
-
+    // RobotContainer.m_led.dispBallCountLED();
+    RobotContainer.m_led.testLED();
   }
 
   @Override

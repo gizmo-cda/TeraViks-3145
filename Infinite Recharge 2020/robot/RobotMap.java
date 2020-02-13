@@ -93,13 +93,13 @@ public class RobotMap {
     public static final double CAMERA_MOUNTING_ANGLE = 30.;  //Units are in degrees and referenced to X axis, with CCW being positive
     public static final double CAMERA_MOUNTING_HEIGHT = 62.;  //Units are in inches
     public static final double DOUBLE_STRIPE_REFLECTIVE_TAPE_TARGET_HEIGHT = 28.5;  //Units are in inches
-  
-    // Intake Positons
-    public static final int INTAKE_UPPER_POSITION = 0;
-    public static final int INTAKE_LOWER_POSITION = 0;
 
     // Lift Positions
     public static final int LIFT_TOP_POSITION = 0;
+
+    // Tilt Positions
+    public static final int TILT_UPPER_POSITION = 0;
+    public static final int TILT_LOWER_POSITION = 0;
     
     // DIO Ports
     public static final int TILT_HOME_SWITCH = 2;
@@ -110,4 +110,13 @@ public class RobotMap {
     public static final int FRONT_LEFT_STEER_CAL = 7;
     public static final int REAR_LEFT_STEER_CAL = 8;
     public static final int REAR_RIGHT_STEER_CAL = 9;
+
+    // PWM Reservations for neopixels
+    public static final int BALL_COUNT_LED_RIGHT = 0;
+    public static final int BALL_COUNT_LED_LEFT = 1;
+    public static final int STATUS_LED_RIGHT = 2;
+    public static final int STATUS_LED_LEFT = 3;
+
+    // Neopixel strip lengths
+    public static final int LED_STRIP_LENGTH = 60;
   }  

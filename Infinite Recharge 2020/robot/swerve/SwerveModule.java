@@ -176,7 +176,7 @@ public class SwerveModule {
                 break;
             }
 
-            if (!calSteerSensors[sensorID]) {
+            if (calSteerSensors[sensorID]) {
                 steerMotor.setSelectedSensorPosition(0);
                 clear = true;
             }

@@ -55,13 +55,8 @@ public class Intake extends SubsystemBase {
   }
 
   public void lowerBeaverTail(){
-    beaverTailMotor.set(ControlMode.Position, RobotMap.INTAKE_LOWER_POSITION);
+    
   }
-
-  public void raiseBeaverTail(){
-    beaverTailMotor.set(ControlMode.Position, RobotMap.INTAKE_UPPER_POSITION);
-  }
-
   
   private void initIntakeMotor(){
     intakeMotor.configFactoryDefault();

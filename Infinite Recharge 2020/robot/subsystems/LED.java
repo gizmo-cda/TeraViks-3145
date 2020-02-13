@@ -9,13 +9,19 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.Timer;
 
 public class LED extends SubsystemBase {
-  private static AddressableLED m_led;
-  private static AddressableLEDBuffer m_ledBuffer;
+  private static AddressableLED m_ballCountLEDR;
+  private static AddressableLEDBuffer m_ballCountLEDBufferR;
+  private static AddressableLED m_ballCountLEDL;
+  private static AddressableLEDBuffer m_ballCountLEDBufferL;
+  private static AddressableLED m_statusLEDR;
+  private static AddressableLEDBuffer m_statusLEDBufferR;
+  private static AddressableLED m_statusLEDL;
+  private static AddressableLEDBuffer m_statusLEDBufferL;
   private static int m_rainbowFirstPixelHue = 240;
   private int ballCount;
   private int adressableLED;
@@ -28,36 +34,52 @@ public class LED extends SubsystemBase {
    * Creates a new LED.
    */
   public LED() {
-    // PWM port 9
     // Must be a PWM header, not MXP or DIO
-    m_led = new AddressableLED(0);
+    m_ballCountLEDR = new AddressableLED(RobotMap.BALL_COUNT_LED_RIGHT);
+    m_ballCountLEDL = new AddressableLED(RobotMap.BALL_COUNT_LED_LEFT);
+    m_statusLEDR = new AddressableLED(RobotMap.STATUS_LED_RIGHT);
+    m_statusLEDL = new AddressableLED(RobotMap.STATUS_LED_LEFT);
 
     // Reuse buffer
-    // Default to a length of 60, start empty output
+    // Length is set from a constant in RobotMap
     // Length is expensive to set, so only set it once, then just update data
-    m_ledBuffer = new AddressableLEDBuffer(35);
-    m_led.setLength(m_ledBuffer.getLength());
+    m_ballCountLEDBufferR = new AddressableLEDBuffer(RobotMap.LED_STRIP_LENGTH);
+    m_ballCountLEDBufferL = new AddressableLEDBuffer(RobotMap.LED_STRIP_LENGTH);
+    m_statusLEDBufferR = new AddressableLEDBuffer(RobotMap.LED_STRIP_LENGTH);
+    m_statusLEDBufferL = new AddressableLEDBuffer(RobotMap.LED_STRIP_LENGTH);
+    m_ballCountLEDR.setLength(m_ballCountLEDBufferR.getLength());
+    m_ballCountLEDL.setLength(m_ballCountLEDBufferL.getLength());
+    m_statusLEDR.setLength(m_statusLEDBufferR.getLength());
+    m_statusLEDL.setLength(m_statusLEDBufferL.getLength());
 
     // Set the data
-    m_led.setData(m_ledBuffer);
-    m_led.start();
+    m_ballCountLEDR.setData(m_ballCountLEDBufferR);
+    m_ballCountLEDR.start();
+    m_ballCountLEDL.setData(m_ballCountLEDBufferL);
+    m_ballCountLEDL.start();
+    m_statusLEDR.setData(m_statusLEDBufferR);
+    m_statusLEDR.start();
+    m_statusLEDL.setData(m_statusLEDBufferL);
+    m_statusLEDL.start();
   }
 
   public void rainbowLED() {
     // For every pixel
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
       // Calculate the hue - hue is easier for rainbows because the color
       // shape is a circle so only one value needs to precess
-      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+      final var hue = (m_rainbowFirstPixelHue + (i * 180 / RobotMap.LED_STRIP_LENGTH) % 180);
       // Set the value
-      m_ledBuffer.setHSV(i, hue, 255, 128);
+      m_ballCountLEDBufferR.setHSV(i, hue, 255, 128);
+      m_ballCountLEDBufferL.setHSV(i, hue, 255, 128);
+      m_statusLEDBufferR.setHSV(i, hue, 255, 128);
+      m_statusLEDBufferL.setHSV(i, hue, 255, 128);
     }
     // Increase by to make the rainbow "move"
     m_rainbowFirstPixelHue += 3;
     // Check bounds
     m_rainbowFirstPixelHue %= 180;
 
-    m_led.setData(m_ledBuffer);
   }
 
   public void dispBallCountLED() {
@@ -77,21 +99,80 @@ public class LED extends SubsystemBase {
 
     for (var i = 0; i <= adressableLED ; i++) {
       if (!(i == 6 || i == 7 || i == 13 || i == 14 || i == 20 || i == 21 || i == 27 || i == 28)) {
-        m_ledBuffer.setRGB(i, r, g, b);
+        m_ballCountLEDBufferR.setRGB(i, r, g, b);
+        m_ballCountLEDBufferL.setRGB(i, r, g, b);
       }
     }
-
-    m_led.setData(m_ledBuffer);
   }
 
-  public void clearLED() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 0, 0, 0);
+  public void intakeLED(){
+    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
+      m_statusLEDBufferR.setRGB(i, 0, 0, 255);
+      m_statusLEDBufferL.setRGB(i, 0, 0, 255);
+      delay(250);
+      clearStatusLED();
+      delay(250);
     }
   }
+
+  public void climbLED(){
+    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
+      m_statusLEDBufferR.setRGB(i, 150, 0, 200);
+      m_statusLEDBufferL.setRGB(i, 150, 0, 200);
+    }
+  }
+
+  public void shootLED(){
+    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
+      m_statusLEDBufferR.setRGB(i, 0, 180, 50);
+      m_statusLEDBufferL.setRGB(i, 0, 180, 50);
+    }
+  }
+
+  public void clearBallCountLED(){
+    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
+      m_ballCountLEDBufferR.setRGB(i, 0, 0, 0);
+      m_ballCountLEDBufferL.setRGB(i, 0, 0, 0);
+    }
+  }
+
+  public void clearStatusLED() {
+    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
+      m_statusLEDBufferR.setRGB(i, 0, 0, 0);
+      m_statusLEDBufferL.setRGB(i, 0, 0, 0);
+    }
+  }
+
+  public void clearLED(){
+    clearBallCountLED();
+    clearStatusLED();
+  }
+
+  public void testLED(){
+    for (var i = 0; i < 60; i++) {
+      m_ballCountLEDBufferR.setRGB(i, 100, 50, 0);
+    }
+
+    for (var i = 0; i < 0; i++) {
+      m_ballCountLEDBufferR.setRGB(i, 200, 100, 0);
+    }
+  }
+ 
+  private void delay(int msec){
+    try{
+        Thread.sleep(msec);
+    }
+    catch (Exception e){
+        System.out.println("Error in Waitloop");
+    }
+}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_ballCountLEDR.setData(m_ballCountLEDBufferR);
+    m_ballCountLEDL.setData(m_ballCountLEDBufferL);
+    m_statusLEDR.setData(m_statusLEDBufferR);
+    m_statusLEDL.setData(m_statusLEDBufferL);
   }
 }
