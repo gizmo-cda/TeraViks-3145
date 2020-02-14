@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.LoadMagazine;
 
@@ -44,6 +43,7 @@ public class Intake extends SubsystemBase {
         CommandScheduler.getInstance().schedule(new LoadMagazine());
       }
     } else stopIntake();
+    // RobotContainer.m_led.intakeLED();
   }
 
   public void reverseIntake(){

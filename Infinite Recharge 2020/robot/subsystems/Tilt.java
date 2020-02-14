@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -18,11 +17,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class Tilt extends SubsystemBase {
   private final WPI_TalonFX tiltMotor = new WPI_TalonFX(RobotMap.TILT_TalonFX_CAN_ID);
-  private final DigitalInput homeSwitch = new DigitalInput(RobotMap.TILT_HOME_SWITCH);
   
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
-
-  private boolean hasBeenHomed;
 
   /**
    * Creates a new Tilt.
@@ -40,15 +36,6 @@ public class Tilt extends SubsystemBase {
   }
 
   public void calTilt(){
-    /*hasBeenHomed = false;
-    for (double i = tiltMotor.getSelectedSensorPosition(0); homeSwitch.get() && !hasBeenHomed; i += 0.001) {
-			tiltMotor.set(ControlMode.MotionMagic, i);
-    }
-    hasBeenHomed = true;	
-    tiltMotor.setSelectedSensorPosition(0, 0, TIMEOUT);
-    tiltMotor.set(ControlMode.MotionMagic, 10);
-    */
-    
     //Init local variables
     boolean clear = false;
     int currentPos = 0;

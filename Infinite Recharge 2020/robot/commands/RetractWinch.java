@@ -13,14 +13,14 @@ import frc.robot.RobotContainer;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class Flip180CW extends InstantCommand {
-  public Flip180CW() {
+public class RetractWinch extends InstantCommand {
+  public RetractWinch() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.m_drivetrain.setFlip180(true);
+    RobotContainer.m_led.climbLED();
   }
 }

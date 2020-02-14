@@ -56,8 +56,10 @@ public class RobotContainer {
   private final SpinWheel3Rev m_spinWheel3Rev = new SpinWheel3Rev();
   private final ShootBall m_shootBall = new ShootBall();
   private final IntakeBall m_intakeBall = new IntakeBall();
+  private final StopIntake m_stopIntake = new StopIntake();
   private final ReverseIntake m_reverseIntake = new ReverseIntake();
   private final InvertDrivetrain m_invertDrivetrain = new InvertDrivetrain();
+  private final RetractWinch m_retractWinch = new RetractWinch();
   // private final Command m_autoCommand;
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
@@ -121,7 +123,11 @@ public class RobotContainer {
     btnL2.whenPressed(m_LowSpeedDrive, false);
     btnL2.whenReleased(m_HighSpeedDrive, false);
 
-    btnStart.whenPressed(m_Drive, false);
+    btnStart.whenPressed(m_retractWinch, false);
+
+    //TEST
+    btnTriangle.whenPressed(m_intakeBall, false);
+    btnTriangle.whenReleased(m_stopIntake, false);
 
     // Operator Buttons
     obtnX.whenPressed(m_spinWheelToColor, false);

@@ -26,20 +26,22 @@ public class ShootBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_shooter.shootBall(1., 1.);
-    RobotContainer.m_magazine.emptyMagazine();
+    // RobotContainer.m_shooter.shootBall(1., 1.);
+    // RobotContainer.m_magazine.emptyMagazine();
+    RobotContainer.m_led.shootLED();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.m_shooter.stopMotors();
-    RobotContainer.m_magazine.stopMagazine();
+    // RobotContainer.m_shooter.stopMotors();
+    // RobotContainer.m_magazine.stopMagazine();
+    RobotContainer.m_led.clearStatusLED();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
