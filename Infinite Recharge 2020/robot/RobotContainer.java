@@ -45,8 +45,6 @@ public class RobotContainer {
   private final CrabMode m_CrabMode = new CrabMode();
   private final Drive m_Drive = new Drive();
   private final FieldCentric m_FieldCentric = new FieldCentric();
-  private final Flip180CCW m_Flip180CCW = new Flip180CCW();
-  private final Flip180CW m_Flip180CW = new Flip180CW();
   private final GetColor m_GetColor = new GetColor();
   private final HighSpeedDrive m_HighSpeedDrive = new HighSpeedDrive();
   private final LowSpeedDrive m_LowSpeedDrive = new LowSpeedDrive();
@@ -60,6 +58,8 @@ public class RobotContainer {
   private final ReverseIntake m_reverseIntake = new ReverseIntake();
   private final InvertDrivetrain m_invertDrivetrain = new InvertDrivetrain();
   private final RetractWinch m_retractWinch = new RetractWinch();
+  private final TargetTrackModeEngage m_targetTrackModeEngage = new TargetTrackModeEngage();
+  private final TargetTrackModeDisengage m_targetTrackModeDisengage = new TargetTrackModeDisengage();
   // private final Command m_autoCommand;
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
@@ -116,18 +116,14 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Driver Buttons
 
-    btnSquare.whenPressed(m_Flip180CCW, false);
-    btnO.whenPressed(m_Flip180CW, false);
     btnX.whenPressed(m_invertDrivetrain, false);
     btnR2.whenPressed(m_shootBall, false);
     btnL2.whenPressed(m_LowSpeedDrive, false);
     btnL2.whenReleased(m_HighSpeedDrive, false);
 
     btnStart.whenPressed(m_retractWinch, false);
-
-    //TEST
-    btnTriangle.whenPressed(m_intakeBall, false);
-    btnTriangle.whenReleased(m_stopIntake, false);
+    btnTriangle.whenPressed(m_targetTrackModeEngage, false);
+    btnTriangle.whenReleased(m_targetTrackModeDisengage, false);
 
     // Operator Buttons
     obtnX.whenPressed(m_spinWheelToColor, false);

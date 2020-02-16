@@ -14,15 +14,21 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 public class LED extends SubsystemBase {
+  // Create LED Objects
   private static AddressableLED m_ballCountLEDR;
-  private static AddressableLEDBuffer m_ballCountLEDBufferR;
   private static AddressableLED m_ballCountLEDL;
-  private static AddressableLEDBuffer m_ballCountLEDBufferL;
   private static AddressableLED m_statusLEDR;
-  private static AddressableLEDBuffer m_statusLEDBufferR;
   private static AddressableLED m_statusLEDL;
+
+  // Create LED Buffer Objects
+  private static AddressableLEDBuffer m_ballCountLEDBufferR;
+  private static AddressableLEDBuffer m_ballCountLEDBufferL;
+  private static AddressableLEDBuffer m_statusLEDBufferR;
   private static AddressableLEDBuffer m_statusLEDBufferL;
+
+  // Used for rainbow
   private static int m_rainbowFirstPixelHue = 240;
+
   private int ballCount;
   private int adressableLED;
   private boolean magFull;

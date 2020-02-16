@@ -56,6 +56,10 @@ public class Vision extends SubsystemBase {
   public double getTx(){
     return getVisionValues().get("tx");
   }
+
+  public double getTy(){
+    return getVisionValues().get("ty");
+  }
   // Network Table is quite verbose and contains more than needed, so clean it up and make it simple for just what is needed
   public HashMap<String, Double> getVisionValues() {
     visionValues.put("tx", tx.getDouble(0.));  

@@ -53,10 +53,6 @@ public class Intake extends SubsystemBase {
   public void stopIntake(){
     intakeMotor.set(ControlMode.PercentOutput, 0.);
   }
-
-  public void lowerBeaverTail(){
-    
-  }
   
   private void initIntakeMotor(){
     intakeMotor.configFactoryDefault();

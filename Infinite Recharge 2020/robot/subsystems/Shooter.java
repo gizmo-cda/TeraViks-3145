@@ -32,9 +32,14 @@ public class Shooter extends SubsystemBase {
   }
 
   // Sets the motor velocities for each shooter motor independently
-  public void shootBall(double topVelocity, double bottomVelocity){
-    shootMotorTop.set(ControlMode.Velocity, topVelocity);
-    shootMotorBottom.set(ControlMode.Velocity, bottomVelocity);
+  public void shootBall(boolean trackMode){
+    if (trackMode){
+      shootMotorTop.set(ControlMode.Velocity, RobotMap.TOP_SHOOT_WHEEL_PULSES_PER_100MS);
+      shootMotorBottom.set(ControlMode.Velocity, RobotMap.BOTTOM_SHOOT_WHEEL_PULSES_PER_100MS);
+    } else {
+      shootMotorTop.set(ControlMode.Velocity, RobotMap.TOP_SHOOT_WHEEL_WALL_PULSES_PER_100MS);
+      shootMotorBottom.set(ControlMode.Velocity, RobotMap.BOTTOM_SHOOT_WHEEL_WALL_PULSES_PER_100MS);
+    }
   }
 
   // Stops the motors

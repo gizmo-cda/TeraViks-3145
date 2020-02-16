@@ -79,28 +79,42 @@ public class RobotMap {
     public static final boolean REAR_RIGHT_DRIVE_TalonFX_Invert = true;
   
     // Deadband Joystick Constants
-    public static final double X_AXIS_THREASHOLD = 0.05;
-    public static final double Y_AXIS_THREASHOLD = 0.05;
-    public static final double Z_AXIS_THREASHOLD = 0.05;
+    public static final double X_AXIS_THREASHOLD = 0.1;
+    public static final double Y_AXIS_THREASHOLD = 0.1;
+    public static final double Z_AXIS_THREASHOLD = 0.1;
     
     // Pitch & Roll Constants
     public static final double PITCH_THRESHOLD = 15.; //Roll in degrees
     public static final double ROLL_THRESHOLD = 15.; //Pitch in degrees
     
-    // Vision System Constants - not used
+    // Vision System Constants
     public static final double CAMERA_MOUNTING_ANGLE = 30.;  //Units are in degrees and referenced to X axis, with CCW being positive
-    public static final double CAMERA_MOUNTING_HEIGHT = 62.;  //Units are in inches
-    public static final double DOUBLE_STRIPE_REFLECTIVE_TAPE_TARGET_HEIGHT = 28.5;  //Units are in inches
+    public static final double CAMERA_MOUNTING_HEIGHT = 24.;  //Units are in inches
+    public static final double TARGET_HEIGHT = 98.; //Units are in inches
+    public static final double DIFFERENTIAL_HEIGHT = TARGET_HEIGHT - CAMERA_MOUNTING_HEIGHT;
+    public static final double GRAVITY = 386.; //Units are in inches/sec ^2
+    public static final double VELOCITY = 785.; //Units are in inches/sec (2500rpm with 6in wheel diameter)
+    public static final double CONSTANT_K = (2 * GRAVITY) / (VELOCITY * VELOCITY);
 
     // Lift Positions
-    public static final int LIFT_TOP_POSITION = 0;
+    public static final double LIFT_TOP_POSITION = 0.;
 
-    // Tilt Positions
-    public static final int TILT_UPPER_POSITION = 0;
-    public static final int TILT_LOWER_POSITION = 0;
+    // Tilt Constants
+    public static final double TRACK_LENGTH = 24.; // Inches
+    public static final double GEAR_TRAVEL = 2.; // Inches
+    public static final double GEAR_RATIO = 16.; // 16:1 gearbox
+    public static final double MAGAZINE_LOW= TRACK_LENGTH / GEAR_TRAVEL * GEAR_RATIO * 2048.;
+    public static final double MAGAZINE_VERTICAL = 2048.;
+    public static final double PULSES_PER_DEGREE = MAGAZINE_LOW / 65.; // 65 degrees of travel
+    public static final double PULSES_PER_RADIAN = PULSES_PER_DEGREE * Math.PI / 180.;
+
+    // Shooter Constants
+    public static final double TOP_SHOOT_WHEEL_PULSES_PER_100MS = 8533.;
+    public static final double BOTTOM_SHOOT_WHEEL_PULSES_PER_100MS = 8533.;
+    public static final double TOP_SHOOT_WHEEL_WALL_PULSES_PER_100MS = 1000.;
+    public static final double BOTTOM_SHOOT_WHEEL_WALL_PULSES_PER_100MS = 1000.;
     
     // DIO Ports
-    public static final int TILT_HOME_SWITCH = 2;
     public static final int BALL_READY_TO_LOAD = 3;
     public static final int BALL_IN_FIRST_POSITION = 4;
     public static final int BALL_IN_FIFTH_POSITION = 5;
@@ -116,5 +130,5 @@ public class RobotMap {
     public static final int STATUS_LED_LEFT = 3;
 
     // Neopixel strip lengths
-    public static final int LED_STRIP_LENGTH = 60;
+    public static final int LED_STRIP_LENGTH = 60;    
   }  

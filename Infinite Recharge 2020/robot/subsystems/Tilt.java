@@ -12,12 +12,16 @@ import frc.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class Tilt extends SubsystemBase {
   private final WPI_TalonFX tiltMotor = new WPI_TalonFX(RobotMap.TILT_TalonFX_CAN_ID);
   
+  private int RevLimitSwitch;
+
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
 
   /**
@@ -31,50 +35,44 @@ public class Tilt extends SubsystemBase {
     tiltMotor.getSelectedSensorPosition(0);
   }
 
-  public void tilt(double tiltPosition) {
+  public void setTiltVert() {
+    tiltMotor.set(ControlMode.Position, RobotMap.MAGAZINE_VERTICAL);
+  }
+
+  public void setTiltLow(){
+    tiltMotor.set(ControlMode.Position, RobotMap.MAGAZINE_LOW);
+  }
+
+  public void setTiltAngle(double tiltPosition) {
     tiltMotor.set(ControlMode.Position, tiltPosition);
   }
 
-  public void calTilt(){
-    //Init local variables
-    boolean clear = false;
-    int currentPos = 0;
-    int newPos = 0;
-    
+  public void calMagVert(){
     System.out.println("  - Calibrating Tilt");
-    
-    //Enable encoder clearing so when the index sensor goes active the reset executes.
-    tiltMotor.configClearPositionOnQuadIdx(true, TIMEOUT);
-    
+        
     //Set current position to a known value and start the motor open-loop, but slow
-    tiltMotor.setSelectedSensorPosition(currentPos);
     tiltMotor.set(ControlMode.PercentOutput, .3);
+
+    RevLimitSwitch = tiltMotor.isRevLimitSwitchClosed();
     
     //
     delay(40);
     
     //While the motor is running check to see when the encoder has been reset
-    while (!clear) {
-        if (newPos < currentPos){
-            tiltMotor.set(ControlMode.PercentOutput, 0.);
-            clear = true;
-        }
-        else {
-            currentPos = newPos;
-        }
-        
-        delay(20);
-        newPos = tiltMotor.getSelectedSensorPosition();
+    while (RevLimitSwitch == 0) {
+      RevLimitSwitch = tiltMotor.isRevLimitSwitchClosed();
+      delay(20);
     }
-    
+  
+    //Disabled index clearing and get the encoder position which will always be positive after stopping the open loop run 
+    tiltMotor.configClearPositionOnQuadIdx(true, TIMEOUT);
+    tiltMotor.set(ControlMode.PercentOutput, 0.);
+
     //Give the motor extra time to stop
     delay(60);
     
-    //Disabled index clearing and get the encoder position which will always be positive after stopping the open loop run
-    tiltMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-
     // Set tilt to upper position and hold that position
-    tiltMotor.set(ControlMode.MotionMagic, RobotMap.TILT_UPPER_POSITION);
+    tiltMotor.set(ControlMode.Position, RobotMap.MAGAZINE_VERTICAL);
   }
 
   private void delay(int msec){
@@ -107,6 +105,9 @@ public class Tilt extends SubsystemBase {
     tiltMotor.configNominalOutputForward(0, TIMEOUT);
     tiltMotor.configNominalOutputReverse(0, TIMEOUT);
 
+    tiltMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    tiltMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    
     tiltMotor.configAllowableClosedloopError(0, 5, TIMEOUT); // Error for 2048 CTRE Encoder
 
     tiltMotor.config_IntegralZone(0, 100, TIMEOUT); // I-zone limits

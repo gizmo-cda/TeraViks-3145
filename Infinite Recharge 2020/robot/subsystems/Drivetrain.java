@@ -81,18 +81,20 @@ public class Drivetrain extends SubsystemBase {
   private boolean snakeMode = false; //Crab = false, Snake = True
 
   private boolean hiLo = false; //High or Low Speed Drivetrain Mode
-
-  private boolean flip180 = false; //Flip a 180, induces rotate until 180 degrees of rotation have been attained
-  private boolean flipCW = false; //Clock Wise = True
   
-  private boolean ballTrackMode = false;
-  private boolean hatchTrackMode = false;
+  private boolean targetTrackMode = false;
   private boolean isDriveInverted = false;
 
   private Queue<Double> txQueue = new LinkedList<Double>();
-  private double queueSum = 0.;
+  private Queue<Double> tyQueue = new LinkedList<Double>();
+  private double queueSumX = 0.;
+  private double queueSumY = 0.;
   private double txAverage = 0.;
+  private double tyAverage = 0.;
   private double tx = 0.;
+  private double ty = 0.;
+  private double distance;
+  private double tiltPosition;
   
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
@@ -156,25 +158,18 @@ public class Drivetrain extends SubsystemBase {
     hiLo = false;
   }
   
-  public void setBallTrackMode(boolean mode){
-    ballTrackMode = mode;
-    if (!ballTrackMode) {
+  public void setTargetTrackMode(boolean mode){
+    targetTrackMode = mode;
+    if (!targetTrackMode) {
       txQueue.clear();
-      queueSum = 0.;
+      tyQueue.clear();
+      queueSumX = 0.;
+      queueSumY = 0.;
     }
   }
 
-  public void setHatchTrackMode(boolean mode){
-    hatchTrackMode = mode;
-    if (!hatchTrackMode) {
-      txQueue.clear();
-      queueSum = 0.;
-    }
-  }
-
-  public void setFlip180(boolean directionCW){
-    flip180 = true;
-    flipCW = directionCW;
+  public boolean getTargetTrackMode(){
+    return targetTrackMode;
   }
 
   public void move(double fwd, double str, double rcw){
@@ -182,37 +177,59 @@ public class Drivetrain extends SubsystemBase {
     yaw = RobotContainer.m_gyro.getYawDeg();
     roll = RobotContainer.m_gyro.getRollDeg();
     pitch = RobotContainer.m_gyro.getPitchDeg();
+
+    if(isDriveInverted){
+      roll = -roll;
+      pitch = -pitch;
+    }
     
     // Detect too much roll angle and strafe into the roll or too much pitch and drive Fwd/Rev accordingly
     if (roll > maxRoll || roll < -maxRoll) antiRoll(roll);
     if (pitch > maxPitch || pitch < -maxPitch) antiFlip(pitch);
-    if (flip180) rotate180(fwd, str);
     
     // Override Joystick Inputs for str and rcw when using Vision Tracking
-    if (ballTrackMode || hatchTrackMode){
+    if (targetTrackMode){
       tx = RobotContainer.m_vision.getTx();
+      ty = RobotContainer.m_vision.getTy();
 
       // take in 10 pitch readings and average them out
       if (txQueue.size() < 10){
         txQueue.add(tx);
-        queueSum += tx;
+        queueSumX += tx;
       } else { 
-        queueSum-=txQueue.remove();
+        queueSumX-=txQueue.remove();
         txQueue.add(tx);
-        queueSum += tx;
+        queueSumX += tx;
       }
   
-      txAverage = queueSum / txQueue.size();
-      // System.out.println(txAverage);
-
-      if (ballTrackMode) str = 0.;
+      txAverage = queueSumX / txQueue.size();
+      
+      if (targetTrackMode) str = 0.;
 
       rcw = .05*txAverage;
+
+      // take in 10 pitch readings and average them out
+      if (tyQueue.size() < 10){
+       tyQueue.add(ty);
+       queueSumY += ty;
+     } else { 
+       queueSumY-=tyQueue.remove();
+       tyQueue.add(ty);
+       queueSumY += ty;
+     }
+
+      tyAverage = queueSumY / tyQueue.size();
+
+      distance = RobotMap.DIFFERENTIAL_HEIGHT / Math.tan(RobotMap.CAMERA_MOUNTING_ANGLE + tyAverage);
+
+      tiltPosition = Math.asin(RobotMap.CONSTANT_K * distance) / 2. * RobotMap.PULSES_PER_RADIAN;
+
+      RobotContainer.m_tilt.setTiltAngle(tiltPosition);
     }
     
     if(!isDriveInverted){
     m_SwerveDrive.setMotors(fwd, str, rcw, centric, yaw, reverseEn, snakeMode, hiLo);
-    } else m_SwerveDrive.setMotors(-fwd, -str, -rcw, centric, yaw, reverseEn, snakeMode, hiLo);
+    } else m_SwerveDrive.setMotors(-fwd, -str, rcw, centric, yaw, reverseEn, snakeMode, hiLo);
   }
   
   private void antiRoll(double roll){
@@ -238,32 +255,6 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
-  private void rotate180(double fwdStart, double strStart){
-    //Get the current yaw and initialize local variables
-    double yawCurrent = RobotContainer.m_gyro.getYawAccumDeg(); //Yaw with no discontinuity at +/- 180
-    double yawStart = yawCurrent;
-    double yawDiff = 0.;
-    double rcwMod = 0.;
-    double yawTarg = 0.;
-    double time = Timer.getFPGATimestamp();
-
-    //Check for clockwise or counter clockwise rotation
-    if (flipCW) rcwMod = 1.; else rcwMod = -1.;
-    if (hiLo) yawTarg = 130.; else yawTarg = 160.;
-    //Now rotate 180 degrees either CW or CCW maintaining fwd and str settings
-    while (yawDiff < yawTarg){
-      yawCurrent = RobotContainer.m_gyro.getYawAccumDeg();
-      
-      if (Timer.getFPGATimestamp() - time > 3) break;
-      yawDiff = Math.abs(yawStart - yawCurrent);
-      
-      m_SwerveDrive.setMotors(fwdStart, strStart, rcwMod, centric,  RobotContainer.m_gyro.getYawDeg(), reverseEn, snakeMode, hiLo);
-    }
-
-    //Disable flip so it only flips one time
-    flip180 = false;
-  }
-  
   public void quickStop(){
     m_SwerveDrive.stopDriveMotors();
   }
