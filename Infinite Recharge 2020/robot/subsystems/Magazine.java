@@ -59,7 +59,7 @@ public class Magazine extends SubsystemBase {
   // *** a command is put on the stack that calls this method every cycle of the
   // scheduler. Because of this, there are local variables to track the state of
   // the ball loading into the magazine.
-  public void loadMagazine() {
+  public boolean loadMagazine() {
     // These get updated every shedular cycle.
     ballReady = !ballReadyToLoad.get();
     magFull = !ballInFifthPos.get();
@@ -96,11 +96,13 @@ public class Magazine extends SubsystemBase {
         }
         isExistingBall = ballLoaded;
       }
+      return false;
     } else {
       if (ballReadyCount >= 5) {
         stopMagazine();
         ballReadyCount = 0;
       }
+      return true;
     }
   }
 
@@ -119,7 +121,7 @@ public class Magazine extends SubsystemBase {
     // This removes the command that loads the magazine from the scheduler stack so
     // that it does not interfere with the magazine being emptied.
     if (CommandScheduler.getInstance().isScheduled(new LoadMagazine())) {
-      RobotContainer.m_loadMagazine.cancelCommand();
+      // RobotContainer.m_loadMagazine.cancelCommand();
     }
 
     if (hasSeenBall) {

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class LoadMagazine extends CommandBase {
-  private boolean finished = false;
   /**
    * Creates a new LoadMagazine.
    */
@@ -21,10 +20,13 @@ public class LoadMagazine extends CommandBase {
     addRequirements(RobotContainer.m_magazine);
   }
 
-  public void cancelCommand(){
-    if(finished) finished = false;
-    else finished = true;
-  }
+  private boolean forceEnd = false;
+  // private boolean finished = false;
+
+  // public void cancelCommand(){
+  //   if(finished) finished = false;
+  //   else finished = true;
+  // }
 
   // Called when the command is initially scheduled.
   @Override
@@ -36,18 +38,20 @@ public class LoadMagazine extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.m_magazine.loadMagazine();
+    forceEnd = RobotContainer.m_magazine.loadMagazine();
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     System.out.println("loadmag end");
-    finished = false;
+    // finished = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return forceEnd;
   }
 }
