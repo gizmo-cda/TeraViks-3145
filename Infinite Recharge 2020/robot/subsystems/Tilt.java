@@ -47,6 +47,10 @@ public class Tilt extends SubsystemBase {
     tiltMotor.set(ControlMode.Position, tiltPosition);
   }
 
+  public void setTiltControlWheel(){
+    tiltMotor.set(ControlMode.Position, RobotMap.MAGAZINE_CONTROL_WHEEL);
+  }
+
   public void calMagVert(){
     System.out.println("  - Calibrating Tilt");
         

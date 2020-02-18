@@ -15,14 +15,10 @@ package frc.robot.swerve;
 import frc.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.Faults;
 
-import java.lang.reflect.Array;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class SwerveModule {
     
@@ -31,15 +27,6 @@ public class SwerveModule {
     public WPI_TalonFX steerMotor;
     private Faults driveFaults = new Faults();
     private Faults steerFaults = new Faults();
-
-    // Digital Inputs for Callibration
-    private DigitalInput calFrontRight = new DigitalInput(RobotMap.FRONT_RIGHT_STEER_CAL);
-    private DigitalInput calFrontLeft = new DigitalInput(RobotMap.FRONT_LEFT_STEER_CAL);
-    private DigitalInput calRearLeft = new DigitalInput(RobotMap.REAR_LEFT_STEER_CAL);
-    private DigitalInput calRearRight = new DigitalInput(RobotMap.REAR_RIGHT_STEER_CAL);
-
-    private static boolean [] calSteerSensors = {false, false, false, false};
-    private static int sensorID;
 
     private int TIMEOUT = RobotMap.TalonFX_TIMEOUT;
     
@@ -84,14 +71,6 @@ public class SwerveModule {
     public int getDrivePosition(){
         return driveMotor.getSelectedSensorPosition();
     }
-
-    public boolean[] getCalSensorState(){
-        Array.setBoolean(calSteerSensors, 0, calFrontRight.get());
-        Array.setBoolean(calSteerSensors, 1, calFrontLeft.get());
-        Array.setBoolean(calSteerSensors, 2, calRearLeft.get());
-        Array.setBoolean(calSteerSensors, 3, calRearRight.get());
-        return calSteerSensors;
-    }
     
     public void setBrake(){
         driveMotor.setNeutralMode(NeutralMode.Brake);
@@ -133,65 +112,9 @@ public class SwerveModule {
     }
 
     // Steering Motor Calibration Method to find the Index Sensor and set the wheel straight forward
-    public void rotateSteerForCal(){
-        //Init local variables
-        boolean clear = false;
-        int currentPos = 0;
-        int newPos = 0;
-        
-        System.out.println("  --Calibrating - "+name);
-        
-        //Enable encoder clearing so when the index sensor goes active the reset executes.
-        // steerMotor.configClearPositionOnQuadIdx(true, TIMEOUT);
-        
-        //Set current position to a known value and start the motor open-loop, but slow
-        steerMotor.setSelectedSensorPosition(currentPos);
-        // steerMotor.set(ControlMode.PercentOutput, .3);
-        
-        // delay(40);
-        
-        //While the motor is running check to see when the encoder has been reset
-        while (!clear) {
-            // if (newPos < currentPos){
-            //     steerMotor.set(ControlMode.PercentOutput, 0.);
-            //     clear = true;
-            // }
-            // else {
-            //     currentPos = newPos;
-            // }
-            getCalSensorState();
+    public void adjustSteeringCalOffsets(){  
+        System.out.println("  --Calibrating - "+name);   
 
-            switch (name){
-                case "FrontRightWheel":
-                sensorID = 0;
-                break;
-                case "FrontLeftWheel":
-                sensorID = 1;
-                break;
-                case "RearLeftWheel":
-                sensorID = 2;
-                break;
-                case "RearRightWheel":
-                sensorID = 3;
-                break;
-            }
-
-            if (calSteerSensors[sensorID]) {
-                steerMotor.setSelectedSensorPosition(0);
-                clear = true;
-            }
-        }
-
-            
-            // delay(20);
-            // newPos = steerMotor.getSelectedSensorPosition();
-        
-        //Give the motor extra time to stop
-        delay(60);
-        
-        //Disabled index clearing and get the encoder position which will always be positive after stopping the open loop run
-        // steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-        
         //Find the index offset in pulses for the wheel being calibrated
         double offset = 0.;
         
@@ -209,37 +132,30 @@ public class SwerveModule {
             offset = RobotMap.REAR_RIGHT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RR;
             break;
         }
-        
-        //Add small increment to offset to account for closed loop error
-        //offset += RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL;
 
         System.out.println("    -Offset            = "+(int) offset);
 
         //Set the position off the wheel for the calibrated index correcting for index dection error
         steerMotor.set(ControlMode.Position, offset);
+
+        delay(1000);
         
         //Delay for the time it will take the wheel to move to the set position, this assumes ~ 2 sec per wheel revolution
-        double positionDelay = offset / RobotMap.STEER_PPR * 2000.;
-        delay((int) positionDelay);
+       // delay(300);
         
         //Now disable the motor before resetting the encoder to the new calibrated reference
-        steerMotor.set(ControlMode.PercentOutput, 0.);
-        delay(40);
-
-        //Check for the error in driving to the position and reset the encoder to the new 0 reference
-        double error = (double) steerMotor.getSelectedSensorPosition();
-        error = Math.abs(error) - Math.abs(offset);
+     //   steerMotor.set(ControlMode.PercentOutput, 0.);
+     //   delay(100);
         
         steerMotor.setSelectedSensorPosition(0);
         
         //Delay to make sure it had time to set the reference to 0 before the next command is called
-        delay(40);
+        delay(1000);
 
         //Now set the wheel to position 0 to hold the new calibrated position
         steerMotor.set(ControlMode.Position, 0.);
         
-        System.out.println("    -Calibration Error = "+(int) error);
-        System.out.println("    -Calibration Completed" + name);
+        System.out.println("    -Calibration Completed " + name);
     }
 
     private void delay(int msec){
@@ -267,8 +183,8 @@ public class SwerveModule {
         steerMotor.configMotionAcceleration(40960, TIMEOUT);  //400 Optical Encoder accel and velocity targets
         steerMotor.configMotionCruiseVelocity(20480, TIMEOUT);
 
-        steerMotor.configPeakOutputForward(1., TIMEOUT);
-        steerMotor.configPeakOutputReverse(-1., TIMEOUT);
+        steerMotor.configPeakOutputForward(.1, TIMEOUT);
+        steerMotor.configPeakOutputReverse(-.1, TIMEOUT);
         
         steerMotor.configNominalOutputForward(0, TIMEOUT);
         steerMotor.configNominalOutputReverse(0, TIMEOUT);

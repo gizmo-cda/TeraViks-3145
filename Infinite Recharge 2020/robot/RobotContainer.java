@@ -52,7 +52,8 @@ public class RobotContainer {
   private final SnakeMode m_SnakeMode = new SnakeMode();
   private final SpinWheelToColor m_spinWheelToColor = new SpinWheelToColor();
   private final SpinWheel3Rev m_spinWheel3Rev = new SpinWheel3Rev();
-  private final ShootBall m_shootBall = new ShootBall();
+  public final static LoadMagazine m_loadMagazine = new LoadMagazine();
+  public final static ShootBall m_shootBall = new ShootBall();
   private final IntakeBall m_intakeBall = new IntakeBall();
   private final StopIntake m_stopIntake = new StopIntake();
   private final ReverseIntake m_reverseIntake = new ReverseIntake();
@@ -60,6 +61,7 @@ public class RobotContainer {
   private final RetractWinch m_retractWinch = new RetractWinch();
   private final TargetTrackModeEngage m_targetTrackModeEngage = new TargetTrackModeEngage();
   private final TargetTrackModeDisengage m_targetTrackModeDisengage = new TargetTrackModeDisengage();
+  private final TiltToControlWheel m_tiltToControlWheel = new TiltToControlWheel();
   // private final Command m_autoCommand;
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
@@ -117,7 +119,7 @@ public class RobotContainer {
     // Driver Buttons
 
     btnX.whenPressed(m_invertDrivetrain, false);
-    btnR2.whenPressed(m_shootBall, false);
+    btnR2.whenPressed(m_shootBall, true);
     btnL2.whenPressed(m_LowSpeedDrive, false);
     btnL2.whenReleased(m_HighSpeedDrive, false);
 
@@ -127,6 +129,7 @@ public class RobotContainer {
 
     // Operator Buttons
     obtnX.whenPressed(m_spinWheelToColor, false);
+    obtnY.whenPressed(m_tiltToControlWheel, false);
     obtnB.whenPressed(m_spinWheel3Rev, false);
     obtnRT.whenPressed(m_intakeBall, false);
     obtnRB.whenPressed(m_reverseIntake, false);

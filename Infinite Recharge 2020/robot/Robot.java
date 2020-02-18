@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 
     // m_gyro.reset();
     RobotContainer.m_drivetrain.init();
-    // RobotContainer.m_magazine.init();
+    RobotContainer.m_magazine.init();
     // RobotContainer.m_intake.init();
     // RobotContainer.m_shooter.init();
     // RobotContainer.m_lift.init();
@@ -75,8 +75,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitchDeg());
     // SmartDashboard.putNumber("Gyro Roll", m_gyro.getRollDeg());
     SmartDashboard.putNumber("Ball Count" , RobotContainer.m_magazine.getBallCount());
+    SmartDashboard.putData(CommandScheduler.getInstance());
   }
-
   /**
    * This function is called once each time the robot enters Disabled mode.
    */
@@ -160,8 +160,11 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-
-    
+    CommandScheduler.getInstance().enable();
+    CommandScheduler.getInstance().schedule(new ShootBall());
+    // CommandScheduler.getInstance().run();
+    Timer.delay(.5);
+    RobotContainer.m_shootBall.cancel();
   }
 
   /**
@@ -169,8 +172,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    System.out.println("X: "+RobotContainer.getDriverX());
-    System.out.println("Y: "+RobotContainer.getDriverY());
-    System.out.println("Z: "+RobotContainer.getDriverZ());
+    // System.out.println("X: "+RobotContainer.getDriverX());
+    // System.out.println("Y: "+RobotContainer.getDriverY());
+    // System.out.println("Z: "+RobotContainer.getDriverZ());
   }
 }

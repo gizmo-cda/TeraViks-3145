@@ -9,21 +9,25 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.LoadMagazine;
 import frc.robot.commands.ShootBall;
 import edu.wpi.first.wpilibj.DigitalInput;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class Magazine extends SubsystemBase {
-  private final WPI_TalonSRX magazineMotor = new WPI_TalonSRX(RobotMap.MAGAZINE_TalonSRX_CAN_ID);
+  private final WPI_TalonFX magazineMotor = new WPI_TalonFX(RobotMap.MAGAZINE_TalonFX_CAN_ID);
 
   private final DigitalInput ballReadyToLoad = new DigitalInput(RobotMap.BALL_READY_TO_LOAD);
   private final DigitalInput ballInFirstPos = new DigitalInput(RobotMap.BALL_IN_FIRST_POSITION);
   public final DigitalInput ballInFifthPos = new DigitalInput(RobotMap.BALL_IN_FIFTH_POSITION);
 
-  private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
+  private int TIMEOUT = RobotMap.TalonFX_TIMEOUT;
 
   private boolean magFull;
   private boolean ballReady;
@@ -44,13 +48,12 @@ public class Magazine extends SubsystemBase {
   }
 
   public void advanceMagazine() {
-    // magazineMotor.set(ControlMode.PercentOutput, 1.);
-    System.out.println("Motor Running");
+    magazineMotor.set(ControlMode.PercentOutput, .5);
   }
 
   public void stopMagazine() {
-    // magazineMotor.set(ControlMode.PercentOutput, 0.);
-    System.out.println("Motor Stopped");
+    magazineMotor.set(ControlMode.PercentOutput, 0.
+    );
   }
 
   // *** a command is put on the stack that calls this method every cycle of the
@@ -71,19 +74,18 @@ public class Magazine extends SubsystemBase {
       if (ballReadyCount == 5) {
         // This captures the state of the first ball position when we start the motor so
         // that we know if there was already a ball there.
-        isExistingBall = ballLoaded;
         advanceMagazine();
       }
 
       if (ballReadyCount >= 5) {
         // This tests to see if there is no longer an existing ball in the first
         // position
-        if (isExistingBall) {
-          isExistingBall = ballLoaded;
-        }
+        // if (isExistingBall) {
+        //   isExistingBall = ballLoaded;
+        // }
 
         // This tests if the new ball has been loaded
-        if (ballLoaded && !isExistingBall) {
+        if (!ballLoaded && isExistingBall) {
           stopMagazine();
           
           if (ballCount < 5) {
@@ -92,9 +94,9 @@ public class Magazine extends SubsystemBase {
 
           ballReadyCount = 0;
         }
+        isExistingBall = ballLoaded;
       }
     } else {
-      CommandScheduler.getInstance().cancel(new LoadMagazine());
       if (ballReadyCount >= 5) {
         stopMagazine();
         ballReadyCount = 0;
@@ -106,6 +108,9 @@ public class Magazine extends SubsystemBase {
   // and stop it when the ball count reaches 0. This method uses local variables
   // to track the state of the balls exiting the magazine.
   public void emptyMagazine() {
+    // CommandScheduler.getInstance().cancel(new LoadMagazine());
+    RobotContainer.m_loadMagazine.isFinished();
+
     // This gets the sensor values every cycle of the scheduler
     canSeeBall = !ballInFifthPos.get();
     // This gets the state of the shoot button
@@ -133,12 +138,16 @@ public class Magazine extends SubsystemBase {
 
     if (ballCount > 0 && isShootPressed) {
       advanceMagazine();
-    } else {
+    } 
+
+
       // This Reschedules the load magazine command and stops the shoot ball command
       // after the mag has finished unloading and the shoot button is no longer being
       // pressed.
-      CommandScheduler.getInstance().schedule(new LoadMagazine());
+      if (ballCount == 0){
       CommandScheduler.getInstance().cancel(new ShootBall());
+    //  CommandScheduler.getInstance().schedule(new LoadMagazine());
+      stopMagazine();
     }
   }
 
@@ -154,6 +163,8 @@ public class Magazine extends SubsystemBase {
     magazineMotor.configFactoryDefault();
 
     magazineMotor.setInverted(false);
+
+    magazineMotor.setNeutralMode(NeutralMode.Brake);
 
     magazineMotor.configPeakOutputForward(1., TIMEOUT);
     magazineMotor.configPeakOutputReverse(-1., TIMEOUT);

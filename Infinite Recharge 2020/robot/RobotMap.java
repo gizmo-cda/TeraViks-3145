@@ -36,8 +36,8 @@ public class RobotMap {
     public static final int REAR_LEFT_STEER_TalonFX_CAN_ID   = 13;
     public static final int REAR_RIGHT_STEER_TalonFX_CAN_ID  = 14;
   
-    // CAN Bus IDs for All other Subsystem Talon SRX controllers
-    public static final int MAGAZINE_TalonSRX_CAN_ID = 15;
+    // CAN Bus IDs for All other Subsystem Talon SRX and FX controllers
+    public static final int MAGAZINE_TalonFX_CAN_ID = 15;
     public static final int INTAKE_TalonSRX_CAN_ID = 16;
     public static final int SHOOT_TOP_TalonFX_CAN_ID = 17;
     public static final int SHOOT_BOTTOM_TalonFX_CAN_ID = 18;
@@ -63,10 +63,10 @@ public class RobotMap {
     public static final double STEER_PPR = 15275.;                        // Pulses per wheel revolution with 2048 CTRE Mag Encoder + 7.46:1
   
     // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
-    public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .375; //Drive Motor needs to be inverted
-    public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125;
-    public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .375;
-    public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .125; //Drive Motor needs to be inverted
+    public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .21875; //Drive Motor needs to be inverted
+    public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .4375;
+    public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .28125;
+    public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .0625; //Drive Motor needs to be inverted
     public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FR = -281.; //Small adjustment to cal for error
     public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FL = -238.; //Small adjustment to cal for error
     public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RL = -287.; //Small adjustment to cal for error
@@ -102,11 +102,12 @@ public class RobotMap {
     // Tilt Constants
     public static final double TRACK_LENGTH = 24.; // Inches
     public static final double GEAR_TRAVEL = 2.; // Inches
-    public static final double GEAR_RATIO = 16.; // 16:1 gearbox
+    public static final double GEAR_RATIO = 20.; // 20:1 gearbox
     public static final double MAGAZINE_LOW= TRACK_LENGTH / GEAR_TRAVEL * GEAR_RATIO * 2048.;
     public static final double MAGAZINE_VERTICAL = 2048.;
     public static final double PULSES_PER_DEGREE = MAGAZINE_LOW / 65.; // 65 degrees of travel
     public static final double PULSES_PER_RADIAN = PULSES_PER_DEGREE * Math.PI / 180.;
+    public static final double MAGAZINE_CONTROL_WHEEL = PULSES_PER_DEGREE * 30.;
 
     // Shooter Constants
     public static final double TOP_SHOOT_WHEEL_PULSES_PER_100MS = 8533.;
