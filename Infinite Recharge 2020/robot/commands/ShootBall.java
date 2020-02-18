@@ -11,11 +11,17 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShootBall extends CommandBase {
+  private boolean finished = false;
   /**
    * Creates a new ShootBall.
    */
   public ShootBall() {
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  public void cancelCommand(){
+    if(finished) finished = false;
+    else finished = true;
   }
 
   // Called when the command is initially scheduled.
@@ -35,12 +41,13 @@ public class ShootBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-      System.out.println("command interrupted");
+      System.out.println("shoot end");
+      finished = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finished;
   }
 }

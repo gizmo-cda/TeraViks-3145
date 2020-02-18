@@ -119,7 +119,7 @@ public class Magazine extends SubsystemBase {
     // This removes the command that loads the magazine from the scheduler stack so
     // that it does not interfere with the magazine being emptied.
     if (CommandScheduler.getInstance().isScheduled(new LoadMagazine())) {
-      CommandScheduler.getInstance().cancel(new LoadMagazine());
+      RobotContainer.m_loadMagazine.cancelCommand();
     }
 
     if (hasSeenBall) {

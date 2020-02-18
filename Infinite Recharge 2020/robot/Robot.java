@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().schedule(new ShootBall());
     // CommandScheduler.getInstance().run();
     Timer.delay(.5);
-    RobotContainer.m_shootBall.cancel();
+    RobotContainer.m_shootBall.cancelCommand();
   }
 
   /**

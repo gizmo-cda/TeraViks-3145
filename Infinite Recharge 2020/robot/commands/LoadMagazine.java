@@ -12,12 +12,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class LoadMagazine extends CommandBase {
+  private boolean finished = false;
   /**
    * Creates a new LoadMagazine.
    */
   public LoadMagazine() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.m_magazine);
+  }
+
+  public void cancelCommand(){
+    if(finished) finished = false;
+    else finished = true;
   }
 
   // Called when the command is initially scheduled.
@@ -36,11 +42,12 @@ public class LoadMagazine extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     System.out.println("loadmag end");
+    finished = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finished;
   }
 }
