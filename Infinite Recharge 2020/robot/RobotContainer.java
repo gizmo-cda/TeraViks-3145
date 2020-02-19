@@ -62,6 +62,7 @@ public class RobotContainer {
   private final TargetTrackModeEngage m_targetTrackModeEngage = new TargetTrackModeEngage();
   private final TargetTrackModeDisengage m_targetTrackModeDisengage = new TargetTrackModeDisengage();
   private final TiltToControlWheel m_tiltToControlWheel = new TiltToControlWheel();
+  private final MoveZipline m_moveZipline = new MoveZipline();
   // private final Command m_autoCommand;
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
@@ -133,6 +134,7 @@ public class RobotContainer {
     obtnB.whenPressed(m_spinWheel3Rev, false);
     obtnRT.whenPressed(m_intakeBall, false);
     obtnRB.whenPressed(m_reverseIntake, false);
+    obtnStart.whenPressed(m_moveZipline, false);
   }
 
   public static double getDriverX() {
@@ -147,8 +149,16 @@ public class RobotContainer {
     return swerveJoy.getZ();
   }
 
+  public static double getOperatorX() {
+    return operatorJoy.getX();
+  }
+
   public static double getOperatorY() {
     return operatorJoy.getY();
+  }
+
+  public static double getOperatorZ() {
+    return operatorJoy.getZ();
   }
 
   public static boolean getShootButtonState() {

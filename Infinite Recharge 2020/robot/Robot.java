@@ -152,19 +152,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    // RobotContainer.m_led.dispBallCountLED();
-    RobotContainer.m_led.testLED();
+    RobotContainer.m_led.dispBallCountLED();
   }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().enable();
-    CommandScheduler.getInstance().schedule(new ShootBall());
-    // CommandScheduler.getInstance().run();
-    Timer.delay(.5);
-    RobotContainer.m_shootBall.cancelCommand();
   }
 
   /**

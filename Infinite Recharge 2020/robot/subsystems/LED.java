@@ -129,7 +129,7 @@ public class LED extends SubsystemBase {
 
   public void shootLED(){
     for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
-      m_statusLEDBufferR.setRGB(i, 0, 180, 50);
+      m_statusLEDBufferR.setRGB(i, 0, 255, 0);
       // m_statusLEDBufferL.setRGB(i, 0, 180, 50);
     }
   }
@@ -163,15 +163,6 @@ public class LED extends SubsystemBase {
     }
   }
  
-  private void delay(int msec){
-    try{
-        Thread.sleep(msec);
-    }
-    catch (Exception e){
-        System.out.println("Error in Waitloop");
-    }
-}
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -38,15 +38,13 @@ public class LoadMagazine extends CommandBase {
   @Override
   public void execute() {
     RobotContainer.m_magazine.loadMagazine();
-    forceEnd = RobotContainer.m_magazine.loadMagazine();
-
+    forceEnd = RobotContainer.m_magazine.getStopLoad();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     System.out.println("loadmag end");
-    // finished = false;
   }
 
   // Returns true when the command should end.

@@ -38,7 +38,7 @@ public class RobotMap {
   
     // CAN Bus IDs for All other Subsystem Talon SRX and FX controllers
     public static final int MAGAZINE_TalonFX_CAN_ID = 15;
-    public static final int INTAKE_TalonSRX_CAN_ID = 16;
+    public static final int INTAKE_TalonSRX_CAN_ID = 16; //Intake and zipline share a controller
     public static final int SHOOT_TOP_TalonFX_CAN_ID = 17;
     public static final int SHOOT_BOTTOM_TalonFX_CAN_ID = 18;
     public static final int ZIPLINE_AND_COLOR_WHEEL_TalonSRX_CAN_ID = 19;
@@ -124,11 +124,12 @@ public class RobotMap {
     public static final int REAR_LEFT_STEER_CAL = 8;
     public static final int REAR_RIGHT_STEER_CAL = 9;
 
-    // PWM Reservations for neopixels
+    // PWM Ports
     public static final int BALL_COUNT_LED_RIGHT = 0;
     public static final int BALL_COUNT_LED_LEFT = 1;
     public static final int STATUS_LED_RIGHT = 2;
     public static final int STATUS_LED_LEFT = 3;
+    public static final int ARM_SERVO_PWM_PORT = 4;
 
     // Neopixel strip lengths
     public static final int LED_STRIP_LENGTH = 60;    

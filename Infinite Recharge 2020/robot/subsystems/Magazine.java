@@ -37,6 +37,8 @@ public class Magazine extends SubsystemBase {
   private boolean hasSeenBall = false;
   private int ballCount = 0;
   private int ballReadyCount = 0;
+  private boolean stopLoad = false;
+  private boolean stopShoot = false;
 
   private boolean isShootPressed;
 
@@ -52,20 +54,20 @@ public class Magazine extends SubsystemBase {
   }
 
   public void stopMagazine() {
-    magazineMotor.set(ControlMode.PercentOutput, 0.
-    );
+    magazineMotor.set(ControlMode.PercentOutput, 0.);
   }
 
   // *** a command is put on the stack that calls this method every cycle of the
   // scheduler. Because of this, there are local variables to track the state of
   // the ball loading into the magazine.
-  public boolean loadMagazine() {
+  public void loadMagazine() {
     // These get updated every shedular cycle.
     ballReady = !ballReadyToLoad.get();
     magFull = !ballInFifthPos.get();
     ballLoaded = !ballInFirstPos.get();
 
     if (!magFull) {
+      stopLoad = false;
       if (ballReady) {
         ballReadyCount += 1;
       }
@@ -81,13 +83,13 @@ public class Magazine extends SubsystemBase {
         // This tests to see if there is no longer an existing ball in the first
         // position
         // if (isExistingBall) {
-        //   isExistingBall = ballLoaded;
+        // isExistingBall = ballLoaded;
         // }
 
         // This tests if the new ball has been loaded
         if (!ballLoaded && isExistingBall) {
           stopMagazine();
-          
+
           if (ballCount < 5) {
             ballCount += 1;
           }
@@ -96,22 +98,27 @@ public class Magazine extends SubsystemBase {
         }
         isExistingBall = ballLoaded;
       }
-      return false;
+      stopLoad = false;
     } else {
       if (ballReadyCount >= 5) {
         stopMagazine();
         ballReadyCount = 0;
       }
-      return true;
+      stopLoad = true;
     }
+  }
+
+  public boolean getStopLoad() {
+    return stopLoad;
   }
 
   // This method uses the end sensor to count the balls as they exit the magazine
   // and stop it when the ball count reaches 0. This method uses local variables
   // to track the state of the balls exiting the magazine.
-  public void emptyMagazine() {
-    // CommandScheduler.getInstance().cancel(new LoadMagazine());
-    RobotContainer.m_loadMagazine.isFinished();
+  public boolean emptyMagazine() {
+    stopShoot = false;
+    if (CommandScheduler.getInstance().isScheduled(new LoadMagazine()))
+      stopLoad = true;
 
     // This gets the sensor values every cycle of the scheduler
     canSeeBall = !ballInFifthPos.get();
@@ -120,9 +127,6 @@ public class Magazine extends SubsystemBase {
 
     // This removes the command that loads the magazine from the scheduler stack so
     // that it does not interfere with the magazine being emptied.
-    if (CommandScheduler.getInstance().isScheduled(new LoadMagazine())) {
-      // RobotContainer.m_loadMagazine.cancelCommand();
-    }
 
     if (hasSeenBall) {
       // This tests whether the ball that was being unloaded has finished unloading.
@@ -140,20 +144,22 @@ public class Magazine extends SubsystemBase {
 
     if (ballCount > 0 && isShootPressed) {
       advanceMagazine();
-    } 
-
-
-      // This Reschedules the load magazine command and stops the shoot ball command
-      // after the mag has finished unloading and the shoot button is no longer being
-      // pressed.
-      if (ballCount == 0){
-      CommandScheduler.getInstance().cancel(new ShootBall());
-    //  CommandScheduler.getInstance().schedule(new LoadMagazine());
-      stopMagazine();
+      stopShoot = false;
     }
+
+    // This Reschedules the load magazine command and stops the shoot ball command
+    // after the mag has finished unloading and the shoot button is no longer being
+    // pressed.
+    if (ballCount == 0) {
+      CommandScheduler.getInstance().schedule(new LoadMagazine());
+      stopMagazine();
+      stopShoot = true;
+      RobotContainer.m_led.clearStatusLED();
+    }
+    return stopShoot;
   }
 
-  public int getBallCount(){
+  public int getBallCount() {
     return ballCount;
   }
 
