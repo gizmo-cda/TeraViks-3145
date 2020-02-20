@@ -13,20 +13,27 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation;
 
+import frc.robot.RobotMap;
+
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * Add your docs here.
  */
+
 public class ColorSensor extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   // Set the default command for a subsystem here.
   // setDefaultCommand(new MySpecialCommand());
+
+  private WPI_TalonSRX ziplineMotor = new WPI_TalonSRX(RobotMap.ZIPLINE_AND_COLOR_WHEEL_TalonSRX_CAN_ID);
 
   /**
    * Change the I2C port below to match the connection of your color sensor
@@ -60,7 +67,7 @@ public class ColorSensor extends SubsystemBase {
   private static String currentColor;
   private static String targetColor;
 
-  public static String colorTest() {
+  public static String getColor() {
     /**
      * The method GetColor() returns a normalized color value from the sensor and
      * can be useful if outputting the color to an RGB LED or similar. To read the
@@ -110,16 +117,16 @@ public class ColorSensor extends SubsystemBase {
   }
 
   public void rotateWheel() {
-    targetColor = colorTest();
+    targetColor = getColor();
     int colorCheck = 0;
 
     while (colorCheck < 7) {
-      currentColor = colorTest();
-      System.out.println("spinning wheel");
+      currentColor = getColor();
+      ziplineMotor.set(ControlMode.PercentOutput, 1.);
       if (currentColor == targetColor) {
         colorCheck += 1;
         Timer.delay(1.);
-        System.out.println("target color found!");
+        ziplineMotor.set(ControlMode.PercentOutput, 0.);
       }
     }
   }
@@ -155,10 +162,22 @@ public class ColorSensor extends SubsystemBase {
     }
 
     while (targetColor != currentColor) {
-      currentColor = colorTest();
-      System.out.println("spinning wheel");
+      currentColor = getColor();
+      ziplineMotor.set(ControlMode.PercentOutput, 1.);
     }
-
-    System.out.println("target color found!");
+    ziplineMotor.set(ControlMode.PercentOutput, 0.);
   }
+
+  // ZIPLINE MOTOR COMMANDS
+  // the zipline and color wheel motors are attatched to the same controller due
+  // to running out of space on the pdp
+
+  public void moveZipline(double operatorX) {
+    ziplineMotor.set(ControlMode.PercentOutput, operatorX);
+  }
+
+  public void stopZipline() {
+    ziplineMotor.set(ControlMode.PercentOutput, 0.);
+  }
+
 }

@@ -24,6 +24,10 @@ public class RobotMap {
     public static final double HIGH_SPEED_SCALE = 1.0;
     public static final double LOW_SPEED_SCALE = .3;
     public static final double ROTATE_SCALE = .67;
+
+    // Max speed and accelleration in METERS
+    public static final double ROBOT_MAX_SPEED = 0.; // m/s
+    public static final double ROBOT_MAX_ACCEL = 0.; // m/s^2
     
     // CAN Bus IDs for Drivetrain Talon SRX controllers
     public static final int FRONT_RIGHT_DRIVE_TalonFX_CAN_ID = 1;
@@ -38,7 +42,7 @@ public class RobotMap {
   
     // CAN Bus IDs for All other Subsystem Talon SRX and FX controllers
     public static final int MAGAZINE_TalonFX_CAN_ID = 15;
-    public static final int INTAKE_TalonSRX_CAN_ID = 16; //Intake and zipline share a controller
+    public static final int INTAKE_TalonSRX_CAN_ID = 16;
     public static final int SHOOT_TOP_TalonFX_CAN_ID = 17;
     public static final int SHOOT_BOTTOM_TalonFX_CAN_ID = 18;
     public static final int ZIPLINE_AND_COLOR_WHEEL_TalonSRX_CAN_ID = 19;
@@ -132,5 +136,9 @@ public class RobotMap {
     public static final int ARM_SERVO_PWM_PORT = 4;
 
     // Neopixel strip lengths
-    public static final int LED_STRIP_LENGTH = 60;    
+    public static final int LED_STRIP_LENGTH = 60;   
+    
+    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
   }  

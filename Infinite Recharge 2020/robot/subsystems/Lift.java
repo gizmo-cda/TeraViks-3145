@@ -13,13 +13,10 @@ import frc.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Lift extends SubsystemBase {
   private WPI_TalonFX liftMotor = new WPI_TalonFX(RobotMap.LIFT_TalonFX_CAN_ID);
-  private WPI_TalonSRX ziplineMotor = new WPI_TalonSRX(RobotMap.INTAKE_TalonSRX_CAN_ID); // Intake and zipline share a controller
   private Servo armServo = new Servo(RobotMap.ARM_SERVO_PWM_PORT);
   private int TIMEOUT = RobotMap.TalonFX_TIMEOUT;
 
@@ -43,14 +40,6 @@ public class Lift extends SubsystemBase {
 
   public void stopWinch(){
     liftMotor.set(ControlMode.PercentOutput, 0.);
-  }
-
-  public void moveZipline(double operatorX){
-    ziplineMotor.set(ControlMode.PercentOutput, operatorX);
-  }
-
-  public void stopZipline(){
-    ziplineMotor.set(ControlMode.PercentOutput, 0.);
   }
 
   public void init(){

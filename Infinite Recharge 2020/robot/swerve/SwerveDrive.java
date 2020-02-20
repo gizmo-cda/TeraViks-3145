@@ -36,7 +36,6 @@ package frc.robot.swerve;
 import frc.robot.RobotMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class SwerveDrive {
@@ -151,31 +150,31 @@ public class SwerveDrive {
         boolean rotateRearRight = true;
      
         // Start all four steer motors
-        frontRight.steerMotor.set(ControlMode.PercentOutput, .1);
-        // frontLeft.steerMotor.set(ControlMode.PercentOutput, .3);
-        // rearLeft.steerMotor.set(ControlMode.PercentOutput, .3);
-        // rearRight.steerMotor.set(ControlMode.PercentOutput, .3);   
+        frontRight.setSteerSpeed(.1);
+        // frontLeft.setSteerSpeed(.3);
+        // rearLeft.setSteerSpeed(.3);
+        // rearRight.setSteerSpeed(.3);   
  
         //While the motors are running check to see when the encoder has been reset and stop the motor
         while (rotate) {
             
             if (!calSensorFrontRight.get() && rotateFrontRight) {
-                frontRight.steerMotor.set(ControlMode.PercentOutput, .0);
+                frontRight.setSteerSpeed(0.);
                 rotateFrontRight = false;
             }
             
             if (calSensorFrontLeft.get() || rotateFrontLeft) {
-                // frontLeft.steerMotor.set(ControlMode.PercentOutput, .0);
+                // frontLeft.setSteerSpeed(0.);
                 rotateFrontLeft = false;
             }
             
             if (calSensorRearLeft.get() || rotateRearLeft) {
-                // rearLeft.steerMotor.set(ControlMode.PercentOutput, .0);
+                // rearLeft.setSteerSpeed(0.);
                 rotateRearLeft = false;
             }
             
             if (calSensorRearRight.get() || rotateRearRight) {
-                // rearRight.steerMotor.set(ControlMode.PercentOutput, .0);
+                // rearRight.setSteerSpeed(0.);
                 rotateRearRight = false;      
             }
 
@@ -194,10 +193,10 @@ public class SwerveDrive {
         delay(1000);
 
         // Start all four steer motors again now that we know where they are
-        frontRight.steerMotor.set(ControlMode.PercentOutput, .1);
-        // frontLeft.steerMotor.set(ControlMode.PercentOutput, .3);
-        // rearLeft.steerMotor.set(ControlMode.PercentOutput, .3);
-        // rearRight.steerMotor.set(ControlMode.PercentOutput, .3);   
+        frontRight.setSteerSpeed(.1);
+        // frontLeft.setSteerSpeed(.3);
+        // rearLeft.setSteerSpeed(.3);
+        // rearRight.setSteerSpeed(.3);   
 
         // Delay to insure we are off the magnet for the cal sensor
         delay(1000);
@@ -232,19 +231,19 @@ public class SwerveDrive {
         delay(1000);
 
         // Stop all four motors
-        frontRight.steerMotor.set(ControlMode.PercentOutput, .0);
-        // frontLeft.steerMotor.set(ControlMode.PercentOutput, .0);
-        // rearLeft.steerMotor.set(ControlMode.PercentOutput, .0);
-        // rearRight.steerMotor.set(ControlMode.PercentOutput, .0);
+        frontRight.setSteerSpeed(0.);
+        // frontLeft.setSteerSpeed(0.);
+        // rearLeft.setSteerSpeed(0.);
+        // rearRight.setSteerSpeed(0.);  
        
         // Allow the steering to settle after being stopped
         delay(1000);
 
         // Drive all four steer motors to the Zero Position
-        frontRight.steerMotor.set(ControlMode.Position, .0);
-        // frontLeft.steerMotor.set(ControlMode.Position, .0);
-        // rearLeft.steerMotor.set(ControlMode.Position, .0);
-        // rearRight.steerMotor.set(ControlMode.Position, .0);
+        frontRight.setSteerPosition(0.);
+        // frontLeft.setSteerPosition(0.);
+        // rearLeft.setSteerPosition(0.);
+        // rearRight.setSteerPosition(0.);
 
         // Allow the steering to settle at zero
         delay(1000);
