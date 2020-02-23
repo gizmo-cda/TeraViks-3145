@@ -44,7 +44,7 @@ public class ShootBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-      System.out.println("shoot end");
+    RobotContainer.m_tilt.setTiltLow();
   }
 
   // Returns true when the command should end.

@@ -9,8 +9,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
 
 public class MoveZipline extends CommandBase {
+  private double move;
+
   /**
    * Creates a new MoveZipline.
    */
@@ -21,12 +24,20 @@ public class MoveZipline extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.m_tilt.setTiltVert();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.m_color.moveZipline(RobotContainer.getOperatorX());
+    if (RobotContainer.m_tilt.getTiltPosition() >= RobotMap.MAGAZINE_VERTICAL - 1000) {
+      RobotContainer.m_lift.releaseArm();
+    }
+    
+    move = RobotContainer.getOperatorX();
+    if ((move > -RobotMap.X_AXIS_THREASHOLD) && (move < RobotMap.X_AXIS_THREASHOLD))
+      move = 0.;
+    RobotContainer.m_colorAndZipline.moveZipline(move);
   }
 
   // Called once the command ends or is interrupted.

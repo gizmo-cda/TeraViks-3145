@@ -31,7 +31,7 @@ public class RobotContainer {
   public static Drivetrain m_drivetrain = new Drivetrain();
   public static Gyro m_gyro = new Gyro();
   public static Vision m_vision = new Vision();
-  public static ColorSensor m_color = new ColorSensor();
+  public static ColorAndZipline m_colorAndZipline = new ColorAndZipline();
   public static LED m_led = new LED();
   public static Magazine m_magazine = new Magazine();
   public static Shooter m_shooter = new Shooter();
@@ -63,6 +63,7 @@ public class RobotContainer {
   private final TargetTrackModeDisengage m_targetTrackModeDisengage = new TargetTrackModeDisengage();
   private final TiltToControlWheel m_tiltToControlWheel = new TiltToControlWheel();
   private final MoveZipline m_moveZipline = new MoveZipline();
+  private final TiltMagToLow m_tiltMagToLow = new TiltMagToLow();
   // private final Command m_autoCommand;
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
@@ -133,8 +134,11 @@ public class RobotContainer {
     obtnY.whenPressed(m_tiltToControlWheel, false);
     obtnB.whenPressed(m_spinWheel3Rev, false);
     obtnRT.whenPressed(m_intakeBall, false);
+    obtnRT.whenReleased(m_stopIntake, false);
     obtnRB.whenPressed(m_reverseIntake, false);
-    obtnStart.whenPressed(m_moveZipline, false);
+    obtnRB.whenReleased(m_stopIntake, false);
+    obtnBack.whenPressed(m_moveZipline, false);
+    obtnA.whenPressed(m_tiltMagToLow, false);
   }
 
   public static double getDriverX() {

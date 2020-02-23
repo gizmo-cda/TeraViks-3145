@@ -39,13 +39,14 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    // m_gyro.reset();
+    RobotContainer.m_gyro.reset();
     RobotContainer.m_drivetrain.init();
-    RobotContainer.m_magazine.init();
+    // RobotContainer.m_magazine.init();
     // RobotContainer.m_intake.init();
     // RobotContainer.m_shooter.init();
     // RobotContainer.m_lift.init();
     // RobotContainer.m_tilt.init();
+    // RobotContainer.m_colorAndZipline.init();
 
     bootCycle = true;
   }
@@ -129,7 +130,8 @@ public class Robot extends TimedRobot {
     Timer.delay(.5);
 
     if (bootCycle && enableDrivetrainCalibration){
-      // CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
+      CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
+      // CommandScheduler.getInstance().schedule(new CalibrateTilt());
     }
 
     // m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
@@ -141,7 +143,7 @@ public class Robot extends TimedRobot {
     bootCycle = false;
 
     System.out.println("//////////////////// Teleop /////////////////");
-    CommandScheduler.getInstance().schedule(new LoadMagazine());
+    // CommandScheduler.getInstance().schedule(new LoadMagazine());
     CommandScheduler.getInstance().schedule(new Drive());
     // CommandScheduler.getInstance().schedule(new GetColor());
     RobotContainer.m_led.clearLED();

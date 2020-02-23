@@ -45,8 +45,6 @@ import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveDrive;
 import java.util.Queue;
 import java.util.LinkedList;
-import edu.wpi.first.wpilibj.Timer;
-
 
 public class Drivetrain extends SubsystemBase {
   // Create the Drive Motor and Steer Motor Objects
@@ -99,14 +97,12 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
     frontRightWheel = new SwerveModule("FrontRightWheel", frontRightDriveMotor, frontRightSteerMotor);
-    // frontLeftWheel = new SwerveModule("FrontLeftWheel", frontLeftDriveMotor, frontLeftSteerMotor);
-    // rearLeftWheel = new SwerveModule("RearLeftWheel", rearLeftDriveMotor, rearLeftSteerMotor);
-    // rearRightWheel = new SwerveModule("RearRightWheel", rearRightDriveMotor, rearRightSteerMotor);
+    frontLeftWheel = new SwerveModule("FrontLeftWheel", frontLeftDriveMotor, frontLeftSteerMotor);
+    rearLeftWheel = new SwerveModule("RearLeftWheel", rearLeftDriveMotor, rearLeftSteerMotor);
+    rearRightWheel = new SwerveModule("RearRightWheel", rearRightDriveMotor, rearRightSteerMotor);
     
     //Now Build the complete Swerve Drive Object with all four Wheel Modules
-    // m_SwerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel);
-    m_SwerveDrive = new SwerveDrive(frontRightWheel, frontRightWheel, frontRightWheel, frontRightWheel);
-
+    m_SwerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel);
   }
   
   public void init(){

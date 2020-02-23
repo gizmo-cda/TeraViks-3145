@@ -66,22 +66,22 @@ public class SwerveDrive {
     
     public void initMotors(){
        frontRight.initSteerMotor();
-       // frontLeft.initSteerMotor();
-       // rearLeft.initSteerMotor();
-       // rearRight.initSteerMotor();
+       frontLeft.initSteerMotor();
+       rearLeft.initSteerMotor();
+       rearRight.initSteerMotor();
         
         frontRight.initDriveMotor();
-      //  frontLeft.initDriveMotor();
-      //  rearLeft.initDriveMotor();
-      //  rearRight.initDriveMotor();
+       frontLeft.initDriveMotor();
+       rearLeft.initDriveMotor();
+       rearRight.initDriveMotor();
     }
     
     //Only used for testing, DON'T USE THIS METHOD
     public void reset(){
         frontRight.resetSteerEncoder();
-        // frontLeft.resetSteerEncoder();
-        // rearLeft.resetSteerEncoder();
-        // rearRight.resetSteerEncoder();
+        frontLeft.resetSteerEncoder();
+        rearLeft.resetSteerEncoder();
+        rearRight.resetSteerEncoder();
         m_swerveMath.reset();
     }
 
@@ -114,28 +114,28 @@ public class SwerveDrive {
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro, reverseEn, snakeMode, hiLo);
         
         frontRight.setVelocity(swerveVectors.get(0));
-        // frontLeft.setVelocity(swerveVectors.get(2));
-        // rearLeft.setVelocity(swerveVectors.get(4));
-        // rearRight.setVelocity(swerveVectors.get(6));
+        frontLeft.setVelocity(swerveVectors.get(2));
+        rearLeft.setVelocity(swerveVectors.get(4));
+        rearRight.setVelocity(swerveVectors.get(6));
          
         frontRight.setSteerPosition(swerveVectors.get(1));
-        // frontLeft.setSteerPosition(swerveVectors.get(3));
-        // rearLeft.setSteerPosition(swerveVectors.get(5));
-        // rearRight.setSteerPosition(swerveVectors.get(7));
+        frontLeft.setSteerPosition(swerveVectors.get(3));
+        rearLeft.setSteerPosition(swerveVectors.get(5));
+        rearRight.setSteerPosition(swerveVectors.get(7));
     }
     
     public void stopDriveMotors(){
         frontRight.setVelocity(0.);
-        // frontLeft.setVelocity(0.);
-        // rearLeft.setVelocity(0.);
-        // rearRight.setVelocity(0.);
+        frontLeft.setVelocity(0.);
+        rearLeft.setVelocity(0.);
+        rearRight.setVelocity(0.);
     }
     
     public void emergencyStopMotors(){
         frontRight.stop();
-        // frontLeft.stop();
-        // rearLeft.stop();
-        // rearRight.stop();
+        frontLeft.stop();
+        rearLeft.stop();
+        rearRight.stop();
     }
 
     // Steering Motor Calibration Method to find the Index Sensor and set the wheel straight forward
@@ -150,31 +150,32 @@ public class SwerveDrive {
         boolean rotateRearRight = true;
      
         // Start all four steer motors
-        frontRight.setSteerSpeed(.1);
-        // frontLeft.setSteerSpeed(.3);
-        // rearLeft.setSteerSpeed(.3);
-        // rearRight.setSteerSpeed(.3);   
+        frontRight.setSteerSpeed(.2);
+        frontLeft.setSteerSpeed(.2);
+        rearLeft.setSteerSpeed(.2);
+        rearRight.setSteerSpeed(.2);   
  
         //While the motors are running check to see when the encoder has been reset and stop the motor
         while (rotate) {
             
-            if (!calSensorFrontRight.get() && rotateFrontRight) {
+            if (calSensorFrontRight.get() && rotateFrontRight) {
                 frontRight.setSteerSpeed(0.);
                 rotateFrontRight = false;
+                System.out.println("stopping at sensor");
             }
             
-            if (calSensorFrontLeft.get() || rotateFrontLeft) {
-                // frontLeft.setSteerSpeed(0.);
+            if (calSensorFrontLeft.get() && rotateFrontLeft) {
+                frontLeft.setSteerSpeed(0.);
                 rotateFrontLeft = false;
             }
             
-            if (calSensorRearLeft.get() || rotateRearLeft) {
-                // rearLeft.setSteerSpeed(0.);
+            if (calSensorRearLeft.get() && rotateRearLeft) {
+                rearLeft.setSteerSpeed(0.);
                 rotateRearLeft = false;
             }
             
-            if (calSensorRearRight.get() || rotateRearRight) {
-                // rearRight.setSteerSpeed(0.);
+            if (calSensorRearRight.get() && rotateRearRight) {
+                rearRight.setSteerSpeed(0.);
                 rotateRearRight = false;      
             }
 
@@ -190,35 +191,36 @@ public class SwerveDrive {
         rotateRearLeft = true;
         rotateRearRight = true;
 
-        delay(1000);
+        delay(100);
 
         // Start all four steer motors again now that we know where they are
-        frontRight.setSteerSpeed(.1);
-        // frontLeft.setSteerSpeed(.3);
-        // rearLeft.setSteerSpeed(.3);
-        // rearRight.setSteerSpeed(.3);   
+        frontRight.setSteerSpeed(.2);
+        frontLeft.setSteerSpeed(.2);
+        rearLeft.setSteerSpeed(.2);
+        rearRight.setSteerSpeed(.2);   
 
         // Delay to insure we are off the magnet for the cal sensor
-        delay(1000);
+        delay(100);
 
         while (rotate) {
-            if (!calSensorFrontRight.get() && rotateFrontRight) {
+            if (calSensorFrontRight.get() && rotateFrontRight) {
                 frontRight.steerMotor.setSelectedSensorPosition(0);
                 rotateFrontRight = false;
+                System.out.println("zeroed sensor");
             }
             
-            if (calSensorFrontLeft.get() || rotateFrontLeft) {
-                // frontLeft.steerMotor.setSelectedSensorPosition(0);
+            if (calSensorFrontLeft.get() && rotateFrontLeft) {
+                frontLeft.steerMotor.setSelectedSensorPosition(0);
                 rotateFrontLeft = false;
             }
             
-            if (calSensorRearLeft.get() || rotateRearLeft) {
-                // rearLeft.steerMotor.setSelectedSensorPosition(0);     
+            if (calSensorRearLeft.get() && rotateRearLeft) {
+                rearLeft.steerMotor.setSelectedSensorPosition(0);     
                 rotateRearLeft = false;
             }
             
-            if (calSensorRearRight.get() || rotateRearRight) {
-                // rearRight.steerMotor.setSelectedSensorPosition(0);
+            if (calSensorRearRight.get() && rotateRearRight) {
+                rearRight.steerMotor.setSelectedSensorPosition(0);
                 rotateRearRight = false;      
             }
 
@@ -228,30 +230,30 @@ public class SwerveDrive {
         }
 
         // Allow the last motor to rotate past the new zero location
-        delay(1000);
+        delay(100);
 
         // Stop all four motors
         frontRight.setSteerSpeed(0.);
-        // frontLeft.setSteerSpeed(0.);
-        // rearLeft.setSteerSpeed(0.);
-        // rearRight.setSteerSpeed(0.);  
+        frontLeft.setSteerSpeed(0.);
+        rearLeft.setSteerSpeed(0.);
+        rearRight.setSteerSpeed(0.);  
        
         // Allow the steering to settle after being stopped
-        delay(1000);
+        delay(100);
 
         // Drive all four steer motors to the Zero Position
         frontRight.setSteerPosition(0.);
-        // frontLeft.setSteerPosition(0.);
-        // rearLeft.setSteerPosition(0.);
-        // rearRight.setSteerPosition(0.);
+        frontLeft.setSteerPosition(0.);
+        rearLeft.setSteerPosition(0.);
+        rearRight.setSteerPosition(0.);
 
         // Allow the steering to settle at zero
-        delay(1000);
+        delay(100);
       
         frontRight.adjustSteeringCalOffsets();
-        // frontLeft.adjustSteeringCalOffsets();
-        // rearLeft.adjustSteeringCalOffsets();
-        // rearRight.adjustSteeringCalOffsets();
+        frontLeft.adjustSteeringCalOffsets();
+        rearLeft.adjustSteeringCalOffsets();
+        rearRight.adjustSteeringCalOffsets();
 
     }
     

@@ -13,14 +13,14 @@ import frc.robot.RobotContainer;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class SpinWheel3Rev extends InstantCommand {
-  public SpinWheel3Rev() {
+public class CalibrateTilt extends InstantCommand {
+  public CalibrateTilt() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.m_colorAndZipline.rotateWheel();
+    RobotContainer.m_tilt.calMagVert();
   }
 }

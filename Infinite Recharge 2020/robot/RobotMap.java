@@ -21,9 +21,9 @@ public class RobotMap {
     public static final double WHEELBASE_TRACK_WIDTH = 19.625; // inches
   
     // Speed Scale Constants for the Drivetrain
-    public static final double HIGH_SPEED_SCALE = 1.0;
+    public static final double HIGH_SPEED_SCALE = 1.;
     public static final double LOW_SPEED_SCALE = .3;
-    public static final double ROTATE_SCALE = .67;
+    public static final double ROTATE_SCALE = .4;
 
     // Max speed and accelleration in METERS
     public static final double ROBOT_MAX_SPEED = 0.; // m/s
@@ -64,17 +64,17 @@ public class RobotMap {
     public static final double DRIVE_WHEEL_PULSES_PER_100MS = 21480.;       // Used for closed loop velocity
     public static final double DRIVE_WHEEL_PULSES_PER_INCH = 49.13;       // PPI with 400 Optical Encoder
     public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 2048;  // 2048 CTRE Mag Encoder
-    public static final double STEER_PPR = 15275.;                        // Pulses per wheel revolution with 2048 CTRE Mag Encoder + 7.46:1
+    public static final double STEER_PPR = 15360.;                        // Pulses per wheel revolution with 2048 CTRE Mag Encoder + 7.46:1 calculated 15275
   
     // Locations of the swerve drive index signal for each modle in encoder pulses to get to zero, straight forward
-    public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * .21875; //Drive Motor needs to be inverted
-    public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .4375;
-    public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * .28125;
-    public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .0625; //Drive Motor needs to be inverted
-    public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FR = -281.; //Small adjustment to cal for error
-    public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FL = -238.; //Small adjustment to cal for error
-    public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RL = -287.; //Small adjustment to cal for error
-    public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RR = -323.; //Small adjustment to cal for error
+    public static final double FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR * -.19681; //Drive Motor needs to be inverted
+    public static final double FRONT_LEFT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .464388;
+    public static final double REAR_LEFT_STEER_INDEX_OFFSET_PULSES  = STEER_PPR  * -.205404;
+    public static final double REAR_RIGHT_STEER_INDEX_OFFSET_PULSES = STEER_PPR  * .463346; //Drive Motor needs to be inverted
+    public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FR = 0.; //Small adjustment to cal for error
+    public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FL = 0.; //Small adjustment to cal for error
+    public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RL = 0.; //Small adjustment to cal for error
+    public static final double CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RR = 0.; //Small adjustment to cal for error
   
     // Drive Motor Inversion, Flips the polarity of the motor in the Talon Controller
     public static final boolean FRONT_RIGHT_DRIVE_TalonFX_Invert = true;
@@ -123,10 +123,10 @@ public class RobotMap {
     public static final int BALL_READY_TO_LOAD = 3;
     public static final int BALL_IN_FIRST_POSITION = 4;
     public static final int BALL_IN_FIFTH_POSITION = 5;
-    public static final int FRONT_RIGHT_STEER_CAL = 6;
-    public static final int FRONT_LEFT_STEER_CAL = 7;
-    public static final int REAR_LEFT_STEER_CAL = 8;
-    public static final int REAR_RIGHT_STEER_CAL = 9;
+    public static final int REAR_RIGHT_STEER_CAL = 6;
+    public static final int REAR_LEFT_STEER_CAL = 7;
+    public static final int FRONT_LEFT_STEER_CAL = 8;
+    public static final int FRONT_RIGHT_STEER_CAL = 9;
 
     // PWM Ports
     public static final int BALL_COUNT_LED_RIGHT = 0;

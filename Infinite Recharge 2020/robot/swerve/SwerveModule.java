@@ -137,20 +137,15 @@ public class SwerveModule {
 
         //Set the position off the wheel for the calibrated index correcting for index dection error
         steerMotor.set(ControlMode.Position, offset);
-
-        delay(1000);
         
         //Delay for the time it will take the wheel to move to the set position, this assumes ~ 2 sec per wheel revolution
-       // delay(300);
+        delay(300);
         
         //Now disable the motor before resetting the encoder to the new calibrated reference
-     //   steerMotor.set(ControlMode.PercentOutput, 0.);
-     //   delay(100);
-        
         steerMotor.setSelectedSensorPosition(0);
         
         //Delay to make sure it had time to set the reference to 0 before the next command is called
-        delay(1000);
+        delay(100);
 
         //Now set the wheel to position 0 to hold the new calibrated position
         steerMotor.set(ControlMode.Position, 0.);
@@ -180,11 +175,11 @@ public class SwerveModule {
         steerMotor.setSelectedSensorPosition(0);
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
 
-        steerMotor.configMotionAcceleration(40960, TIMEOUT);  //400 Optical Encoder accel and velocity targets
+        steerMotor.configMotionAcceleration(40960, TIMEOUT);  //2048 CTRE Encoder accel and velocity targets
         steerMotor.configMotionCruiseVelocity(20480, TIMEOUT);
 
-        steerMotor.configPeakOutputForward(.1, TIMEOUT);
-        steerMotor.configPeakOutputReverse(-.1, TIMEOUT);
+        steerMotor.configPeakOutputForward(.2, TIMEOUT);
+        steerMotor.configPeakOutputReverse(-.2, TIMEOUT);
         
         steerMotor.configNominalOutputForward(0, TIMEOUT);
         steerMotor.configNominalOutputReverse(0, TIMEOUT);

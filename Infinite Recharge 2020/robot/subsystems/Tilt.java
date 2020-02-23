@@ -31,8 +31,8 @@ public class Tilt extends SubsystemBase {
 
   }
 
-  public void getTiltPosition() {
-    tiltMotor.getSelectedSensorPosition(0);
+  public double getTiltPosition() {
+    return tiltMotor.getSelectedSensorPosition(0);
   }
 
   public void setTiltVert() {
