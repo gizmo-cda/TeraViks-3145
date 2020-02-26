@@ -13,15 +13,23 @@ import frc.robot.RobotContainer;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class TargetTrackModeDisengage extends InstantCommand {
-  public TargetTrackModeDisengage() {
+public class DriveSpeed extends InstantCommand {
+  private static boolean isLow;
+  private static boolean isMedium;
+
+  public DriveSpeed() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.m_drivetrain.setTargetTrackMode(false);
-    RobotContainer.m_shooterCam.setCamMode(1);
+    isLow = RobotContainer.getLowSpeedDriveButtonState();
+    isMedium = RobotContainer.getMediumSpeedDriveButtonState();
+
+    if (!isLow && !isMedium) RobotContainer.m_drivetrain.setHighSpeedDriveMode();
+    if (!isLow && isMedium) RobotContainer.m_drivetrain.setMediumSpeedDriveMode();
+    if (isLow && !isMedium) RobotContainer.m_drivetrain.setLowSpeedDriveMode();
+    if (isLow && isMedium) RobotContainer.m_drivetrain.setLowSpeedDriveMode();
   }
 }

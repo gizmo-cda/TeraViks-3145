@@ -22,7 +22,8 @@ public class RobotMap {
   
     // Speed Scale Constants for the Drivetrain
     public static final double HIGH_SPEED_SCALE = 1.;
-    public static final double LOW_SPEED_SCALE = .3;
+    public static final double MED_SPEED_SCALE = .3;
+    public static final double LOW_SPEED_SCALE = .1;
     public static final double ROTATE_SCALE = .4;
 
     // Max speed and accelleration in METERS
@@ -120,9 +121,9 @@ public class RobotMap {
     public static final double BOTTOM_SHOOT_WHEEL_WALL_PULSES_PER_100MS = 1000.;
     
     // DIO Ports
-    public static final int BALL_READY_TO_LOAD = 3;
-    public static final int BALL_IN_FIRST_POSITION = 4;
-    public static final int BALL_IN_FIFTH_POSITION = 5;
+    public static final int BALL_READY_TO_LOAD = 2;
+    public static final int BALL_IN_FIRST_POSITION = 3;
+    public static final int BALL_IN_FIFTH_POSITION = 4;
     public static final int REAR_RIGHT_STEER_CAL = 6;
     public static final int REAR_LEFT_STEER_CAL = 7;
     public static final int FRONT_LEFT_STEER_CAL = 8;

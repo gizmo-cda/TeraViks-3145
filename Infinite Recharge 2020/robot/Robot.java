@@ -137,7 +137,7 @@ public class Robot extends TimedRobot {
     // m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
     // m_vision.ledOff();
 
-    CommandScheduler.getInstance().schedule(new HighSpeedDrive());
+    CommandScheduler.getInstance().schedule(new DriveSpeed());
     CommandScheduler.getInstance().run();
 
     bootCycle = false;

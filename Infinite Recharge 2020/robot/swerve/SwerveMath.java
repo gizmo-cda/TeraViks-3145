@@ -73,7 +73,7 @@ public class SwerveMath {
 
   private static boolean snakeMode; //Crab = false, Snake = true
 
-  private static boolean hiLo; //Adjust wheel velocity scalar for high speed or low speed
+  private static String hiLo; //Adjust wheel velocity scalar for high speed or low speed
 
   //Initialize variables to store previous SwerveMath iteration's wheel position values - used for Reversing
   private static Double wp1Current = 0.;  
@@ -120,11 +120,12 @@ public class SwerveMath {
   }  
 
   // First Method of SwerveMath that returns the vector (speed, position) for each wheel as a list
-  public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn, boolean centricIn, double gyroIn, boolean reverseEnIn, boolean snakeModeIn, boolean hiLoIn){
+  public ArrayList<Double> getVectors(double fwdIn, double strIn, double rcwIn, boolean centricIn, double gyroIn, boolean reverseEnIn, boolean snakeModeIn, String hiLoIn){
     hiLo = hiLoIn;
     fwd = fwdIn;
     str = strIn;
-    if(hiLo) rcw = rcwIn * RobotMap.ROTATE_SCALE; else rcw = rcwIn;
+    // if(hiLo) rcw = rcwIn * RobotMap.ROTATE_SCALE; else rcw = rcwIn; // Wheel speeds are scaled down after math block, if in low speed rotate is slow enough
+    if(hiLo == "high") rcw = rcwIn * RobotMap.ROTATE_SCALE; else rcw = rcwIn; // Wheel speeds are scaled down after math block, if in low speed rotate is slow enough
     centric = centricIn;
     gyro = gyroIn * toRad;
     reverseEn = reverseEnIn;
@@ -179,17 +180,40 @@ public class SwerveMath {
     ws4 *= pp100msec;
 
     // modify wheel speeds to scale value <=1
-    if (hiLo) {
-      ws1 *= RobotMap.HIGH_SPEED_SCALE; 
-      ws2 *= RobotMap.HIGH_SPEED_SCALE;
-      ws3 *= RobotMap.HIGH_SPEED_SCALE;
-      ws4 *= RobotMap.HIGH_SPEED_SCALE;
-    }
-    else {
-      ws1 *= RobotMap.LOW_SPEED_SCALE; 
-      ws2 *= RobotMap.LOW_SPEED_SCALE;
-      ws3 *= RobotMap.LOW_SPEED_SCALE;
-      ws4 *= RobotMap.LOW_SPEED_SCALE; 
+    // if (hiLo) {
+    //   ws1 *= RobotMap.HIGH_SPEED_SCALE; 
+    //   ws2 *= RobotMap.HIGH_SPEED_SCALE;
+    //   ws3 *= RobotMap.HIGH_SPEED_SCALE;
+    //   ws4 *= RobotMap.HIGH_SPEED_SCALE;
+    // }
+    // else {
+    //   ws1 *= RobotMap.LOW_SPEED_SCALE; 
+    //   ws2 *= RobotMap.LOW_SPEED_SCALE;
+    //   ws3 *= RobotMap.LOW_SPEED_SCALE;
+    //   ws4 *= RobotMap.LOW_SPEED_SCALE; 
+    // }
+
+    switch(hiLo){
+      case "high":
+        ws1 *= RobotMap.HIGH_SPEED_SCALE; 
+        ws2 *= RobotMap.HIGH_SPEED_SCALE;
+        ws3 *= RobotMap.HIGH_SPEED_SCALE;
+        ws4 *= RobotMap.HIGH_SPEED_SCALE;
+      break;
+
+      case "medium":
+        ws1 *= RobotMap.MED_SPEED_SCALE; 
+        ws2 *= RobotMap.MED_SPEED_SCALE;
+        ws3 *= RobotMap.MED_SPEED_SCALE;
+        ws4 *= RobotMap.MED_SPEED_SCALE; 
+      break;
+
+      case "low":
+        ws1 *= RobotMap.LOW_SPEED_SCALE; 
+        ws2 *= RobotMap.LOW_SPEED_SCALE;
+        ws3 *= RobotMap.LOW_SPEED_SCALE;
+        ws4 *= RobotMap.LOW_SPEED_SCALE; 
+      break;
     }
 
     // Calculate the wheel angle for each wheel in radians: +/-pi referenced to Y axis 

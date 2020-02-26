@@ -93,7 +93,7 @@ public class SwerveDrive {
         return driveDistanceVectors;
     }
     
-    public void setMotorsForDistance (double fwd, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, boolean hiLo, double distance){
+    public void setMotorsForDistance (double fwd, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, String hiLo, double distance){
         driveDistanceVectors = getDriveMotorPositions();
 
         swerveVectors = m_swerveMath.getVectors(fwd, 0., 0., centric, gyro, reverseEn, snakeMode, hiLo);
@@ -109,7 +109,7 @@ public class SwerveDrive {
         rearRight.setSteerPosition(swerveVectors.get(7));
     }
     
-    public void setMotors  (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, boolean hiLo){
+    public void setMotors  (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, String hiLo){
         
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro, reverseEn, snakeMode, hiLo);
         
@@ -161,7 +161,6 @@ public class SwerveDrive {
             if (calSensorFrontRight.get() && rotateFrontRight) {
                 frontRight.setSteerSpeed(0.);
                 rotateFrontRight = false;
-                System.out.println("stopping at sensor");
             }
             
             if (calSensorFrontLeft.get() && rotateFrontLeft) {
@@ -206,7 +205,6 @@ public class SwerveDrive {
             if (calSensorFrontRight.get() && rotateFrontRight) {
                 frontRight.steerMotor.setSelectedSensorPosition(0);
                 rotateFrontRight = false;
-                System.out.println("zeroed sensor");
             }
             
             if (calSensorFrontLeft.get() && rotateFrontLeft) {
@@ -250,11 +248,38 @@ public class SwerveDrive {
         // Allow the steering to settle at zero
         delay(100);
       
-        frontRight.adjustSteeringCalOffsets();
-        frontLeft.adjustSteeringCalOffsets();
-        rearLeft.adjustSteeringCalOffsets();
-        rearRight.adjustSteeringCalOffsets();
+        // frontRight.adjustSteeringCalOffsets();
+        // frontLeft.adjustSteeringCalOffsets();
+        // rearLeft.adjustSteeringCalOffsets();
+        // rearRight.adjustSteeringCalOffsets();
 
+        System.out.println("    -Applying Offsets");   
+
+         //Set the position off the wheel for the calibrated index correcting for index dection error
+         frontRight.setSteerPosition(RobotMap.FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FR);
+         frontLeft.setSteerPosition(RobotMap.FRONT_LEFT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FL);
+         rearLeft.setSteerPosition(RobotMap.REAR_LEFT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RL);
+         rearRight.setSteerPosition(RobotMap.REAR_RIGHT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_RR);
+        
+         //Delay for the time it will take the wheel to move to the set position, this assumes ~ 2 sec per wheel revolution
+         delay(300);
+         
+         //Now disable the motor before resetting the encoder to the new calibrated reference
+         frontRight.steerMotor.setSelectedSensorPosition(0);
+         frontLeft.steerMotor.setSelectedSensorPosition(0);
+         rearLeft.steerMotor.setSelectedSensorPosition(0);
+         rearRight.steerMotor.setSelectedSensorPosition(0);
+
+         //Delay to make sure it had time to set the reference to 0 before the next command is called
+         delay(100);
+ 
+         //Now set the wheel to position 0 to hold the new calibrated position
+         frontRight.setSteerPosition(0.);
+         frontLeft.setSteerPosition(0.);
+         rearLeft.setSteerPosition(0.);
+         rearRight.setSteerPosition(0.);
+
+         System.out.println("    -Calibration Completed");
     }
     
     private void delay(int msec){

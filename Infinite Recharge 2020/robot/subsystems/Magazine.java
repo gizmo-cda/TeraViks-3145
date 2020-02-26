@@ -143,7 +143,7 @@ public class Magazine extends SubsystemBase {
     if (ballCount > 0 && isShootPressed) {
       advanceMagazine();
       stopShoot = false;
-    }
+    } else stopMagazine();
 
     // This Reschedules the load magazine command and stops the shoot ball command
     // after the mag has finished unloading and the shoot button is no longer being

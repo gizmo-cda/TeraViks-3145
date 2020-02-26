@@ -30,7 +30,8 @@ public class RobotContainer {
   // Declare Subsystem Objects
   public static Drivetrain m_drivetrain = new Drivetrain();
   public static Gyro m_gyro = new Gyro();
-  public static Vision m_vision = new Vision();
+  public static ShooterCam m_shooterCam = new ShooterCam();
+  public static IntakeCam m_intakeCam = new IntakeCam();
   public static ColorAndZipline m_colorAndZipline = new ColorAndZipline();
   public static LED m_led = new LED();
   public static Magazine m_magazine = new Magazine();
@@ -46,8 +47,7 @@ public class RobotContainer {
   private final Drive m_Drive = new Drive();
   private final FieldCentric m_FieldCentric = new FieldCentric();
   private final GetColor m_GetColor = new GetColor();
-  private final HighSpeedDrive m_HighSpeedDrive = new HighSpeedDrive();
-  private final LowSpeedDrive m_LowSpeedDrive = new LowSpeedDrive();
+  private final DriveSpeed m_DriveSpeed = new DriveSpeed();
   private final RobotCentric m_RobotCentric = new RobotCentric();
   private final SnakeMode m_SnakeMode = new SnakeMode();
   private final SpinWheelToColor m_spinWheelToColor = new SpinWheelToColor();
@@ -100,9 +100,6 @@ public class RobotContainer {
   private static JoystickButton obtnLeftStick = new JoystickButton(operatorJoy, 11); //Left Stick Button
   private static JoystickButton obtnRightStick = new JoystickButton(operatorJoy, 12); //Right Stick Button - Reverse Ball Intake
 
-  //Creates a private boolean for getting the state of the shoot button
-  private static boolean isPressed;
-
   // ***** The container for the robot. Contains subsystems, OI devices, and
   // commands.
 
@@ -122,8 +119,10 @@ public class RobotContainer {
 
     btnX.whenPressed(m_invertDrivetrain, false);
     btnR2.whenPressed(m_shootBall, true);
-    btnL2.whenPressed(m_LowSpeedDrive, false);
-    btnL2.whenReleased(m_HighSpeedDrive, false);
+    btnL2.whenPressed(m_DriveSpeed, false);
+    btnL2.whenReleased(m_DriveSpeed, false);
+    btnL1.whenPressed(m_DriveSpeed,false);
+    btnL1.whenReleased(m_DriveSpeed, false);
 
     btnStart.whenPressed(m_retractWinch, false);
     btnTriangle.whenPressed(m_targetTrackModeEngage, false);
@@ -166,8 +165,15 @@ public class RobotContainer {
   }
 
   public static boolean getShootButtonState() {
-    isPressed = btnR2.get();
-    return isPressed;
+    return btnR2.get();
+  }
+
+  public static boolean getMediumSpeedDriveButtonState() {
+    return btnL2.get();
+  }
+
+  public static boolean getLowSpeedDriveButtonState() {
+    return btnL1.get();
   }
 
   /**

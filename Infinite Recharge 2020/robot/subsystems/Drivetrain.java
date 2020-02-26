@@ -78,7 +78,7 @@ public class Drivetrain extends SubsystemBase {
   
   private boolean snakeMode = false; //Crab = false, Snake = True
 
-  private boolean hiLo = false; //High or Low Speed Drivetrain Mode
+  private String hiLo = "high"; //High or Low Speed Drivetrain Mode
   
   private boolean targetTrackMode = false;
   private boolean isDriveInverted = false;
@@ -147,11 +147,15 @@ public class Drivetrain extends SubsystemBase {
   }
   
   public void setHighSpeedDriveMode(){
-    hiLo = true;
+    hiLo = "high";
+  }
+
+  public void setMediumSpeedDriveMode(){
+    hiLo = "medium";
   }
 
   public void setLowSpeedDriveMode(){
-    hiLo = false;
+    hiLo = "low";
   }
   
   public void setTargetTrackMode(boolean mode){
@@ -185,8 +189,8 @@ public class Drivetrain extends SubsystemBase {
     
     // Override Joystick Inputs for str and rcw when using Vision Tracking
     if (targetTrackMode){
-      tx = RobotContainer.m_vision.getTx();
-      ty = RobotContainer.m_vision.getTy();
+      tx = RobotContainer.m_shooterCam.getTx();
+      ty = RobotContainer.m_shooterCam.getTy();
 
       // take in 10 pitch readings and average them out
       if (txQueue.size() < 10){
@@ -259,8 +263,13 @@ public class Drivetrain extends SubsystemBase {
     m_SwerveDrive.emergencyStopMotors();
   }
   
-  public void driveDistance(double gyro, boolean hiLo, double distance) {
+  public void driveDistance(double gyro, String hiLo, double distance) {
     m_SwerveDrive.setMotorsForDistance(0.5, centric, gyro, reverseEn, snakeMode, hiLo, distance);
+  }
+
+  // This method rotates to the absolute heading
+  public void rotateToHeading(double gyro, String hiLo, double heading) {
+    m_SwerveDrive.setMotors(0., 0., .2, centric, yaw, reverseEn, snakeMode, hiLo);
   }
 
   // Sets a boolean to invert the control of the drive motors
