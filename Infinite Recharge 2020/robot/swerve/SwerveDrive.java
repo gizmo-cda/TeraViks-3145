@@ -54,6 +54,7 @@ public class SwerveDrive {
 
     private ArrayList<Double> swerveVectors = new ArrayList<Double>(8);
     private ArrayList<Double> driveDistanceVectors = new ArrayList<Double>(Arrays.asList(0.,0.,0.,0.));
+    private int velocity = 0;
     
     public SwerveDrive(SwerveModule frontRightWheel, SwerveModule frontLeftWheel, SwerveModule rearLeftWheel, SwerveModule rearRightWheel){
         frontRight = frontRightWheel;
@@ -65,15 +66,15 @@ public class SwerveDrive {
     }
     
     public void initMotors(){
-       frontRight.initSteerMotor();
-       frontLeft.initSteerMotor();
-       rearLeft.initSteerMotor();
-       rearRight.initSteerMotor();
-        
+        frontRight.initSteerMotor();
+        frontLeft.initSteerMotor();
+        rearLeft.initSteerMotor();
+        rearRight.initSteerMotor();
+            
         frontRight.initDriveMotor();
-       frontLeft.initDriveMotor();
-       rearLeft.initDriveMotor();
-       rearRight.initDriveMotor();
+        frontLeft.initDriveMotor();
+        rearLeft.initDriveMotor();
+        rearRight.initDriveMotor();
     }
     
     //Only used for testing, DON'T USE THIS METHOD
@@ -85,6 +86,11 @@ public class SwerveDrive {
         m_swerveMath.reset();
     }
 
+    public boolean isDriveTrainStopped() {
+        velocity = frontRight.getVelocity() + frontLeft.getVelocity() + rearLeft.getVelocity() + rearRight.getVelocity();
+        if (velocity < 1000) return true; else return false;
+    }
+
     private ArrayList<Double> getDriveMotorPositions() {
         driveDistanceVectors.set(0, (double)frontRight.getDrivePosition());
         driveDistanceVectors.set(1, (double)frontLeft.getDrivePosition());
@@ -93,10 +99,10 @@ public class SwerveDrive {
         return driveDistanceVectors;
     }
     
-    public void setMotorsForDistance (double fwd, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, String hiLo, double distance){
+    public void setMotorsForDistance (double fwd, double str, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, String hiLo, double distance){
         driveDistanceVectors = getDriveMotorPositions();
 
-        swerveVectors = m_swerveMath.getVectors(fwd, 0., 0., centric, gyro, reverseEn, snakeMode, hiLo);
+        swerveVectors = m_swerveMath.getVectors(fwd, str, 0., centric, gyro, reverseEn, snakeMode, hiLo);
         
         frontRight.setWheelPosition(driveDistanceVectors.get(0)+distance);
         frontLeft.setWheelPosition(driveDistanceVectors.get(1)+distance);
@@ -109,7 +115,7 @@ public class SwerveDrive {
         rearRight.setSteerPosition(swerveVectors.get(7));
     }
     
-    public void setMotors  (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, String hiLo){
+    public void setMotors (double fwd, double str, double rcw, boolean centric, double gyro, boolean reverseEn, boolean snakeMode, String hiLo){
         
         swerveVectors = m_swerveMath.getVectors(fwd, str, rcw, centric, gyro, reverseEn, snakeMode, hiLo);
         
@@ -124,6 +130,13 @@ public class SwerveDrive {
         rearRight.setSteerPosition(swerveVectors.get(7));
     }
     
+    public void setMaxDriveMotorPower(double power) {
+        frontRight.setMaxDrivePower(power);
+        frontLeft.setMaxDrivePower(power);
+        rearLeft.setMaxDrivePower(power);
+        rearRight.setMaxDrivePower(power);
+    }
+
     public void stopDriveMotors(){
         frontRight.setVelocity(0.);
         frontLeft.setVelocity(0.);

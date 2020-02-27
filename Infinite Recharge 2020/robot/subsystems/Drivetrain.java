@@ -93,6 +93,7 @@ public class Drivetrain extends SubsystemBase {
   private double ty = 0.;
   private double distance;
   private double tiltPosition;
+  private double distanceInTicks;
   
   public Drivetrain(){
     //Create the Swerve Drive Modules for each wheel
@@ -262,14 +263,37 @@ public class Drivetrain extends SubsystemBase {
   public void emergencyStop(){
     m_SwerveDrive.emergencyStopMotors();
   }
-  
-  public void driveDistance(double gyro, String hiLo, double distance) {
-    m_SwerveDrive.setMotorsForDistance(0.5, centric, gyro, reverseEn, snakeMode, hiLo, distance);
+
+  //Distance is in +/- inches, drives the specified distance and returns true once the drive train stops
+  //Can only be used in Autonomous when DRIVE is not on the command stack
+  public boolean driveDistance(double fwd, double str, double distance) {
+    distanceInTicks = distance * RobotMap.DRIVE_WHEEL_PULSES_PER_INCH;  //convert to ticks
+   
+    m_SwerveDrive.setMotorsForDistance(fwd, str, centric, yaw, reverseEn, snakeMode, hiLo, distanceInTicks);
+
+    delay(100); //wait for the motors to spin up
+
+    while (!m_SwerveDrive.isDriveTrainStopped()) {
+        delay(100);  //just wait 100msec before checking agian
+    }
+    
+    return true;
   }
 
-  // This method rotates to the absolute heading
-  public void rotateToHeading(double gyro, String hiLo, double heading) {
-    m_SwerveDrive.setMotors(0., 0., .2, centric, yaw, reverseEn, snakeMode, hiLo);
+  //This method rotates to the absolute heading +/-180 and returns true after the robot is stopped
+  //Can only be used in Autonomous when DRIVE is not on the command stack
+  public boolean rotateToHeading(double rcw, double heading) {
+    yaw = RobotContainer.m_gyro.getYawDeg();
+
+    m_SwerveDrive.setMotors(0., 0., rcw, centric, yaw, reverseEn, snakeMode, hiLo);
+
+    while (yaw != heading) {
+      yaw = RobotContainer.m_gyro.getYawDeg();
+    }
+
+    m_SwerveDrive.stopDriveMotors();
+
+    return true;
   }
 
   // Sets a boolean to invert the control of the drive motors
@@ -279,6 +303,15 @@ public class Drivetrain extends SubsystemBase {
     } else isDriveInverted = true;
   }
   
+  private void delay(int msec){
+    try{
+        Thread.sleep(msec);
+    }
+    catch (Exception e){
+        System.out.println("Error in Waitloop");
+    }
+  }
+
   /*@Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

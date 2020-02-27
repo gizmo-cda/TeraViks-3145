@@ -62,8 +62,8 @@ public class RobotMap {
     public static final double FINAL_STEER_WHEEL_GEAR_RATIO = STEER_MOTOR_GEAR_REDUCTION_RATIO * STEER_WHEEL_GEAR_RATIO;
    
     // Drivetrain Encoder Constants
-    public static final double DRIVE_WHEEL_PULSES_PER_100MS = 21480.;       // Used for closed loop velocity
-    public static final double DRIVE_WHEEL_PULSES_PER_INCH = 49.13;       // PPI with 400 Optical Encoder
+    public static final double DRIVE_WHEEL_PULSES_PER_100MS = 21480.;     // Used for closed loop velocity
+    public static final double DRIVE_WHEEL_PULSES_PER_INCH = 49.13;       // PPI with 400 Optical Encoder  NEES TO BE UPDATED for 2048 encoder
     public static final double STEER_MOTOR_PULSES_PER_REVOLUTION = 2048;  // 2048 CTRE Mag Encoder
     public static final double STEER_PPR = 15360.;                        // Pulses per wheel revolution with 2048 CTRE Mag Encoder + 7.46:1 calculated 15275
   

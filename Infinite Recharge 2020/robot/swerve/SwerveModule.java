@@ -13,8 +13,8 @@
 package frc.robot.swerve;
 
 import frc.robot.RobotMap;
-import com.ctre.phoenix.motorcontrol.Faults;
 
+import java.lang.Math;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -25,10 +25,9 @@ public class SwerveModule {
     private String name;
     private WPI_TalonFX driveMotor;
     public WPI_TalonFX steerMotor;
-    private Faults driveFaults = new Faults();
-    private Faults steerFaults = new Faults();
 
     private int TIMEOUT = RobotMap.TalonFX_TIMEOUT;
+    private double power;
     
     public SwerveModule(String wheelName, WPI_TalonFX wheelDriveMotor, WPI_TalonFX wheelSteerMotor){
         name = wheelName;
@@ -52,12 +51,13 @@ public class SwerveModule {
     }
     
     //Closed-Loop Position Target Setting (+/- pulses per +/-180 degrees)
-    public void setSteerPosition(double wheelPosition){
-        steerMotor.set(ControlMode.MotionMagic, wheelPosition);
+    public void setSteerPosition(double position){
+        steerMotor.set(ControlMode.MotionMagic, position);
     }
 
+    //Closed-loop Position
     public void setWheelPosition(double position){
-         driveMotor.set(ControlMode.Position, position);
+         driveMotor.set(ControlMode.MotionMagic, position);
     }
     
     public int getVelocity(){
@@ -83,28 +83,19 @@ public class SwerveModule {
     public void stop(){
         driveMotor.stopMotor();
         steerMotor.stopMotor();
-	}
+    }
     
-    public WPI_TalonFX getDriveMotor(){
-		return driveMotor;
-	}
-	
-	public WPI_TalonFX getSteerMotor(){
-		return steerMotor;
+    public void setMaxDrivePower(double powerMax) {
+        power = Math.abs(powerMax);
+
+        if (power > 1) power = 1.;
+
+        driveMotor.configPeakOutputForward(power, TIMEOUT);
+        driveMotor.configPeakOutputReverse(-power, TIMEOUT);
     }
     
     public String getName(){
         return name;
-    }
-    
-    public boolean detectDriveMotorPhase(){
-        driveMotor.getFaults(driveFaults);
-        return driveFaults.SensorOutOfPhase;
-    }
-    
-    public boolean detectSteerMotorPhase(){
-        steerMotor.getFaults(steerFaults);
-        return steerFaults.SensorOutOfPhase;
     }
     
     public void resetSteerEncoder(){
