@@ -19,7 +19,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Intake extends SubsystemBase {
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(RobotMap.INTAKE_TalonSRX_CAN_ID);
-  private final WPI_TalonSRX beaverTailMotor = new WPI_TalonSRX(RobotMap.BEAVER_TAIL_TalonSRX_CAN_ID);
   private int TIMEOUT = RobotMap.TalonSRX_TIMEOUT;
 
   private boolean magFull = false;
@@ -31,7 +30,6 @@ public class Intake extends SubsystemBase {
   }
 
   public void init() {
-    initBeaverTailMotor();
     initIntakeMotor();
   }
 
@@ -66,39 +64,6 @@ public class Intake extends SubsystemBase {
     intakeMotor.configNominalOutputReverse(0, TIMEOUT);
 
     System.out.println("  - Intake Motor Initialized");
-  }
-
-  private void initBeaverTailMotor(){
-    beaverTailMotor.configFactoryDefault();
-        
-    beaverTailMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT);
-    beaverTailMotor.selectProfileSlot(0, 0); //slot #, PID #
-
-    beaverTailMotor.setInverted(false);
-    beaverTailMotor.setNeutralMode(NeutralMode.Brake);
-
-    beaverTailMotor.setSelectedSensorPosition(0);
-    beaverTailMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
-
-    beaverTailMotor.configMotionAcceleration(40960, TIMEOUT);  //400 Optical Encoder accel and velocity targets
-    beaverTailMotor.configMotionCruiseVelocity(20480, TIMEOUT);
-
-    beaverTailMotor.configPeakOutputForward(1., TIMEOUT);
-    beaverTailMotor.configPeakOutputReverse(-1., TIMEOUT);
-    
-    beaverTailMotor.configNominalOutputForward(0, TIMEOUT);
-    beaverTailMotor.configNominalOutputReverse(0, TIMEOUT);
-    
-    beaverTailMotor.configAllowableClosedloopError(0, 5, TIMEOUT);  //Error for 2048 CTRE Encoder
-
-    beaverTailMotor.config_IntegralZone(0, 100, TIMEOUT); //I-zone limits
-    
-    beaverTailMotor.config_kP(0, .75, TIMEOUT);  
-    beaverTailMotor.config_kI(0, .001, TIMEOUT);
-    beaverTailMotor.config_kD(0, 1., TIMEOUT);
-    beaverTailMotor.config_kF(0, 0., TIMEOUT);
-    
-    System.out.println("  - Beaver Tail Motor Initialized");
   }
 
   @Override

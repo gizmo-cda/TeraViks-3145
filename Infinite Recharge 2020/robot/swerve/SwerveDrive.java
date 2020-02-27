@@ -261,12 +261,12 @@ public class SwerveDrive {
         // Allow the steering to settle at zero
         delay(100);
       
-        // frontRight.adjustSteeringCalOffsets();
-        // frontLeft.adjustSteeringCalOffsets();
-        // rearLeft.adjustSteeringCalOffsets();
-        // rearRight.adjustSteeringCalOffsets();
+        frontRight.adjustSteeringCalOffsets();
+        frontLeft.adjustSteeringCalOffsets();
+        rearLeft.adjustSteeringCalOffsets();
+        rearRight.adjustSteeringCalOffsets();
 
-        System.out.println("    -Applying Offsets");   
+        /*System.out.println("    -Applying Offsets");   
 
          //Set the position off the wheel for the calibrated index correcting for index dection error
          frontRight.setSteerPosition(RobotMap.FRONT_RIGHT_STEER_INDEX_OFFSET_PULSES + RobotMap.CLOSED_LOOP_STEERING_ERROR_FOR_CAL_FR);
@@ -292,7 +292,7 @@ public class SwerveDrive {
          rearLeft.setSteerPosition(0.);
          rearRight.setSteerPosition(0.);
 
-         System.out.println("    -Calibration Completed");
+         System.out.println("    -Calibration Completed");*/
     }
     
     private void delay(int msec){

@@ -49,7 +49,6 @@ public class RobotMap {
     public static final int ZIPLINE_AND_COLOR_WHEEL_TalonSRX_CAN_ID = 19;
     public static final int LIFT_TalonFX_CAN_ID = 20;
     public static final int TILT_TalonFX_CAN_ID = 21;
-    public static final int BEAVER_TAIL_TalonSRX_CAN_ID = 22;
   
     // Talon controllers' timeout
     public static final int TalonFX_TIMEOUT = 1000; //units in msec

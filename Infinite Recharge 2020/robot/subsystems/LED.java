@@ -168,7 +168,7 @@ public class LED extends SubsystemBase {
     // This method will be called once per scheduler run
     // m_ballCountLEDR.setData(m_ballCountLEDBufferR);
     // m_ballCountLEDL.setData(m_ballCountLEDBufferL);
-    m_statusLEDR.setData(m_statusLEDBufferR);
+    // m_statusLEDR.setData(m_statusLEDBufferR);
     // m_statusLEDL.setData(m_statusLEDBufferL);
   }
 }

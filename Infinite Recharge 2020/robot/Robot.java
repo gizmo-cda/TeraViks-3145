@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    RobotContainer.m_led.rainbowLED();
+    // RobotContainer.m_led.rainbowLED();
   }
 
   /**
@@ -130,7 +130,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.5);
 
     if (bootCycle && enableDrivetrainCalibration){
-      CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
+      // CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
       // CommandScheduler.getInstance().schedule(new CalibrateTilt());
     }
 
@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
     // CommandScheduler.getInstance().schedule(new LoadMagazine());
     CommandScheduler.getInstance().schedule(new Drive());
     // CommandScheduler.getInstance().schedule(new GetColor());
-    RobotContainer.m_led.clearLED();
+    // RobotContainer.m_led.clearLED();
   }
 
   /**
@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    RobotContainer.m_led.dispBallCountLED();
+    // RobotContainer.m_led.dispBallCountLED();
   }
 
   @Override

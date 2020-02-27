@@ -94,7 +94,7 @@ public class Tilt extends SubsystemBase {
     tiltMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT);
     tiltMotor.selectProfileSlot(0, 0); // slot #, PID #
 
-    tiltMotor.setInverted(false);
+    tiltMotor.setInverted(true);
     tiltMotor.setNeutralMode(NeutralMode.Brake);
 
     tiltMotor.setSelectedSensorPosition(0);

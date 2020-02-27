@@ -87,7 +87,7 @@ public class Shooter extends SubsystemBase {
     shootMotorBottom.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT); 
     shootMotorBottom.selectProfileSlot(0, 0); // slot #, PID #
     
-    shootMotorBottom.setInverted(false);
+    shootMotorBottom.setInverted(true);
     
     shootMotorBottom.setSelectedSensorPosition(0);
     shootMotorBottom.configClearPositionOnQuadIdx(false, TIMEOUT);
