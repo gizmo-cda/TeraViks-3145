@@ -93,7 +93,7 @@ public class RobotMap {
     
     // Vision System Constants
     public static final double CAMERA_MOUNTING_ANGLE = 30.;  //Units are in degrees and referenced to X axis, with CCW being positive
-    public static final double CAMERA_MOUNTING_HEIGHT = 24.;  //Units are in inches
+    public static final double CAMERA_MOUNTING_HEIGHT = 16.375;  //Units are in inches
     public static final double TARGET_HEIGHT = 98.; //Units are in inches
     public static final double DIFFERENTIAL_HEIGHT = TARGET_HEIGHT - CAMERA_MOUNTING_HEIGHT;
     public static final double GRAVITY = 386.; //Units are in inches/sec ^2
@@ -107,22 +107,26 @@ public class RobotMap {
     public static final double TRACK_LENGTH = 24.; // Inches
     public static final double GEAR_TRAVEL = 2.; // Inches
     public static final double GEAR_RATIO = 20.; // 20:1 gearbox
-    public static final double MAGAZINE_LOW= TRACK_LENGTH / GEAR_TRAVEL * GEAR_RATIO * 2048.;
-    public static final double MAGAZINE_VERTICAL = 2048.;
+    public static final double MAGAZINE_LOW = -TRACK_LENGTH / GEAR_TRAVEL * GEAR_RATIO * 2048.; // Phoenix shows 77782
+    public static final double MAGAZINE_VERTICAL = -18000.;
     public static final double PULSES_PER_DEGREE = MAGAZINE_LOW / 65.; // 65 degrees of travel
     public static final double PULSES_PER_RADIAN = PULSES_PER_DEGREE * Math.PI / 180.;
-    public static final double MAGAZINE_CONTROL_WHEEL = PULSES_PER_DEGREE * 30.;
+    public static final double MAGAZINE_CONTROL_WHEEL = -PULSES_PER_DEGREE * 30.;
 
     // Shooter Constants
-    public static final double TOP_SHOOT_WHEEL_PULSES_PER_100MS = 8533.;
-    public static final double BOTTOM_SHOOT_WHEEL_PULSES_PER_100MS = 8533.;
+    public static final double TOP_SHOOT_WHEEL_PULSES_PER_100MS = 20480.; //8533 /15360
+    public static final double BOTTOM_SHOOT_WHEEL_PULSES_PER_100MS = 20480.;
     public static final double TOP_SHOOT_WHEEL_WALL_PULSES_PER_100MS = 1000.;
     public static final double BOTTOM_SHOOT_WHEEL_WALL_PULSES_PER_100MS = 1000.;
+
+    // Magazine Constants
+
+    public static final double MAGAZINE_LENGTH = 18000.;
     
     // DIO Ports
-    public static final int BALL_READY_TO_LOAD = 2;
-    public static final int BALL_IN_FIRST_POSITION = 3;
-    public static final int BALL_IN_FIFTH_POSITION = 4;
+    public static final int BALL_READY_TO_LOAD = 0;
+    public static final int BALL_IN_FIRST_POSITION = 1;
+    public static final int BALL_IN_FIFTH_POSITION = 2;
     public static final int REAR_RIGHT_STEER_CAL = 6;
     public static final int REAR_LEFT_STEER_CAL = 7;
     public static final int FRONT_LEFT_STEER_CAL = 8;

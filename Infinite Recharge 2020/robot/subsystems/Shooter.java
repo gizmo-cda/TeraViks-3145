@@ -12,7 +12,8 @@ import frc.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;;
 
 public class Shooter extends SubsystemBase {
   private final TalonFX shootMotorTop = new TalonFX(RobotMap.SHOOT_TOP_TalonFX_CAN_ID);
@@ -37,8 +38,10 @@ public class Shooter extends SubsystemBase {
       shootMotorTop.set(ControlMode.Velocity, RobotMap.TOP_SHOOT_WHEEL_PULSES_PER_100MS);
       shootMotorBottom.set(ControlMode.Velocity, RobotMap.BOTTOM_SHOOT_WHEEL_PULSES_PER_100MS);
     } else {
-      shootMotorTop.set(ControlMode.Velocity, RobotMap.TOP_SHOOT_WHEEL_WALL_PULSES_PER_100MS);
-      shootMotorBottom.set(ControlMode.Velocity, RobotMap.BOTTOM_SHOOT_WHEEL_WALL_PULSES_PER_100MS);
+      // shootMotorTop.set(ControlMode.Velocity, RobotMap.TOP_SHOOT_WHEEL_WALL_PULSES_PER_100MS);
+      // shootMotorBottom.set(ControlMode.Velocity, RobotMap.BOTTOM_SHOOT_WHEEL_WALL_PULSES_PER_100MS);
+      shootMotorTop.set(ControlMode.Velocity, RobotMap.TOP_SHOOT_WHEEL_PULSES_PER_100MS);
+      shootMotorBottom.set(ControlMode.Velocity, RobotMap.BOTTOM_SHOOT_WHEEL_PULSES_PER_100MS);
     }
   }
 
@@ -55,13 +58,12 @@ public class Shooter extends SubsystemBase {
     shootMotorTop.selectProfileSlot(0, 0); // slot #, PID #
     
     shootMotorTop.setInverted(false);
+    shootMotorTop.setNeutralMode(NeutralMode.Coast);
+    shootMotorTop.configClosedloopRamp(.25, TIMEOUT);
     
     shootMotorTop.setSelectedSensorPosition(0);
     shootMotorTop.configClearPositionOnQuadIdx(false, TIMEOUT);
-    
-    shootMotorTop.configMotionAcceleration(40960, TIMEOUT); // 400 Optical Encoder accel and velocity targets
-    shootMotorTop.configMotionCruiseVelocity(20480, TIMEOUT);
-    
+  
     shootMotorTop.configPeakOutputForward(1., TIMEOUT);
     shootMotorTop.configPeakOutputReverse(-1., TIMEOUT);
     
@@ -88,12 +90,11 @@ public class Shooter extends SubsystemBase {
     shootMotorBottom.selectProfileSlot(0, 0); // slot #, PID #
     
     shootMotorBottom.setInverted(true);
+    shootMotorBottom.setNeutralMode(NeutralMode.Coast);
+    shootMotorBottom.configClosedloopRamp(.25, TIMEOUT);
     
     shootMotorBottom.setSelectedSensorPosition(0);
     shootMotorBottom.configClearPositionOnQuadIdx(false, TIMEOUT);
-    
-    shootMotorBottom.configMotionAcceleration(40960, TIMEOUT); // 400 Optical Encoder accel and velocity targets
-    shootMotorBottom.configMotionCruiseVelocity(20480, TIMEOUT);
     
     shootMotorBottom.configPeakOutputForward(1., TIMEOUT);
     shootMotorBottom.configPeakOutputReverse(-1., TIMEOUT);

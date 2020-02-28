@@ -7,61 +7,48 @@
 
 package frc.robot.commands;
 
-import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
 
-public class ShootBall extends CommandBase {
+public class TiltNudge extends CommandBase {
+  private double upDown;
+  private double position;
   /**
-   * Creates a new ShootBall.
+   * Creates a new TiltNudge.
    */
-  public ShootBall() {
+  public TiltNudge() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
-
-  private boolean forceEnd = false;
-  // private boolean finished = false;
-
-  // public void cancelCommand(){
-  //   if(finished) finished = false;
-  //   else finished = true;
-  // }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("shoot command init");
-    RobotContainer.m_shooter.shootBall(RobotContainer.m_drivetrain.getTargetTrackMode());
-    RobotContainer.m_magazine.resetPosition();
-    delay(500);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    forceEnd = RobotContainer.m_magazine.emptyMagazine();
-    RobotContainer.m_led.shootLED();
-    RobotContainer.m_magazine.emptyMagazine();
+     upDown = -RobotContainer.getOperatorY();
+
+    // Dead-band the joystick inputs to remove noise/errors when centered
+    if ((upDown > -RobotMap.Y_AXIS_THREASHOLD) && (upDown < RobotMap.Y_AXIS_THREASHOLD)) upDown = 0.;
+
+     position = (double) RobotContainer.m_tilt.getTiltPosition();
+    if (upDown > 0) position += 5000.; 
+    if (upDown < 0) position -= 5000.;
+
+    RobotContainer.m_tilt.setTiltAngle(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // RobotContainer.m_tilt.setTiltLow();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return forceEnd;
+    return true;
   }
-
-  private void delay(int msec){
-    try{
-        Thread.sleep(msec);
-    }
-    catch (Exception e){
-        System.out.println("Error in Waitloop");
-    }
-  }
-
 }

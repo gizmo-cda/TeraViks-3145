@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
+
 import frc.robot.commands.*;
 
 /**
@@ -24,7 +25,7 @@ import frc.robot.commands.*;
 public class Robot extends TimedRobot {
   public RobotContainer m_robotContainer;
   private static boolean bootCycle;
-  private static boolean enableDrivetrainCalibration = true;
+  private static boolean enableCalibration = true;
 
   private Command m_autonomousCommand;
 
@@ -41,11 +42,11 @@ public class Robot extends TimedRobot {
 
     RobotContainer.m_gyro.reset();
     RobotContainer.m_drivetrain.init();
-    // RobotContainer.m_magazine.init();
-    // RobotContainer.m_intake.init();
-    // RobotContainer.m_shooter.init();
+    RobotContainer.m_magazine.init();
+    RobotContainer.m_intake.init();
+    RobotContainer.m_shooter.init();
     // RobotContainer.m_lift.init();
-    // RobotContainer.m_tilt.init();
+    RobotContainer.m_tilt.init();
     // RobotContainer.m_colorAndZipline.init();
 
     bootCycle = true;
@@ -76,6 +77,8 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitchDeg());
     // SmartDashboard.putNumber("Gyro Roll", m_gyro.getRollDeg());
     SmartDashboard.putNumber("Ball Count" , RobotContainer.m_magazine.getBallCount());
+    SmartDashboard.putBoolean("BallReady", RobotContainer.m_magazine.getBallReady());
+    SmartDashboard.putBoolean("BallLoaded", RobotContainer.m_magazine.getBallLoaded());
     SmartDashboard.putData(CommandScheduler.getInstance());
   }
   /**
@@ -129,8 +132,8 @@ public class Robot extends TimedRobot {
     // m_gyro.reset();  
     Timer.delay(.5);
 
-    if (bootCycle && enableDrivetrainCalibration){
-      // CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
+    if (bootCycle && enableCalibration){
+      CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
       // CommandScheduler.getInstance().schedule(new CalibrateTilt());
     }
 
@@ -143,7 +146,7 @@ public class Robot extends TimedRobot {
     bootCycle = false;
 
     System.out.println("//////////////////// Teleop /////////////////");
-    // CommandScheduler.getInstance().schedule(new LoadMagazine());
+    CommandScheduler.getInstance().schedule(new LoadMagazine());
     CommandScheduler.getInstance().schedule(new Drive());
     // CommandScheduler.getInstance().schedule(new GetColor());
     // RobotContainer.m_led.clearLED();

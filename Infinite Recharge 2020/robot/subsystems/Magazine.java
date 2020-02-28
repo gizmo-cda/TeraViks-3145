@@ -37,6 +37,7 @@ public class Magazine extends SubsystemBase {
   private int ballReadyCount = 0;
   private boolean stopLoad = false;
   private boolean stopShoot = false;
+  private double magPosition;
 
   private boolean isShootPressed;
 
@@ -115,8 +116,9 @@ public class Magazine extends SubsystemBase {
   // to track the state of the balls exiting the magazine.
   public boolean emptyMagazine() {
     stopShoot = false;
-    if (CommandScheduler.getInstance().isScheduled(new LoadMagazine()))
-      stopLoad = true;
+    magPosition = magazineMotor.getSelectedSensorPosition();
+
+    if (CommandScheduler.getInstance().isScheduled(new LoadMagazine())) stopLoad = true;
 
     // This gets the sensor values every cycle of the scheduler
     canSeeBall = !ballInFifthPos.get();
@@ -140,20 +142,19 @@ public class Magazine extends SubsystemBase {
       }
     }
 
-    if (ballCount > 0 && isShootPressed) {
-      advanceMagazine();
-      stopShoot = false;
-    } else stopMagazine();
-
+    if (magPosition < RobotMap.MAGAZINE_LENGTH) {
+      advanceMagazine();    
+    } else {
+      stopMagazine();
+      RobotContainer.m_shooter.stopMotors();
+      CommandScheduler.getInstance().schedule(new LoadMagazine());
+      stopShoot = true;
+      RobotContainer.m_led.clearStatusLED();
+      ballCount = 0;
+    }
     // This Reschedules the load magazine command and stops the shoot ball command
     // after the mag has finished unloading and the shoot button is no longer being
     // pressed.
-    if (ballCount == 0) {
-      CommandScheduler.getInstance().schedule(new LoadMagazine());
-      stopMagazine();
-      stopShoot = true;
-      RobotContainer.m_led.clearStatusLED();
-    }
     return stopShoot;
   }
 
@@ -163,6 +164,18 @@ public class Magazine extends SubsystemBase {
 
   public boolean getMagFull() {
     return !ballInFifthPos.get();
+  }
+
+  public boolean getBallLoaded() {
+    return ballInFifthPos.get();
+  }
+
+  public boolean getBallReady() {
+    return !ballReadyToLoad.get();
+  }
+
+  public void resetPosition() {
+    magazineMotor.setSelectedSensorPosition(0);
   }
 
   public void init() {
@@ -180,6 +193,16 @@ public class Magazine extends SubsystemBase {
 
     System.out.println("  - Magazine Motor Initialized");
   }
+
+  private void delay(int msec){
+    try{
+        Thread.sleep(msec);
+    }
+    catch (Exception e){
+        System.out.println("Error in Waitloop");
+    }
+  }
+
 
   @Override
   public void periodic() {

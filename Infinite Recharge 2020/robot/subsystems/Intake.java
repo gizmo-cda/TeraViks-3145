@@ -29,10 +29,6 @@ public class Intake extends SubsystemBase {
   public Intake() {
   }
 
-  public void init() {
-    initIntakeMotor();
-  }
-
   public void intakeBall(){
     if (!magFull){
       intakeMotor.set(ControlMode.PercentOutput, 1.);
@@ -52,7 +48,7 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(ControlMode.PercentOutput, 0.);
   }
   
-  private void initIntakeMotor(){
+  public void init(){
     intakeMotor.configFactoryDefault();
     
     intakeMotor.setInverted(false);

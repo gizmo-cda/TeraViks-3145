@@ -50,20 +50,21 @@ public class RobotContainer {
   private final DriveSpeed m_DriveSpeed = new DriveSpeed();
   private final RobotCentric m_RobotCentric = new RobotCentric();
   private final SnakeMode m_SnakeMode = new SnakeMode();
-  private final SpinWheelToColor m_spinWheelToColor = new SpinWheelToColor();
-  private final SpinWheel3Rev m_spinWheel3Rev = new SpinWheel3Rev();
-  public final static LoadMagazine m_loadMagazine = new LoadMagazine();
-  public final static ShootBall m_shootBall = new ShootBall();
-  private final IntakeBall m_intakeBall = new IntakeBall();
-  private final StopIntake m_stopIntake = new StopIntake();
-  private final ReverseIntake m_reverseIntake = new ReverseIntake();
-  private final InvertDrivetrain m_invertDrivetrain = new InvertDrivetrain();
-  private final RetractWinch m_retractWinch = new RetractWinch();
-  private final TargetTrackModeEngage m_targetTrackModeEngage = new TargetTrackModeEngage();
-  private final TargetTrackModeDisengage m_targetTrackModeDisengage = new TargetTrackModeDisengage();
-  private final TiltToControlWheel m_tiltToControlWheel = new TiltToControlWheel();
-  private final MoveZipline m_moveZipline = new MoveZipline();
-  private final TiltMagToLow m_tiltMagToLow = new TiltMagToLow();
+  private final SpinWheelToColor m_SpinWheelToColor = new SpinWheelToColor();
+  private final SpinWheel3Rev m_SpinWheel3Rev = new SpinWheel3Rev();
+  public final static LoadMagazine m_LoadMagazine = new LoadMagazine();
+  public final static ShootBall m_ShootBall = new ShootBall();
+  private final IntakeBall m_IntakeBall = new IntakeBall();
+  private final StopIntake m_StopIntake = new StopIntake();
+  private final ReverseIntake m_ReverseIntake = new ReverseIntake();
+  private final InvertDrivetrain m_InvertDrivetrain = new InvertDrivetrain();
+  private final RetractWinch m_RetractWinch = new RetractWinch();
+  private final TargetTrackModeEngage m_TargetTrackModeEngage = new TargetTrackModeEngage();
+  private final TargetTrackModeDisengage m_TargetTrackModeDisengage = new TargetTrackModeDisengage();
+  private final TiltToControlWheel m_TiltToControlWheel = new TiltToControlWheel();
+  private final MoveZipline m_MoveZipline = new MoveZipline();
+  private final TiltMagToLow m_TiltMagToLow = new TiltMagToLow();
+  private final TiltNudge m_TiltNudge = new TiltNudge();
   // private final Command m_autoCommand;
 
   //Instantiate the Object, SwerveJoy, the joystick that controls the swervedrive
@@ -117,27 +118,28 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Driver Buttons
 
-    btnX.whenPressed(m_invertDrivetrain, false);
-    btnR2.whenPressed(m_shootBall, true);
+    btnX.whenPressed(m_InvertDrivetrain, false);
+    btnR2.whenPressed(m_ShootBall, true);
     btnL2.whenPressed(m_DriveSpeed, false);
     btnL2.whenReleased(m_DriveSpeed, false);
     btnL1.whenPressed(m_DriveSpeed,false);
     btnL1.whenReleased(m_DriveSpeed, false);
 
-    btnStart.whenPressed(m_retractWinch, false);
-    btnTriangle.whenPressed(m_targetTrackModeEngage, false);
-    btnTriangle.whenReleased(m_targetTrackModeDisengage, false);
+    btnStart.whenPressed(m_RetractWinch, false);
+    btnTriangle.whenPressed(m_TargetTrackModeEngage, false);
+    btnTriangle.whenReleased(m_TargetTrackModeDisengage, false);
 
     // Operator Buttons
-    obtnX.whenPressed(m_spinWheelToColor, false);
-    obtnY.whenPressed(m_tiltToControlWheel, false);
-    obtnB.whenPressed(m_spinWheel3Rev, false);
-    obtnRT.whenPressed(m_intakeBall, false);
-    obtnRT.whenReleased(m_stopIntake, false);
-    obtnRB.whenPressed(m_reverseIntake, false);
-    obtnRB.whenReleased(m_stopIntake, false);
-    obtnBack.whenPressed(m_moveZipline, false);
-    obtnA.whenPressed(m_tiltMagToLow, false);
+    obtnX.whenPressed(m_SpinWheelToColor, false);
+    obtnY.whenPressed(m_TiltToControlWheel, false);
+    obtnB.whenPressed(m_SpinWheel3Rev, false);
+    obtnRT.whenPressed(m_IntakeBall, false);
+    obtnRT.whenReleased(m_StopIntake, false);
+    obtnRB.whenPressed(m_ReverseIntake, false);
+    obtnRB.whenReleased(m_StopIntake, false);
+    obtnBack.whenPressed(m_MoveZipline, false);
+    obtnA.whenPressed(m_TiltMagToLow, false);
+    obtnLeftStick.whenPressed(m_TiltNudge, false);
   }
 
   public static double getDriverX() {
