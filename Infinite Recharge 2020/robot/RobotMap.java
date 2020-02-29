@@ -25,10 +25,6 @@ public class RobotMap {
     public static final double MED_SPEED_SCALE = .3;
     public static final double LOW_SPEED_SCALE = .1;
     public static final double ROTATE_SCALE = .4;
-
-    // Max speed and accelleration in METERS
-    public static final double ROBOT_MAX_SPEED = 0.; // m/s
-    public static final double ROBOT_MAX_ACCEL = 0.; // m/s^2
     
     // CAN Bus IDs for Drivetrain Talon SRX controllers
     public static final int FRONT_RIGHT_DRIVE_TalonFX_CAN_ID = 1;
@@ -58,7 +54,6 @@ public class RobotMap {
     public static final double FINAL_DRIVE_WHEEL_GEAR_RATIO = 10.;        // Motor drives the wheel directly, ratio is based on pully sizes
     public static final double STEER_MOTOR_GEAR_REDUCTION_RATIO = 12.;    // Motor drives gear reduction unit
     public static final double STEER_WHEEL_GEAR_RATIO = 4.612;            // Output of gear reduction drives the steering pully
-    public static final double FINAL_STEER_WHEEL_GEAR_RATIO = STEER_MOTOR_GEAR_REDUCTION_RATIO * STEER_WHEEL_GEAR_RATIO;
    
     // Drivetrain Encoder Constants
     public static final double DRIVE_WHEEL_PULSES_PER_100MS = 21480.;     // Used for closed loop velocity
@@ -97,7 +92,7 @@ public class RobotMap {
     public static final double TARGET_HEIGHT = 98.; //Units are in inches
     public static final double DIFFERENTIAL_HEIGHT = TARGET_HEIGHT - CAMERA_MOUNTING_HEIGHT;
     public static final double GRAVITY = 386.; //Units are in inches/sec ^2
-    public static final double VELOCITY = 785.; //Units are in inches/sec (2500rpm with 6in wheel diameter)
+    public static final double VELOCITY = 4239.; //Units are in inches/sec (2500rpm with 6in wheel diameter)
     public static final double CONSTANT_K = (2 * GRAVITY) / (VELOCITY * VELOCITY);
 
     // Lift Positions
@@ -107,11 +102,11 @@ public class RobotMap {
     public static final double TRACK_LENGTH = 24.; // Inches
     public static final double GEAR_TRAVEL = 2.; // Inches
     public static final double GEAR_RATIO = 20.; // 20:1 gearbox
-    public static final double MAGAZINE_LOW = -TRACK_LENGTH / GEAR_TRAVEL * GEAR_RATIO * 2048.; // Phoenix shows 77782
-    public static final double MAGAZINE_VERTICAL = -18000.;
+    public static final double MAGAZINE_LOW = -74766;
+    public static final double MAGAZINE_VERTICAL = -2048.;
     public static final double PULSES_PER_DEGREE = MAGAZINE_LOW / 65.; // 65 degrees of travel
-    public static final double PULSES_PER_RADIAN = PULSES_PER_DEGREE * Math.PI / 180.;
-    public static final double MAGAZINE_CONTROL_WHEEL = -PULSES_PER_DEGREE * 30.;
+    public static final double  PULSES_PER_RADIAN = PULSES_PER_DEGREE * Math.PI / 180.;
+    public static final double MAGAZINE_CONTROL_WHEEL = -39000.;
 
     // Shooter Constants
     public static final double TOP_SHOOT_WHEEL_PULSES_PER_100MS = 20480.; //8533 /15360
@@ -120,8 +115,7 @@ public class RobotMap {
     public static final double BOTTOM_SHOOT_WHEEL_WALL_PULSES_PER_100MS = 1000.;
 
     // Magazine Constants
-
-    public static final double MAGAZINE_LENGTH = 18000.;
+    public static final double MAGAZINE_LENGTH = 205000.;
     
     // DIO Ports
     public static final int BALL_READY_TO_LOAD = 0;
@@ -133,16 +127,12 @@ public class RobotMap {
     public static final int FRONT_RIGHT_STEER_CAL = 9;
 
     // PWM Ports
-    public static final int BALL_COUNT_LED_RIGHT = 0;
-    public static final int BALL_COUNT_LED_LEFT = 1;
-    public static final int STATUS_LED_RIGHT = 2;
-    public static final int STATUS_LED_LEFT = 3;
-    public static final int ARM_SERVO_PWM_PORT = 4;
+    public static final int ARM_SERVO_PWM_PORT = 0;
+    public static final int BALL_COUNT_LED_RIGHT = 1;
+    public static final int BALL_COUNT_LED_LEFT = 2;
+    public static final int STATUS_LED_RIGHT = 3;
+    public static final int STATUS_LED_LEFT = 4;
 
     // Neopixel strip lengths
     public static final int LED_STRIP_LENGTH = 60;   
-    
-    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
-    public static final double kRamseteB = 2;
-    public static final double kRamseteZeta = 0.7;
   }  

@@ -29,10 +29,9 @@ public class ShootBall extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("shoot command init");
     RobotContainer.m_shooter.shootBall(RobotContainer.m_drivetrain.getTargetTrackMode());
     RobotContainer.m_magazine.resetPosition();
-    delay(500);
+    delay(800);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,7 +45,6 @@ public class ShootBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // RobotContainer.m_tilt.setTiltLow();
   }
 
   // Returns true when the command should end.

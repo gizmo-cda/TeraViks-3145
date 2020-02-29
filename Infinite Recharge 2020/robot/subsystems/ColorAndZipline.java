@@ -165,6 +165,7 @@ public class ColorAndZipline extends SubsystemBase {
     while (targetColor != currentColor) {
       currentColor = getColor();
       ziplineMotor.set(ControlMode.PercentOutput, 1.);
+      System.out.println(currentColor);
     }
     ziplineMotor.set(ControlMode.PercentOutput, 0.);
   }

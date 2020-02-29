@@ -50,10 +50,12 @@ public class Magazine extends SubsystemBase {
 
   public void advanceMagazine() {
     magazineMotor.set(ControlMode.PercentOutput, .5);
+    System.out.println("advancing mag");
   }
 
   public void stopMagazine() {
     magazineMotor.set(ControlMode.PercentOutput, 0.);
+    System.out.println("stopping mag");
   }
 
   // *** a command is put on the stack that calls this method every cycle of the
@@ -123,7 +125,7 @@ public class Magazine extends SubsystemBase {
     // This gets the sensor values every cycle of the scheduler
     canSeeBall = !ballInFifthPos.get();
     // This gets the state of the shoot button
-    isShootPressed = RobotContainer.getShootButtonState();
+    // isShootPressed = RobotContainer.getShootButtonState();
 
     // This removes the command that loads the magazine from the scheduler stack so
     // that it does not interfere with the magazine being emptied.
@@ -149,7 +151,9 @@ public class Magazine extends SubsystemBase {
       RobotContainer.m_shooter.stopMotors();
       CommandScheduler.getInstance().schedule(new LoadMagazine());
       stopShoot = true;
+      
       RobotContainer.m_led.clearStatusLED();
+      RobotContainer.m_tilt.setTiltLow();
       ballCount = 0;
     }
     // This Reschedules the load magazine command and stops the shoot ball command
@@ -163,7 +167,7 @@ public class Magazine extends SubsystemBase {
   }
 
   public boolean getMagFull() {
-    return !ballInFifthPos.get();
+    return ballInFifthPos.get();
   }
 
   public boolean getBallLoaded() {

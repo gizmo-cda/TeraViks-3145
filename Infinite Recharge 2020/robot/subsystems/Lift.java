@@ -30,10 +30,6 @@ public class Lift extends SubsystemBase {
     armServo.set(.25);
   }
 
-  public void resetArm(){
-    armServo.set(0.);
-  }
-
   public void retractWinch(){
     liftMotor.set(ControlMode.Position, RobotMap.LIFT_TOP_POSITION);
   }

@@ -78,7 +78,7 @@ public class Drivetrain extends SubsystemBase {
   
   private boolean snakeMode = false; //Crab = false, Snake = True
 
-  private String hiLo = "high"; //High or Low Speed Drivetrain Mode
+  private String hiLo = "high"; //High, Medium, or Low Speed Drivetrain Mode
   
   private boolean targetTrackMode = false;
   private boolean isDriveInverted = false;
@@ -104,6 +104,8 @@ public class Drivetrain extends SubsystemBase {
     
     //Now Build the complete Swerve Drive Object with all four Wheel Modules
     m_SwerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel);
+    // m_SwerveDrive = new SwerveDrive(frontRightWheel, frontRightWheel, frontRightWheel, frontRightWheel);
+
   }
   
   public void init(){
@@ -221,7 +223,7 @@ public class Drivetrain extends SubsystemBase {
 
       tyAverage = queueSumY / tyQueue.size();
 
-      distance = RobotMap.DIFFERENTIAL_HEIGHT / Math.tan(RobotMap.CAMERA_MOUNTING_ANGLE + tyAverage);
+      distance = RobotMap.DIFFERENTIAL_HEIGHT / Math.tan(Math.toRadians(RobotMap.CAMERA_MOUNTING_ANGLE + tyAverage));
 
       tiltPosition = Math.asin(RobotMap.CONSTANT_K * distance) / 2. * RobotMap.PULSES_PER_RADIAN;
 
@@ -233,6 +235,18 @@ public class Drivetrain extends SubsystemBase {
     } else m_SwerveDrive.setMotors(-fwd, -str, rcw, centric, yaw, reverseEn, snakeMode, hiLo);
   }
   
+  public double getDistance(){
+    return distance;
+  }
+
+  public double getTargetTiltPos(){
+    return tiltPosition;
+  }
+
+  public double getTyAvg(){
+    return tyAverage;
+  }
+
   private void antiRoll(double roll){
     setCrabMode();
     
@@ -301,6 +315,10 @@ public class Drivetrain extends SubsystemBase {
     if(isDriveInverted) {
       isDriveInverted = false;
     } else isDriveInverted = true;
+  }
+
+  public void maxDrivePower(double power){
+    m_SwerveDrive.setMaxDriveMotorPower(power);
   }
   
   private void delay(int msec){

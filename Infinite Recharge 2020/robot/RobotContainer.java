@@ -135,8 +135,8 @@ public class RobotContainer {
     obtnB.whenPressed(m_SpinWheel3Rev, false);
     obtnRT.whenPressed(m_IntakeBall, false);
     obtnRT.whenReleased(m_StopIntake, false);
-    obtnRB.whenPressed(m_ReverseIntake, false);
-    obtnRB.whenReleased(m_StopIntake, false);
+    obtnLT.whenPressed(m_ReverseIntake, false);
+    obtnLT.whenReleased(m_StopIntake, false);
     obtnBack.whenPressed(m_MoveZipline, false);
     obtnA.whenPressed(m_TiltMagToLow, false);
     obtnLeftStick.whenPressed(m_TiltNudge, false);

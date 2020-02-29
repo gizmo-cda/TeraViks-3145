@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
     RobotContainer.m_shooter.init();
     // RobotContainer.m_lift.init();
     RobotContainer.m_tilt.init();
-    // RobotContainer.m_colorAndZipline.init();
+    RobotContainer.m_colorAndZipline.init();
 
     bootCycle = true;
   }
@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    
+
     // SmartDashboard.putBoolean("Centric Set", m_drivetrain.getCentric());
     // SmartDashboard.putNumber("Gyro Yaw", m_gyro.getYawDeg());
     // SmartDashboard.putNumber("Gyro Pitch", m_gyro.getPitchDeg());
@@ -79,6 +79,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Ball Count" , RobotContainer.m_magazine.getBallCount());
     SmartDashboard.putBoolean("BallReady", RobotContainer.m_magazine.getBallReady());
     SmartDashboard.putBoolean("BallLoaded", RobotContainer.m_magazine.getBallLoaded());
+    SmartDashboard.putBoolean("Mag Full", RobotContainer.m_magazine.getMagFull());
+    SmartDashboard.putNumber("TyAverage", RobotContainer.m_drivetrain.getTyAvg());
+    SmartDashboard.putNumber("TargetTiltPos", RobotContainer.m_drivetrain.getTargetTiltPos());
+    SmartDashboard.putNumber("distance to target", RobotContainer.m_drivetrain.getDistance());
     SmartDashboard.putData(CommandScheduler.getInstance());
   }
   /**
@@ -86,8 +90,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    RobotContainer.m_led.clearLED();
     System.out.println("//////////////////// DISABLED Init /////////////////");
+    // RobotContainer.m_led.clearLED();
+    RobotContainer.m_tilt.stopTilt();
   }
 
   @Override
@@ -101,12 +106,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    Timer.delay(.5);
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
+    if (bootCycle && enableCalibration){
+      CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
+      CommandScheduler.getInstance().schedule(new CalibrateTilt());
+    } else CommandScheduler.getInstance().schedule(new TiltMagToLow());
+
+    RobotContainer.m_drivetrain.maxDrivePower(.5);
+
+    AutoPaths.drivePathA();
   }
 
   /**
@@ -118,27 +127,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
-
     // Adding calDriveTrain to scheduler if booting (ie not enable/disable in DS)
     System.out.println("//////////////////// TeleopInit /////////////////");
 
-    // m_gyro.reset();  
     Timer.delay(.5);
 
     if (bootCycle && enableCalibration){
       CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
-      // CommandScheduler.getInstance().schedule(new CalibrateTilt());
-    }
+      CommandScheduler.getInstance().schedule(new CalibrateTilt());
+    } else CommandScheduler.getInstance().schedule(new TiltMagToLow());
 
-    // m_vision.setCamMode(1); // default to regular vision mode, not tracking mode
-    // m_vision.ledOff();
+    RobotContainer.m_drivetrain.maxDrivePower(1.);
+
+    RobotContainer.m_shooterCam.setCamMode(1); // default to regular vision mode, not tracking mode
+    RobotContainer.m_shooterCam.ledOff();
+
+    RobotContainer.m_intakeCam.setCamMode(1); // default to regular vision mode, not tracking mode
+    RobotContainer.m_intakeCam.ledOff();
 
     CommandScheduler.getInstance().schedule(new DriveSpeed());
     CommandScheduler.getInstance().run();
@@ -148,7 +153,6 @@ public class Robot extends TimedRobot {
     System.out.println("//////////////////// Teleop /////////////////");
     CommandScheduler.getInstance().schedule(new LoadMagazine());
     CommandScheduler.getInstance().schedule(new Drive());
-    // CommandScheduler.getInstance().schedule(new GetColor());
     // RobotContainer.m_led.clearLED();
   }
 

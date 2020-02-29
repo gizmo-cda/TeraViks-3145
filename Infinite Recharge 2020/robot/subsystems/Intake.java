@@ -13,8 +13,6 @@ import frc.robot.RobotMap;
 import frc.robot.commands.LoadMagazine;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Intake extends SubsystemBase {
@@ -33,9 +31,9 @@ public class Intake extends SubsystemBase {
     if (!magFull){
       intakeMotor.set(ControlMode.PercentOutput, 1.);
       
-      if (!CommandScheduler.getInstance().isScheduled(new LoadMagazine())){
-        CommandScheduler.getInstance().schedule(new LoadMagazine());
-      }
+      // if (!CommandScheduler.getInstance().isScheduled(new LoadMagazine())){
+        // CommandScheduler.getInstance().schedule(new LoadMagazine());
+      // }
     } else stopIntake();
     // RobotContainer.m_led.intakeLED();
   }

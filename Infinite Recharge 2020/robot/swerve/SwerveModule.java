@@ -166,11 +166,11 @@ public class SwerveModule {
         steerMotor.setSelectedSensorPosition(0);
         steerMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
 
-        steerMotor.configMotionAcceleration(40960, TIMEOUT);  //2048 CTRE Encoder accel and velocity targets
-        steerMotor.configMotionCruiseVelocity(20480, TIMEOUT);
+        steerMotor.configMotionAcceleration(8192, TIMEOUT);  //2048 CTRE Encoder accel and velocity targets
+        steerMotor.configMotionCruiseVelocity(8192, TIMEOUT);
 
-        steerMotor.configPeakOutputForward(.2, TIMEOUT);
-        steerMotor.configPeakOutputReverse(-.2, TIMEOUT);
+        steerMotor.configPeakOutputForward(.4, TIMEOUT);
+        steerMotor.configPeakOutputReverse(-.4, TIMEOUT);
         
         steerMotor.configNominalOutputForward(0, TIMEOUT);
         steerMotor.configNominalOutputReverse(0, TIMEOUT);
