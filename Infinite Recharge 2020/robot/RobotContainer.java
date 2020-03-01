@@ -50,8 +50,8 @@ public class RobotContainer {
   private final DriveSpeed m_DriveSpeed = new DriveSpeed();
   private final RobotCentric m_RobotCentric = new RobotCentric();
   private final SnakeMode m_SnakeMode = new SnakeMode();
-  private final SpinWheelToColor m_SpinWheelToColor = new SpinWheelToColor();
-  private final SpinWheel3Rev m_SpinWheel3Rev = new SpinWheel3Rev();
+  private final RotateWheelToColor m_RotateWheelToColor = new RotateWheelToColor();
+  private final RotateWheel3Times m_RotateWheel3Times = new RotateWheel3Times();
   public final static LoadMagazine m_LoadMagazine = new LoadMagazine();
   public final static ShootBall m_ShootBall = new ShootBall();
   private final IntakeBall m_IntakeBall = new IntakeBall();
@@ -130,9 +130,9 @@ public class RobotContainer {
     btnTriangle.whenReleased(m_TargetTrackModeDisengage, false);
 
     // Operator Buttons
-    obtnX.whenPressed(m_SpinWheelToColor, false);
+    obtnX.whenPressed(m_RotateWheelToColor, false);
     obtnY.whenPressed(m_TiltToControlWheel, false);
-    obtnB.whenPressed(m_SpinWheel3Rev, false);
+    obtnB.whenPressed(m_RotateWheel3Times, false);
     obtnRT.whenPressed(m_IntakeBall, false);
     obtnRT.whenReleased(m_StopIntake, false);
     obtnLT.whenPressed(m_ReverseIntake, false);

@@ -17,6 +17,8 @@ public class Drive extends CommandBase {
   private Double str; //Strafe, X axis, 1 to -1 from Joystick
   private Double rcw; //Rotate CW, Z axis, 1 to -1 from Joystick, refernced 1=180 CW -1=-180 CW
 
+  private boolean forceEnd = false;
+
   /**
    * Creates a new Drive.
    */
@@ -65,6 +67,8 @@ public class Drive extends CommandBase {
 
     // Call Drivetrain Subsystem to move
     RobotContainer.m_drivetrain.move(fwd, str, rcw);
+
+    forceEnd = RobotContainer.m_lift.getStopDrive();
   }
 
   // Called once the command ends or is interrupted.
@@ -75,6 +79,6 @@ public class Drive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return forceEnd;
   }
 }

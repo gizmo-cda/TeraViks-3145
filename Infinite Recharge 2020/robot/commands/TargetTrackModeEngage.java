@@ -24,6 +24,7 @@ public class TargetTrackModeEngage extends InstantCommand {
     RobotContainer.m_drivetrain.setTargetTrackMode(true);
     RobotContainer.m_shooterCam.setPipeline(0);
     RobotContainer.m_shooterCam.setCamMode(0);
+    RobotContainer.m_shooterCam.ledOn();
     RobotContainer.m_drivetrain.turnOffCentric();
   }
 }

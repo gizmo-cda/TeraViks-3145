@@ -67,6 +67,10 @@ public class ColorAndZipline extends SubsystemBase {
 
   private String currentColor;
   private String targetColor;
+  private String gameData;
+  private boolean endCommand;
+  private int colorCheck;
+  private boolean hasSeenColor;
 
   public String getColor() {
     /**
@@ -117,23 +121,42 @@ public class ColorAndZipline extends SubsystemBase {
     return colorString;
   }
 
-  public void rotateWheel() {
-    targetColor = getColor();
-    int colorCheck = 0;
-
-    while (colorCheck < 7) {
-      currentColor = getColor();
-      ziplineMotor.set(ControlMode.PercentOutput, 1.);
-      if (currentColor == targetColor) {
-        colorCheck += 1;
-        Timer.delay(1.);
-        ziplineMotor.set(ControlMode.PercentOutput, 0.);
-      }
-    }
+  public void resetColorCheck() {
+    colorCheck = 0;
   }
 
-  public void rotateWheelToColor() {
-    String gameData;
+  public boolean rotateWheel() {
+    targetColor = getColor();
+    currentColor = getColor();
+
+
+    if (colorCheck < 7) {
+      endCommand = false;
+
+      if (currentColor == targetColor && !hasSeenColor) {
+        colorCheck ++;
+        hasSeenColor = true;
+      } else hasSeenColor = false;
+    } else endCommand = true;
+
+    return endCommand;
+  }
+  
+  public boolean rotateWheelToColor() {
+    getColor();
+    currentColor = getColor();
+
+    if (targetColor != currentColor) {
+      endCommand = false;
+    } else {
+      stopZipline();
+      endCommand = true;
+    }
+
+    return endCommand;
+  }
+
+  public void getGameData(){
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     if (gameData.length() > 0) {
       switch (gameData.charAt(0)) {
@@ -161,18 +184,15 @@ public class ColorAndZipline extends SubsystemBase {
       // Code for no data received yet
       targetColor = "null";
     }
-
-    while (targetColor != currentColor) {
-      currentColor = getColor();
-      ziplineMotor.set(ControlMode.PercentOutput, 1.);
-      System.out.println(currentColor);
-    }
-    ziplineMotor.set(ControlMode.PercentOutput, 0.);
   }
 
   // ZIPLINE MOTOR COMMANDS
   // the zipline and color wheel motors are attatched to the same controller due
   // to running out of space on the pdp
+
+  public void startZipline() {
+    ziplineMotor.set(ControlMode.PercentOutput, 1.);
+  }
 
   public void moveZipline(double operatorX) {
     ziplineMotor.set(ControlMode.PercentOutput, operatorX);

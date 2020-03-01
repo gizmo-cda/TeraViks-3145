@@ -23,5 +23,6 @@ public class TargetTrackModeDisengage extends InstantCommand {
   public void initialize() {
     RobotContainer.m_drivetrain.setTargetTrackMode(false);
     RobotContainer.m_shooterCam.setCamMode(1);
+    RobotContainer.m_shooterCam.ledOff();
   }
 }

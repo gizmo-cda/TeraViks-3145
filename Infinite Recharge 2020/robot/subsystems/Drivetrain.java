@@ -225,9 +225,9 @@ public class Drivetrain extends SubsystemBase {
 
       distance = RobotMap.DIFFERENTIAL_HEIGHT / Math.tan(Math.toRadians(RobotMap.CAMERA_MOUNTING_ANGLE + tyAverage));
 
-      tiltPosition = Math.asin(RobotMap.CONSTANT_K * distance) / 2. * RobotMap.PULSES_PER_RADIAN;
+      tiltPosition = 180 * Math.asin(RobotMap.CONSTANT_K * distance) / 2. /** RobotMap.PULSES_PER_DEGREE*/;
 
-      RobotContainer.m_tilt.setTiltAngle(tiltPosition);
+      // RobotContainer.m_tilt.setTiltAngle(tiltPosition);
     }
     
     if(!isDriveInverted){

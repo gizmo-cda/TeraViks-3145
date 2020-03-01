@@ -39,7 +39,7 @@ public class ShootBall extends CommandBase {
   public void execute() {
     forceEnd = RobotContainer.m_magazine.emptyMagazine();
     RobotContainer.m_led.shootLED();
-    RobotContainer.m_magazine.emptyMagazine();
+    // RobotContainer.m_magazine.emptyMagazine();
   }
 
   // Called once the command ends or is interrupted.

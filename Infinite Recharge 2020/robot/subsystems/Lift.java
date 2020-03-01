@@ -20,18 +20,33 @@ public class Lift extends SubsystemBase {
   private Servo armServo = new Servo(RobotMap.ARM_SERVO_PWM_PORT);
   private int TIMEOUT = RobotMap.TalonFX_TIMEOUT;
 
+  private boolean stopDrive = false;
+
   /**
    * Creates a new Lift.
    */
   public Lift() {
   }
 
+  public void init(){
+    // initServo();
+    initWinch();
+  }
+
   public void releaseArm(){
-    armServo.set(.25);
+    armServo.setAngle(180.);
   }
 
   public void retractWinch(){
-    liftMotor.set(ControlMode.Position, RobotMap.LIFT_TOP_POSITION);
+    liftMotor.setSelectedSensorPosition(0);
+    
+    delay(100);
+    liftMotor.set(ControlMode.MotionMagic, RobotMap.LIFT_TOP_POSITION);
+    stopDrive = true;
+  }
+
+  public boolean getStopDrive(){
+    return stopDrive;
   }
 
   public void reverseWinch(){
@@ -42,7 +57,11 @@ public class Lift extends SubsystemBase {
     liftMotor.set(ControlMode.PercentOutput, 0.);
   }
 
-  public void init(){
+  public void initServo(){
+    armServo.setBounds(2500., 0., 0., 0., 500.);
+  }
+
+  public void initWinch(){
     liftMotor.configFactoryDefault();
     
     liftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, TIMEOUT); 
@@ -53,7 +72,7 @@ public class Lift extends SubsystemBase {
     liftMotor.setSelectedSensorPosition(0);
     liftMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
     
-    liftMotor.configMotionAcceleration(40960, TIMEOUT); // 400 Optical Encoder accel and velocity targets
+    liftMotor.configMotionAcceleration(16384, TIMEOUT); // 400 Optical Encoder accel and velocity targets
     liftMotor.configMotionCruiseVelocity(20480, TIMEOUT);
     
     liftMotor.configPeakOutputForward(1., TIMEOUT);
@@ -66,13 +85,22 @@ public class Lift extends SubsystemBase {
     
     liftMotor.config_IntegralZone(0, 100, TIMEOUT); // I-zone limits
     
-    liftMotor.config_kP(0, .05, TIMEOUT);
-    liftMotor.config_kI(0, 0.0001, TIMEOUT);
-    liftMotor.config_kD(0, 2., TIMEOUT);
-    liftMotor.config_kF(0, .05, TIMEOUT);
+    liftMotor.config_kP(0, 2., TIMEOUT);
+    liftMotor.config_kI(0, 0., TIMEOUT);
+    liftMotor.config_kD(0, 10., TIMEOUT);
+    liftMotor.config_kF(0, 0., TIMEOUT);
     
 
     System.out.println("  - Lift Motor Initialized");
+  }
+  
+  private void delay(int msec){
+    try{
+        Thread.sleep(msec);
+    }
+    catch (Exception e){
+        System.out.println("Error in Waitloop");
+    }
   }
 
   @Override
