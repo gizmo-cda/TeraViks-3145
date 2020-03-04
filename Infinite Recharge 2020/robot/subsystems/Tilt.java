@@ -104,7 +104,7 @@ public class Tilt extends SubsystemBase {
     tiltMotor.setSelectedSensorPosition(0);
     tiltMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
 
-    tiltMotor.configMotionAcceleration(6826, TIMEOUT); // 400 Optical Encoder accel and velocity targets
+    tiltMotor.configMotionAcceleration(500, TIMEOUT); // 400 Optical Encoder accel and velocity targets
     tiltMotor.configMotionCruiseVelocity(6826, TIMEOUT);
 
     tiltMotor.configPeakOutputForward(1., TIMEOUT);

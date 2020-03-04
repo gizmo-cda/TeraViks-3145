@@ -53,6 +53,10 @@ public class ShootBall extends CommandBase {
     return forceEnd;
   }
 
+  public boolean getForceEnd(){
+    return forceEnd;
+  }
+
   private void delay(int msec){
     try{
         Thread.sleep(msec);

@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class IntakeCam extends SubsystemBase {
   
-  private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-intake");
   
   private NetworkTableEntry tx= table.getEntry("tx");  //Horizontal (relatie to cam) offset from target: left 0<x<27, right -27<x<0
   private NetworkTableEntry ty= table.getEntry("ty");  //Vertical (relative to cam) offset from target: below 0<y<20.5, above -20.5<y<0

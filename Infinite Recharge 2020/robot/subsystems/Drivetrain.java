@@ -247,6 +247,10 @@ public class Drivetrain extends SubsystemBase {
     return tyAverage;
   }
 
+  public double getTxAvg(){
+    return txAverage;
+  }
+
   private void antiRoll(double roll){
     setCrabMode();
     
