@@ -104,8 +104,8 @@ public class Tilt extends SubsystemBase {
     tiltMotor.setSelectedSensorPosition(0);
     tiltMotor.configClearPositionOnQuadIdx(false, TIMEOUT);
 
-    tiltMotor.configMotionAcceleration(500, TIMEOUT); // 400 Optical Encoder accel and velocity targets
-    tiltMotor.configMotionCruiseVelocity(6826, TIMEOUT);
+    tiltMotor.configMotionAcceleration(12000, TIMEOUT); // 400 Optical Encoder accel and velocity targets
+    tiltMotor.configMotionCruiseVelocity(15000, TIMEOUT);
 
     tiltMotor.configPeakOutputForward(1., TIMEOUT);
     tiltMotor.configPeakOutputReverse(-1., TIMEOUT);
@@ -120,9 +120,9 @@ public class Tilt extends SubsystemBase {
 
     //tiltMotor.config_IntegralZone(0, 100, TIMEOUT); // I-zone limits
 
-    tiltMotor.config_kP(0, 2., TIMEOUT);
-    tiltMotor.config_kI(0, 0., TIMEOUT);
-    tiltMotor.config_kD(0, 10., TIMEOUT);
+    tiltMotor.config_kP(0, .9, TIMEOUT);
+    tiltMotor.config_kI(0, .0001, TIMEOUT);
+    tiltMotor.config_kD(0, .1, TIMEOUT);
     tiltMotor.config_kF(0, 0., TIMEOUT);
 
     System.out.println("  - Tilt Motor Initialized");

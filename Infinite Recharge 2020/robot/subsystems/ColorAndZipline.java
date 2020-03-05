@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import frc.robot.RobotMap;
@@ -191,7 +190,7 @@ public class ColorAndZipline extends SubsystemBase {
   // to running out of space on the pdp
 
   public void startZipline() {
-    ziplineMotor.set(ControlMode.PercentOutput, 1.);
+    ziplineMotor.set(ControlMode.PercentOutput, .3);
   }
 
   public void moveZipline(double operatorX) {

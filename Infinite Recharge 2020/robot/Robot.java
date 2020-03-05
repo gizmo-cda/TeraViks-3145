@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
@@ -27,8 +26,6 @@ public class Robot extends TimedRobot {
   private static boolean bootCycle;
   private static boolean enableCalibration = true;
 
-  private Command m_autonomousCommand;
-
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -46,8 +43,8 @@ public class Robot extends TimedRobot {
     // RobotContainer.m_intake.init();
     // RobotContainer.m_shooter.init();
     // RobotContainer.m_lift.init();
-    RobotContainer.m_tilt.init();
-    // RobotContainer.m_colorAndZipline.init();
+    // RobotContainer.m_tilt.init();
+    RobotContainer.m_colorAndZipline.init();
 
     bootCycle = true;
     RobotContainer.m_drivetrain.setTargetTrackMode(true);
@@ -111,12 +108,12 @@ public class Robot extends TimedRobot {
 
     if (bootCycle && enableCalibration){
       CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
-      CommandScheduler.getInstance().schedule(new CalibrateTilt());
-    } else CommandScheduler.getInstance().schedule(new TiltMagToLow());
+      // CommandScheduler.getInstance().schedule(new CalibrateTilt());
+    } else /*CommandScheduler.getInstance().schedule(new TiltMagToLow());*/
 
     RobotContainer.m_drivetrain.maxDrivePower(.5);
 
-    AutoPaths.drivePathA();
+    AutoPaths.driveForward();
   }
 
   /**
@@ -135,7 +132,7 @@ public class Robot extends TimedRobot {
 
     if (bootCycle && enableCalibration){
       // CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
-      CommandScheduler.getInstance().schedule(new CalibrateTilt());
+      // CommandScheduler.getInstance().schedule(new CalibrateTilt());
     } /*else CommandScheduler.getInstance().schedule(new TiltMagToLow());*/
 
     // RobotContainer.m_drivetrain.maxDrivePower(1.);

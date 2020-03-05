@@ -47,7 +47,7 @@ public class ShooterCam extends SubsystemBase {
   }
   
   public void setPipeline(int newPipeline){
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(newPipeline);   
+    NetworkTableInstance.getDefault().getTable("limelight-shooter").getEntry("pipeline").setNumber(newPipeline);   
   }
   
   public double getTv(){
@@ -88,4 +88,8 @@ public class ShooterCam extends SubsystemBase {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }*/
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
 }

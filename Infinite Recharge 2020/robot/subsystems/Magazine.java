@@ -39,8 +39,6 @@ public class Magazine extends SubsystemBase {
   private boolean stopShoot = false;
   private double magPosition;
 
-  private boolean isShootPressed;
-
   /**
    * Creates a new Magazine.
    */
