@@ -38,7 +38,7 @@ public class ShootBall extends CommandBase {
   @Override
   public void execute() {
     forceEnd = RobotContainer.m_magazine.emptyMagazine();
-    RobotContainer.m_led.shootLED();
+    // RobotContainer.m_led.shootLED();
     // RobotContainer.m_magazine.emptyMagazine();
   }
 

@@ -27,20 +27,29 @@ public class AutoPaths {
     }
 
     // shoot 3, move to intake 1, intake 1, move to intake 1, intake 1, move, shoot
-    public static boolean ShootIntake2Shoot() {
+    public static boolean targetStartThreeBallCenter() {
         shoot();
-        RobotContainer.m_drivetrain.driveDistance(1., .577, 107.);
+
+        RobotContainer.m_drivetrain.driveDistance(1., 1., 147.);
+        RobotContainer.m_drivetrain.rotateToHeading(.5, -123.);
+        RobotContainer.m_drivetrain.driveDistance(0., 1., 22.);
+
         startIntake();
-        Timer.delay(.5);
+        RobotContainer.m_drivetrain.driveDistance(1., 0., 54.);
         stopIntake();
-        // 1 MORE INTAKE
-        RobotContainer.m_drivetrain.driveDistance(1., 0., 38.);
-        RobotContainer.m_drivetrain.rotateToHeading(1., 45.);
+
+        RobotContainer.m_drivetrain.driveDistance(0., -1., 38.);
+        RobotContainer.m_drivetrain.driveDistance(1., 0., 70.);
+        RobotContainer.m_drivetrain.rotateToHeading(.5, 0.);
+
         shoot();
+
         return true;
     }
 
-    public static boolean EightBallCenter() {
+    public static boolean sideStartThreeBallTrench() {
+        RobotContainer.m_drivetrain.driveDistance(0., 1., 147.);
+        
         return true;
     }
 
@@ -49,10 +58,16 @@ public class AutoPaths {
 
     private static void shoot() {
         CommandScheduler.getInstance().schedule(new TargetTrackModeEngage());
-        while (RobotContainer.m_drivetrain.getTxAvg() > -1. && RobotContainer.m_drivetrain.getTxAvg() < 1.) {
+        // CommandScheduler.getInstance().run();
+        
+        RobotContainer.m_drivetrain.move(0, 0, 0);
+        while (RobotContainer.m_drivetrain.getTxAvg() < -1. && RobotContainer.m_drivetrain.getTxAvg() > 1.) {
             RobotContainer.m_drivetrain.move(0, 0, 0);
         }
+
         CommandScheduler.getInstance().schedule(new TargetTrackModeDisengage());
+        // CommandScheduler.getInstance().run();
+        
         CommandScheduler.getInstance().schedule(new ShootBall());
         while (!RobotContainer.m_ShootBall.getForceEnd()) {
             CommandScheduler.getInstance().run();

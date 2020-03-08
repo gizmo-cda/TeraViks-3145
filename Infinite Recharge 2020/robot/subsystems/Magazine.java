@@ -150,7 +150,7 @@ public class Magazine extends SubsystemBase {
       CommandScheduler.getInstance().schedule(new LoadMagazine());
       stopShoot = true;
       
-      RobotContainer.m_led.clearStatusLED();
+      // RobotContainer.m_led.clearStatusLED();
       RobotContainer.m_tilt.setTiltLow();
       ballCount = 0;
     }

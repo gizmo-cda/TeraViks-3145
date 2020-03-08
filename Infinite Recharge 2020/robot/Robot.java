@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     // RobotContainer.m_shooter.init();
     // RobotContainer.m_lift.init();
     // RobotContainer.m_tilt.init();
-    RobotContainer.m_colorAndZipline.init();
+    // RobotContainer.m_colorAndZipline.init();
 
     bootCycle = true;
     RobotContainer.m_drivetrain.setTargetTrackMode(true);
@@ -69,6 +69,8 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    RobotContainer.m_colorAndZipline.getColor();
 
     // SmartDashboard.putBoolean("Centric Set", m_drivetrain.getCentric());
     // SmartDashboard.putNumber("Gyro Yaw", m_gyro.getYawDeg());
@@ -107,9 +109,11 @@ public class Robot extends TimedRobot {
     Timer.delay(.5);
 
     if (bootCycle && enableCalibration){
-      CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
-      // CommandScheduler.getInstance().schedule(new CalibrateTilt());
-    } else /*CommandScheduler.getInstance().schedule(new TiltMagToLow());*/
+      // CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
+      CommandScheduler.getInstance().schedule(new CalibrateTilt());
+    } else /*CommandScheduler.getInstance().schedule(new TiltMagToLow())*/;
+    
+    CommandScheduler.getInstance().schedule(new LoadMagazine());
 
     RobotContainer.m_drivetrain.maxDrivePower(.5);
 
@@ -137,8 +141,8 @@ public class Robot extends TimedRobot {
 
     // RobotContainer.m_drivetrain.maxDrivePower(1.);
 
-    // RobotContainer.m_shooterCam.setCamMode(1); // default to regular vision mode, not tracking mode
-    // RobotContainer.m_shooterCam.ledOff();
+    RobotContainer.m_shooterCam.setCamMode(1); // default to regular vision mode, not tracking mode
+    RobotContainer.m_shooterCam.ledOff();
 
     RobotContainer.m_intakeCam.setCamMode(1); // default to regular vision mode, not tracking mode
     RobotContainer.m_intakeCam.ledOff();

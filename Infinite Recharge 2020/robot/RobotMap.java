@@ -7,13 +7,18 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
- * The RobotMap class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants.  This class should not be used for any other purpose.  All constants should be
- * declared globally (i.e. public static).  Do not put anything functional in this class.
+ * The RobotMap class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean constants. This class should not be used for any other
+ * purpose. All constants should be declared globally (i.e. public static). Do
+ * not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the constants are needed, to reduce verbosity.
  */
 public class RobotMap {
     // Constants for Robot Dimensions
@@ -91,9 +96,9 @@ public class RobotMap {
     public static final double CAMERA_MOUNTING_HEIGHT = 18.5;  //Units are in inches //TODO: readjust
     public static final double TARGET_HEIGHT = 98.; //Units are in inches
     public static final double DIFFERENTIAL_HEIGHT = TARGET_HEIGHT - CAMERA_MOUNTING_HEIGHT;
-    public static final double GRAVITY = 386.4; //Units are in inches/sec ^2
-    public static final double VELOCITY = 360.; //Units are in inches/sec (2500rpm with 6in wheel diameter)
-    public static final double CONSTANT_K = (2 * GRAVITY) / (VELOCITY * VELOCITY);
+    // public static final double GRAVITY = 386.4; //Units are in inches/sec ^2
+    // public static final double VELOCITY = 360.; //Units are in inches/sec (2500rpm with 6in wheel diameter)
+    // public static final double CONSTANT_K = (2 * GRAVITY) / (VELOCITY * VELOCITY);
 
     // Lift Positions
     public static final double LIFT_TOP_POSITION = 225000.;
@@ -129,11 +134,53 @@ public class RobotMap {
 
     // PWM Ports
     public static final int ARM_SERVO_PWM_PORT = 0;
-    public static final int BALL_COUNT_LED_RIGHT = 1;
-    public static final int BALL_COUNT_LED_LEFT = 2;
-    public static final int STATUS_LED_RIGHT = 3;
-    public static final int STATUS_LED_LEFT = 4;
+    public static final int FRONT_RIGHT_LED = 1;
+    public static final int FRONT_LEFT_LED = 2;
+    public static final int REAR_LEFT_LED = 3;
+    public static final int REAR_RIGHT_LED = 4;
+    public static final int MAGAZINE_LED = 5;
 
     // Neopixel strip lengths
-    public static final int LED_STRIP_LENGTH = 60;
+    public static final int DRIVE_LED_LENGTH = 8;
+    public static final int MAG_LED_LENGTH = 12;
+
+    // Lookup table for shooting. Each index is 1 ft from the target
+    public static final ArrayList<Double> SHOOT_ANGLES = new ArrayList<Double>(Arrays.asList(
+      MAGAZINE_VERTICAL, // 0 ft
+      MAGAZINE_LOW / 10., // 1 ft
+      MAGAZINE_LOW / 10., // 2 ft
+      MAGAZINE_LOW / 10., // 3 ft
+      MAGAZINE_LOW / 10., // 4 ft
+      MAGAZINE_LOW / 5., // 5 ft
+      MAGAZINE_LOW / 5., // 6 ft
+      MAGAZINE_LOW / 5., // 7 ft
+      MAGAZINE_LOW / 5., // 8 ft
+      MAGAZINE_LOW / 5., // 9 ft
+      MAGAZINE_LOW / 4., // 10 ft
+      MAGAZINE_LOW / 4., // 11 ft
+      MAGAZINE_LOW / 4., // 12 ft
+      MAGAZINE_LOW / 4., // 13 ft
+      MAGAZINE_LOW / 4., // 14 ft
+      MAGAZINE_LOW / 3., // 15 ft
+      MAGAZINE_LOW / 3., // 16 ft
+      MAGAZINE_LOW / 3., // 17 ft
+      MAGAZINE_LOW / 3., // 18 ft
+      MAGAZINE_LOW / 3., // 19 ft
+      MAGAZINE_LOW / 2., // 20 ft
+      MAGAZINE_LOW / 2., // 21 ft
+      MAGAZINE_LOW / 2., // 22 ft
+      MAGAZINE_LOW / 2., // 23 ft
+      MAGAZINE_LOW / 2., // 24 ft
+      MAGAZINE_LOW / 1.5, // 25 ft
+      MAGAZINE_LOW / 1.5, // 26 ft
+      MAGAZINE_LOW / 1.5, // 27 ft
+      MAGAZINE_LOW / 1.5, // 28 ft
+      MAGAZINE_LOW / 1.5, // 29 ft
+      MAGAZINE_LOW, // 30 ft
+      MAGAZINE_LOW, // 31 ft
+      MAGAZINE_LOW, // 32 ft
+      MAGAZINE_LOW, // 33 ft
+      MAGAZINE_LOW, // 34 ft
+      MAGAZINE_LOW // 35 ft
+      ));
   }  

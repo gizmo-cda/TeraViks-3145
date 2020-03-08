@@ -1,9 +1,9 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
+// /*----------------------------------------------------------------------------*/
+// /* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+// /* Open Source Software - may be modified and shared by FRC teams. The code   */
+// /* must be accompanied by the FIRST BSD license file in the root directory of */
+// /* the project.                                                               */
+// /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
 
@@ -14,161 +14,150 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 public class LED extends SubsystemBase {
-  // Create LED Objects
-  private static AddressableLED m_ballCountLEDR;
-  private static AddressableLED m_ballCountLEDL;
-  private static AddressableLED m_statusLEDR;
-  private static AddressableLED m_statusLEDL;
+//   // Create LED Objects
+//   private static AddressableLED frontRightLED;
+//   private static AddressableLED frontLeftLED;
+//   private static AddressableLED rearLeftLED;
+//   private static AddressableLED rearRightLED;
+//   private static AddressableLED magLED;
 
-  // Create LED Buffer Objects
-  private static AddressableLEDBuffer m_ballCountLEDBufferR;
-  private static AddressableLEDBuffer m_ballCountLEDBufferL;
-  private static AddressableLEDBuffer m_statusLEDBufferR;
-  private static AddressableLEDBuffer m_statusLEDBufferL;
+//   // Create LED Buffer Objects
+//   private static AddressableLEDBuffer frontRightBuffer;
+//   private static AddressableLEDBuffer frontLeftBuffer;
+//   private static AddressableLEDBuffer rearRightBuffer;
+//   private static AddressableLEDBuffer rearLeftBuffer;
+//   private static AddressableLEDBuffer magBuffer;
 
-  // Used for rainbow
-  private static int m_rainbowFirstPixelHue = 240;
+//   // Used for rainbow
+//   private static int m_rainbowFirstPixelHue = 240;
 
-  private int ballCount;
-  private int adressableLED;
-  private boolean magFull;
-  private int r = 0;
-  private int g = 0;
-  private int b = 0;
+//   private int ballCount;
+//   private int adressableLED;
+//   private boolean magFull;
+//   private int r = 0;
+//   private int g = 0;
+//   private int b = 0;
 
-  /**
-   * Creates a new LED.
-   */
-  public LED() {
-    // Must be a PWM header, not MXP or DIO
-    // m_ballCountLEDR = new AddressableLED(RobotMap.BALL_COUNT_LED_RIGHT);
-    // m_ballCountLEDL = new AddressableLED(RobotMap.BALL_COUNT_LED_LEFT);
-    m_statusLEDR = new AddressableLED(RobotMap.STATUS_LED_RIGHT);
-    // m_statusLEDL = new AddressableLED(RobotMap.STATUS_LED_LEFT);
+//   /**
+//    * Creates a new LED.
+//    */
+//   public LED() {
+//     // Must be a PWM header, not MXP or DIO
+//     frontRightLED = new AddressableLED(RobotMap.FRONT_RIGHT_LED);
+//     frontLeftLED = new AddressableLED(RobotMap.FRONT_LEFT_LED);
+//     rearLeftLED = new AddressableLED(RobotMap.REAR_LEFT_LED);
+//     rearRightLED = new AddressableLED(RobotMap.REAR_RIGHT_LED);
+//     magLED = new AddressableLED(RobotMap.MAGAZINE_LED);
 
-    // Reuse buffer
-    // Length is set from a constant in RobotMap
-    // Length is expensive to set, so only set it once, then just update data
-    // m_ballCountLEDBufferR = new AddressableLEDBuffer(RobotMap.LED_STRIP_LENGTH);
-    // m_ballCountLEDBufferL = new AddressableLEDBuffer(RobotMap.LED_STRIP_LENGTH);
-    m_statusLEDBufferR = new AddressableLEDBuffer(RobotMap.LED_STRIP_LENGTH);
-    // m_statusLEDBufferL = new AddressableLEDBuffer(RobotMap.LED_STRIP_LENGTH);
-    // m_ballCountLEDR.setLength(m_ballCountLEDBufferR.getLength());
-    // m_ballCountLEDL.setLength(m_ballCountLEDBufferL.getLength());
-    m_statusLEDR.setLength(m_statusLEDBufferR.getLength());
-    // m_statusLEDL.setLength(m_statusLEDBufferL.getLength());
+//     // Reuse buffer
+//     // Length is set from a constant in RobotMap
+//     // Length is expensive to set, so only set it once, then just update data
+//     frontRightBuffer = new AddressableLEDBuffer(RobotMap.DRIVE_LED_LENGTH);
+//     frontLeftBuffer = new AddressableLEDBuffer(RobotMap.DRIVE_LED_LENGTH);
+//     rearLeftBuffer = new AddressableLEDBuffer(RobotMap.DRIVE_LED_LENGTH);
+//     rearRightBuffer = new AddressableLEDBuffer(RobotMap.DRIVE_LED_LENGTH);
+//     magBuffer = new AddressableLEDBuffer(RobotMap.MAG_LED_LENGTH);
 
-    // Set the data
-    // m_ballCountLEDR.setData(m_ballCountLEDBufferR);
-    // m_ballCountLEDR.start();
-    // m_ballCountLEDL.setData(m_ballCountLEDBufferL);
-    // m_ballCountLEDL.start();
-    m_statusLEDR.setData(m_statusLEDBufferR);
-    m_statusLEDR.start();
-    // m_statusLEDL.setData(m_statusLEDBufferL);
-    // m_statusLEDL.start();
-  }
+//     frontRightLED.setLength(frontRightBuffer.getLength());
+//     frontLeftLED.setLength(frontLeftBuffer.getLength());
+//     rearLeftLED.setLength(rearLeftBuffer.getLength());
+//     rearRightLED.setLength(rearRightBuffer.getLength());
+//     magLED.setLength(magBuffer.getLength());
 
-  public void rainbowLED() {
-    // For every pixel
-    for (var i = 0; i < m_statusLEDBufferR.getLength(); i++) {
-      // Calculate the hue - hue is easier for rainbows because the color
-      // shape is a circle so only one value needs to precess
-      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_statusLEDBufferR.getLength())) % 180;
-      // Set the value
-      // m_ballCountLEDBufferR.setHSV(i, hue, 255, 128);
-      // m_ballCountLEDBufferL.setHSV(i, hue, 255, 128);
-      m_statusLEDBufferR.setHSV(i, hue, 255, 128);
-      // m_statusLEDBufferL.setHSV(i, hue, 255, 128);
-    }
-    // Increase by to make the rainbow "move"
-    m_rainbowFirstPixelHue += 3;
-    // Check bounds
-    m_rainbowFirstPixelHue %= 180;
+//     // Set the data
+//     frontRightLED.setData(frontRightBuffer);
+//     frontRightLED.start();
+//     frontLeftLED.setData(frontLeftBuffer);
+//     frontLeftLED.start();
+//     rearLeftLED.setData(rearLeftBuffer);
+//     rearLeftLED.start();
+//     rearRightLED.setData(rearRightBuffer);
+//     rearRightLED.start();
+//   }
 
-  }
+//   public void rainbowLED() {
+//     // For every pixel
+//     for (var i = 0; i < RobotMap.DRIVE_LED_LENGTH; i++) {
+//       // Calculate the hue - hue is easier for rainbows because the color
+//       // shape is a circle so only one value needs to precess
+//       final var hue = (m_rainbowFirstPixelHue + (i * 180 / RobotMap.DRIVE_LED_LENGTH)) % 180;
+//       // Set the value
+//       frontRightBuffer.setHSV(i, hue, 255, 128);
+//       frontLeftBuffer.setHSV(i, hue, 255, 128);
+//       rearLeftBuffer.setHSV(i, hue, 255, 128);
+//       rearRightBuffer.setHSV(i, hue, 255, 128);
+//     }
+//     // Increase by to make the rainbow "move"
+//     m_rainbowFirstPixelHue += 3;
+//     // Check bounds
+//     m_rainbowFirstPixelHue %= 180;
 
-  public void dispBallCountLED() {
-    ballCount = RobotContainer.m_magazine.getBallCount();
-    adressableLED = ballCount * 7 - 1;
-    magFull = RobotContainer.m_magazine.getMagFull();
-    
-    if (magFull) {
-      r = 240;
-      g = 0;
-      b = 0;
-    } else {
-      r = 200;
-      g = 100;
-      b = 0;
-    }
+//   }
 
-    for (var i = 0; i <= adressableLED ; i++) {
-      if (!(i == 6 || i == 7 || i == 13 || i == 14 || i == 20 || i == 21 || i == 27 || i == 28)) {
-        // m_ballCountLEDBufferR.setRGB(i, r, g, b);
-        // m_ballCountLEDBufferL.setRGB(i, r, g, b);
-      }
-    }
-  }
+//   public boolean isDriveInverted(){
+//     return RobotContainer.m_drivetrain.getDriveInverted();
+//   }
 
-  public void intakeLED(){
-    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
-      m_statusLEDBufferR.setRGB(i, 0, 0, 255);
-      // m_statusLEDBufferL.setRGB(i, 0, 0, 255);
-    }
-    m_statusLEDR.setData(m_statusLEDBufferR);
-    // m_statusLEDR.setData(m_statusLEDBufferR);
-  }
+//   public void intakeLED(){
+//     for (var i = 0; i < RobotMap.DRIVE_LED_LENGTH; i++) {
+//       // m_statusLEDBufferR.setRGB(i, 0, 0, 255);
+//       // m_statusLEDBufferL.setRGB(i, 0, 0, 255);
+//       if(isDriveInverted()){
+//         frontRightBuffer.setRGB(i, 0, 0, 255);
+//         frontLeftBuffer.setRGB(i, 0, 0, 255);
+//         rearLeftBuffer.setRGB(i, 255, 255, 255);
+//         rearRightBuffer.setRGB(i, 255, 255, 255);
+//       } else {
+//         frontRightBuffer.setRGB(i, 0, 0, 255);
+//         frontLeftBuffer.setRGB(i, 0, 0, 255);
+//         rearLeftBuffer.setRGB(i, 255, 255, 255);
+//         rearRightBuffer.setRGB(i, 255, 255, 255);
+//       }
+//     }
+//     // m_statusLEDR.setData(m_statusLEDBufferR);
+//     // m_statusLEDR.setData(m_statusLEDBufferR);
+//   }
 
-  public void climbLED(){
-    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
-      m_statusLEDBufferR.setRGB(i, 100, 0, 100);
-      // m_statusLEDBufferL.setRGB(i, 150, 0, 200);
-    }
-  }
+//   public void climbLED(){
+//     for (var i = 0; i < RobotMap.DRIVE_LED_LENGTH; i++) {
+//       // m_statusLEDBufferR.setRGB(i, 100, 0, 100);
+//       // m_statusLEDBufferL.setRGB(i, 150, 0, 200);
+//     }
+//   }
 
-  public void shootLED(){
-    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
-      m_statusLEDBufferR.setRGB(i, 0, 255, 0);
-      // m_statusLEDBufferL.setRGB(i, 0, 180, 50);
-    }
-  }
+//   public void shootLED(){
+//     for (var i = 0; i < RobotMap.DRIVE_LED_LENGTH; i++) {
+//       // m_statusLEDBufferR.setRGB(i, 0, 255, 0);
+//       // m_statusLEDBufferL.setRGB(i, 0, 180, 50);
+//     }
+//   }
 
-  public void clearBallCountLED(){
-    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
-      // m_ballCountLEDBufferR.setRGB(i, 0, 0, 0);
-      // m_ballCountLEDBufferL.setRGB(i, 0, 0, 0);
-    }
-  }
+//   public void clearMagLED(){
+//     for (var i = 0; i < RobotMap.DRIVE_LED_LENGTH; i++) {
+//       magBuffer.setRGB(i, 0, 0, 0);
+//     }
+//   }
 
-  public void clearStatusLED() {
-    for (var i = 0; i < RobotMap.LED_STRIP_LENGTH; i++) {
-      m_statusLEDBufferR.setRGB(i, 0, 0, 0);
-      // m_statusLEDBufferL.setRGB(i, 0, 0, 0);
-    }
-  }
+//   public void clearDriveLED() {
+//     for (var i = 0; i < RobotMap.DRIVE_LED_LENGTH; i++) {
+//       frontRightBuffer.setRGB(i, 0, 0, 0);
+//       frontLeftBuffer.setRGB(i, 0, 0, 0);
+//       rearLeftBuffer.setRGB(i, 0, 0, 0);
+//       rearRightBuffer.setRGB(i, 0, 0, 0);
+//     }
+//   }
 
-  public void clearLED(){
-    clearBallCountLED();
-    clearStatusLED();
-  }
-
-  public void testLED(){
-    for (var i = 0; i < 60; i++) {
-      // m_ballCountLEDBufferR.setRGB(i, 100, 50, 0);
-    }
-
-    for (var i = 0; i < 0; i++) {
-      // m_ballCountLEDBufferR.setRGB(i, 200, 100, 0);
-    }
-  }
+//   public void clearLED(){
+//     clearMagLED();
+//     clearDriveLED();
+//   }
  
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    // m_ballCountLEDR.setData(m_ballCountLEDBufferR);
-    // m_ballCountLEDL.setData(m_ballCountLEDBufferL);
-    // m_statusLEDR.setData(m_statusLEDBufferR);
-    // m_statusLEDL.setData(m_statusLEDBufferL);
-  }
+//   @Override
+//   public void periodic() {
+//     // This method will be called once per scheduler run
+//     // m_ballCountLEDR.setData(m_ballCountLEDBufferR);
+//     // m_ballCountLEDL.setData(m_ballCountLEDBufferL);
+//     // m_statusLEDR.setData(m_statusLEDBufferR);
+//     // m_statusLEDL.setData(m_statusLEDBufferL);
+//   }
 }

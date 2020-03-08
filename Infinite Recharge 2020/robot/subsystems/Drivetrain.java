@@ -45,6 +45,7 @@ import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveDrive;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.lang.Math;
 
 public class Drivetrain extends SubsystemBase {
   // Create the Drive Motor and Steer Motor Objects
@@ -223,11 +224,11 @@ public class Drivetrain extends SubsystemBase {
 
       tyAverage = queueSumY / tyQueue.size();
 
-      distance = RobotMap.DIFFERENTIAL_HEIGHT / Math.tan(Math.toRadians(RobotMap.CAMERA_MOUNTING_ANGLE + tyAverage));
+      distance = (RobotMap.DIFFERENTIAL_HEIGHT / Math.tan(Math.toRadians(RobotMap.CAMERA_MOUNTING_ANGLE + tyAverage))) / 12;
 
-      tiltPosition = 180 * Math.asin(RobotMap.CONSTANT_K * distance) / 2. /** RobotMap.PULSES_PER_DEGREE*/;
+      tiltPosition = RobotMap.SHOOT_ANGLES.get((int)Math.round(distance));
 
-      // RobotContainer.m_tilt.setTiltAngle(tiltPosition);
+      RobotContainer.m_tilt.setTiltAngle(tiltPosition);
     }
     
     if(!isDriveInverted){
@@ -319,6 +320,10 @@ public class Drivetrain extends SubsystemBase {
     if(isDriveInverted) {
       isDriveInverted = false;
     } else isDriveInverted = true;
+  }
+
+  public boolean getDriveInverted(){
+    return isDriveInverted;
   }
 
   public void maxDrivePower(double power){

@@ -22,6 +22,6 @@ public class StopIntake extends InstantCommand {
   @Override
   public void initialize() {
     RobotContainer.m_intake.stopIntake();
-    RobotContainer.m_led.clearStatusLED();
+    // RobotContainer.m_led.clearStatusLED();
   }
 }
