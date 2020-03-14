@@ -31,9 +31,9 @@ public class Intake extends SubsystemBase {
     if (!magFull){
       intakeMotor.set(ControlMode.PercentOutput, 1.);
       
-      // if (!CommandScheduler.getInstance().isScheduled(new LoadMagazine())){
-        // CommandScheduler.getInstance().schedule(new LoadMagazine());
-      // }
+      if (!CommandScheduler.getInstance().isScheduled(new LoadMagazine())){
+        CommandScheduler.getInstance().schedule(new LoadMagazine());
+      }
     } else stopIntake();
     // RobotContainer.m_led.intakeLED();
   }

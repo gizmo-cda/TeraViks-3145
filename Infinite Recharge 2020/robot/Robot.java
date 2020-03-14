@@ -39,11 +39,11 @@ public class Robot extends TimedRobot {
 
     // RobotContainer.m_gyro.reset();
     // RobotContainer.m_drivetrain.init();
-    // RobotContainer.m_magazine.init();
+    RobotContainer.m_magazine.init();
     // RobotContainer.m_intake.init();
-    // RobotContainer.m_shooter.init();
+    RobotContainer.m_shooter.init();
     // RobotContainer.m_lift.init();
-    // RobotContainer.m_tilt.init();
+    RobotContainer.m_tilt.init();
     // RobotContainer.m_colorAndZipline.init();
 
     bootCycle = true;
@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    RobotContainer.m_colorAndZipline.getColor();
+    // RobotContainer.m_colorAndZipline.getColor();
 
     // SmartDashboard.putBoolean("Centric Set", m_drivetrain.getCentric());
     // SmartDashboard.putNumber("Gyro Yaw", m_gyro.getYawDeg());
@@ -136,7 +136,7 @@ public class Robot extends TimedRobot {
 
     if (bootCycle && enableCalibration){
       // CommandScheduler.getInstance().schedule(new CalibrateDriveTrain());
-      // CommandScheduler.getInstance().schedule(new CalibrateTilt());
+      CommandScheduler.getInstance().schedule(new CalibrateTilt());
     } /*else CommandScheduler.getInstance().schedule(new TiltMagToLow());*/
 
     // RobotContainer.m_drivetrain.maxDrivePower(1.);
@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
     bootCycle = false;
 
     System.out.println("//////////////////// Teleop /////////////////");
-    // CommandScheduler.getInstance().schedule(new LoadMagazine());
+    CommandScheduler.getInstance().schedule(new LoadMagazine());
     // CommandScheduler.getInstance().schedule(new Drive());
     // RobotContainer.m_led.clearLED();
   }

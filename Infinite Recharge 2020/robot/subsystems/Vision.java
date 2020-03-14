@@ -30,16 +30,19 @@ public class Vision extends SubsystemBase {
   public Vision() {
   }
   
+  /** 0 is pipeline/tracking, 1 is driver cam (no tracking, higher exposure) */
   public void setCamMode(int visionMode) {
     table.getEntry("camMode").setNumber(visionMode);
   }
 
+  /**1 is force off, 0 is default for pipeline, 3 is force on */
   public void ledOff() {
-    table.getEntry("ledMode").setNumber(1); // 1 is force off, 0 is default for pipeline, 3 is force on
+    table.getEntry("ledMode").setNumber(1);
   }
 
+  /**1 is force off, 0 is default for pipeline, 3 is force on */
   public void ledOn() {
-    table.getEntry("ledMode").setNumber(3); // 1 is force off, 0 is default for pipeline, 3 is force on
+    table.getEntry("ledMode").setNumber(3);
   }
   
   public int getCamMode(){

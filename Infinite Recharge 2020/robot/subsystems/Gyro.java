@@ -27,22 +27,22 @@ public class Gyro extends SubsystemBase {
         ahrs.reset();
     }
 
-    // This is total accumulated Yaw angle in degrees and is continuous
+    /** This is total accumulated Yaw angle in degrees and is continuous */
     public double getYawAccumDeg(){
         return ahrs.getAngle();
     }
 
-    // This is Yaw angle +/- 180 in degrees, this has a discontinuity
+    /** This is Yaw angle +/- 180 in degrees, this has a discontinuity */
     public double getYawDeg(){
        return ahrs.getYaw();
     }
 
-    // This is Pitch angle +/- 180 in degrees, robot short axis tilt to front is positive
+    /** This is Pitch angle +/- 180 in degrees, robot short axis tilt to front is positive */
     public double getPitchDeg(){
         return ahrs.getPitch();
     }
 
-    // This is Roll angle +/- 180 in degrees, robot long axis tilt to right is positive
+    /** This is Roll angle +/- 180 in degrees, robot long axis tilt to right is positive */
     public double getRollDeg(){
         return ahrs.getRoll();
     }

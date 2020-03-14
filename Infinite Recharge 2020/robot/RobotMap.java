@@ -93,7 +93,7 @@ public class RobotMap {
     
     // Vision System Constants
     public static final double CAMERA_MOUNTING_ANGLE = 30.;  //Units are in degrees and referenced to X axis, with CCW being positive
-    public static final double CAMERA_MOUNTING_HEIGHT = 18.5;  //Units are in inches //TODO: readjust
+    public static final double CAMERA_MOUNTING_HEIGHT = 25.25;  //Units are in inches //TODO: readjust
     public static final double TARGET_HEIGHT = 98.; //Units are in inches
     public static final double DIFFERENTIAL_HEIGHT = TARGET_HEIGHT - CAMERA_MOUNTING_HEIGHT;
     // public static final double GRAVITY = 386.4; //Units are in inches/sec ^2
@@ -115,8 +115,8 @@ public class RobotMap {
     public static final double MAGAZINE_CONTROL_WHEEL = -39000.;
 
     // Shooter Constants
-    public static final double TOP_SHOOT_WHEEL_PULSES_PER_100MS = 20480.; //8533 /15360
-    public static final double BOTTOM_SHOOT_WHEEL_PULSES_PER_100MS = 20480.;
+    public static final double TOP_SHOOT_WHEEL_PULSES_PER_100MS = 6827.; //8533 /15360
+    public static final double BOTTOM_SHOOT_WHEEL_PULSES_PER_100MS = 9557.;
     public static final double TOP_SHOOT_WHEEL_WALL_PULSES_PER_100MS = 1000.;
     public static final double BOTTOM_SHOOT_WHEEL_WALL_PULSES_PER_100MS = 1000.;
 
@@ -141,8 +141,8 @@ public class RobotMap {
     public static final int MAGAZINE_LED = 5;
 
     // Neopixel strip lengths
-    public static final int DRIVE_LED_LENGTH = 8;
-    public static final int MAG_LED_LENGTH = 12;
+    public static final int DRIVE_LED_LENGTH = 12;
+    public static final int MAG_LED_LENGTH = 21;
 
     // Lookup table for shooting. Each index is 1 ft from the target
     public static final ArrayList<Double> SHOOT_ANGLES = new ArrayList<Double>(Arrays.asList(

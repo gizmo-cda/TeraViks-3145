@@ -47,7 +47,7 @@ public class Magazine extends SubsystemBase {
   }
 
   public void advanceMagazine() {
-    magazineMotor.set(ControlMode.PercentOutput, .5);
+    magazineMotor.set(ControlMode.PercentOutput, .4);
     System.out.println("advancing mag");
   }
 
@@ -102,6 +102,7 @@ public class Magazine extends SubsystemBase {
       if (ballReadyCount >= 5) {
         stopMagazine();
         ballReadyCount = 0;
+        // RobotContainer.m_led.magFullLED();
       }
       stopLoad = true;
     }
@@ -149,6 +150,7 @@ public class Magazine extends SubsystemBase {
       RobotContainer.m_shooter.stopMotors();
       CommandScheduler.getInstance().schedule(new LoadMagazine());
       stopShoot = true;
+      // RobotContainer.m_led.driveLED();
       
       // RobotContainer.m_led.clearStatusLED();
       RobotContainer.m_tilt.setTiltLow();

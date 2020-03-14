@@ -70,11 +70,11 @@ public class Shooter extends SubsystemBase {
     shootMotorTop.configNominalOutputForward(0, TIMEOUT);
     shootMotorTop.configNominalOutputReverse(0, TIMEOUT);
     
-    shootMotorTop.configAllowableClosedloopError(0, 5, TIMEOUT); // Error for2048 CTRE Encoder
+    shootMotorTop.configAllowableClosedloopError(0, 20, TIMEOUT); // Error for2048 CTRE Encoder
     
     shootMotorTop.config_IntegralZone(0, 100, TIMEOUT); // I-zone limits
     
-    shootMotorTop.config_kP(0, .05, TIMEOUT);
+    shootMotorTop.config_kP(0, .15, TIMEOUT);
     shootMotorTop.config_kI(0, 0.0001, TIMEOUT);
     shootMotorTop.config_kD(0, 2., TIMEOUT);
     shootMotorTop.config_kF(0, .05, TIMEOUT);
@@ -102,11 +102,11 @@ public class Shooter extends SubsystemBase {
     shootMotorBottom.configNominalOutputForward(0, TIMEOUT);
     shootMotorBottom.configNominalOutputReverse(0, TIMEOUT);
     
-    shootMotorBottom.configAllowableClosedloopError(0, 5, TIMEOUT); // Error for2048 CTRE Encoder
+    shootMotorBottom.configAllowableClosedloopError(0, 20, TIMEOUT); // Error for2048 CTRE Encoder
     
     shootMotorBottom.config_IntegralZone(0, 100, TIMEOUT); // I-zone limits
     
-    shootMotorBottom.config_kP(0, .05, TIMEOUT);
+    shootMotorBottom.config_kP(0, .15, TIMEOUT);
     shootMotorBottom.config_kI(0, 0.0001, TIMEOUT);
     shootMotorBottom.config_kD(0, 2., TIMEOUT);
     shootMotorBottom.config_kF(0, .05, TIMEOUT);

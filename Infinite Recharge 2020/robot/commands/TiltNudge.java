@@ -35,8 +35,8 @@ public class TiltNudge extends CommandBase {
     if ((upDown > -RobotMap.Y_AXIS_THREASHOLD) && (upDown < RobotMap.Y_AXIS_THREASHOLD)) upDown = 0.;
 
      position = (double) RobotContainer.m_tilt.getTiltPosition();
-    if (upDown > 0) position += 5000.; 
-    if (upDown < 0) position -= 5000.;
+    if (upDown > 0) position += -RobotMap.PULSES_PER_DEGREE; 
+    if (upDown < 0) position -= -RobotMap.PULSES_PER_DEGREE;
 
     RobotContainer.m_tilt.setTiltAngle(position);
   }

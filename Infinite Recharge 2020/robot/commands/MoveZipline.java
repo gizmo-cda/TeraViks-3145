@@ -25,6 +25,7 @@ public class MoveZipline extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.m_tilt.setTiltVert();
+    // RobotContainer.m_led.climbLED();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
